@@ -3859,3 +3859,646 @@ body {
   flex-wrap: wrap;
   text-align: center;
 }
+
+/* ── Embedded One Game Every Call Scrollytelling ── */
+.scroll-embed-section {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(79, 168, 255, 0.12), transparent 24%),
+    radial-gradient(circle at 82% 18%, rgba(232, 200, 64, 0.12), transparent 20%),
+    linear-gradient(180deg, #101820 0%, #0d0f14 100%);
+  color: var(--text);
+  padding: 74px 24px 84px;
+}
+
+.scroll-embed-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.55) 0 1px, transparent 2px),
+    radial-gradient(circle, rgba(232, 200, 64, 0.28) 0 1px, transparent 2px);
+  background-size: 180px 180px, 115px 115px;
+  background-position: 22px 36px, 70px 104px;
+  opacity: 0.12;
+}
+
+.scroll-embed-shell {
+  position: relative;
+  z-index: 1;
+  width: min(1220px, 100%);
+  margin: 0 auto;
+}
+
+.scroll-embed-header {
+  width: min(900px, 100%);
+  margin: 0 auto 30px;
+  text-align: center;
+}
+
+.scroll-embed-kicker {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 7px 14px;
+  border: 1px solid rgba(232, 200, 64, 0.38);
+  border-radius: 999px;
+  color: var(--accent);
+  background: rgba(232, 200, 64, 0.08);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.scroll-embed-header h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 7vw, 92px);
+  line-height: 0.92;
+  letter-spacing: 2px;
+  color: #ffffff;
+  margin-bottom: 14px;
+  text-shadow: 0 12px 34px rgba(0, 0, 0, 0.42);
+}
+
+.scroll-embed-header p {
+  max-width: 760px;
+  margin: 0 auto;
+  color: rgba(232, 234, 240, 0.78);
+  line-height: 1.65;
+  font-size: clamp(16px, 1.45vw, 19px);
+}
+
+.umpire-scroll-frame {
+  display: block;
+  width: 100%;
+  height: 92vh;
+  min-height: 760px;
+  border: 1px solid rgba(232, 234, 240, 0.14);
+  border-radius: 24px;
+  background: #0d0f14;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .scroll-embed-section {
+    padding: 56px 14px 64px;
+  }
+
+  .umpire-scroll-frame {
+    min-height: 900px;
+    border-radius: 16px;
+  }
+}
+
+
+/* On-page scrollytelling embed: no iframe box, no internal scroll */
+.scroll-on-page-section {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(79, 168, 255, 0.10), transparent 28%),
+    radial-gradient(circle at 82% 6%, rgba(232, 200, 64, 0.08), transparent 24%),
+    #0d0f14;
+  border-top: 1px solid rgba(232, 234, 240, 0.08);
+  border-bottom: 1px solid rgba(232, 234, 240, 0.08);
+}
+
+.scroll-on-page-section .scroll-embed-shell,
+.scroll-on-page-section .scroll-embed-header {
+  display: none;
+}
+
+umpire-scroll-story {
+  display: block;
+  width: 100%;
+}
+
+
+/* ===== One Game Every Call scrollytelling (on-page, no iframe) ===== */
+#one-game-scroll-section {
+  --ink:       #0e1018;
+  --paper:     #f4f0e8;
+  --sepia:     #e8e0cc;
+  --mid:       #b8ad96;
+  --muted:     #8a816e;
+  --strike:    #c8392b;
+  --ball:      #2563b0;
+  --miss:      #f59b00;
+  --miss-dark: #c47a00;
+  --correct:   #2a7a4b;
+  --ff: 'Bebas Neue', sans-serif;
+  --fb: 'Literata', serif;
+  --fm: 'IBM Plex Mono', monospace;
+}#one-game-scroll-section *, #one-game-scroll-section *::before, #one-game-scroll-section *::after { box-sizing: border-box; margin: 0; padding: 0; }#one-game-scroll-section { background: var(--paper); color: var(--ink); font-family: var(--fb); overflow-x: hidden; width:100%; }#one-game-scroll-section /* ── HERO ─────────────────── */
+#scroll-hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center;
+  padding: 60px 24px; position: relative; background: var(--ink); overflow: hidden;
+}#one-game-scroll-section #scroll-hero::before {
+  content:''; position:absolute; width:600px; height:600px;
+  border:1px solid rgba(255,255,255,0.04); border-radius:50%;
+  top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none;
+}#one-game-scroll-section #scroll-hero::after {
+  content:''; position:absolute; width:400px; height:400px;
+  border:1px solid rgba(255,255,255,0.06); border-radius:50%;
+  top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none;
+}#one-game-scroll-section .hero-eyebrow { font-family:var(--fm); font-size:11px; letter-spacing:3px; color:var(--mid); text-transform:uppercase; margin-bottom:20px; }#one-game-scroll-section .hero-title { font-family:var(--ff); font-size:clamp(56px,10vw,96px); color:#fff; letter-spacing:4px; line-height:0.95; margin-bottom:24px; }#one-game-scroll-section .hero-title em { color:var(--strike); font-style:normal; }#one-game-scroll-section .hero-body { font-size:17px; color:rgba(255,255,255,0.5); max-width:520px; line-height:1.7; font-weight:300; font-style:italic; margin-bottom:40px; }#one-game-scroll-section .game-card {
+  background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1);
+  border-radius:12px; padding:20px 28px; display:flex; align-items:center;
+  gap:20px; flex-wrap:wrap; justify-content:center; max-width:520px; width:100%; margin-bottom:20px;
+}#one-game-scroll-section .game-matchup { font-family:var(--ff); font-size:32px; letter-spacing:3px; color:#fff; line-height:1; }#one-game-scroll-section .game-meta { font-family:var(--fm); font-size:10px; color:var(--mid); letter-spacing:1px; text-transform:uppercase; margin-top:4px; }#one-game-scroll-section .btn-new-game {
+  background:var(--strike); color:#fff; border:none; border-radius:6px;
+  padding:10px 22px; font-family:var(--ff); font-size:16px; letter-spacing:2px;
+  cursor:pointer; transition:all 0.15s; white-space:nowrap;
+}#one-game-scroll-section .btn-new-game:hover { background:#e04535; transform:translateY(-1px); box-shadow:0 4px 16px rgba(200,57,43,0.4); }#one-game-scroll-section .scroll-hint { font-family:var(--fm); font-size:10px; color:rgba(255,255,255,0.25); letter-spacing:2px; text-transform:uppercase; margin-top:8px; animation:bob 2s ease-in-out infinite; }
+@keyframes bob { 0%,100%{transform:translateY(0);opacity:0.5} 50%{transform:translateY(6px);opacity:0.8} }#one-game-scroll-section /* ── STORY LAYOUT ─────────── */
+.story-layout { display:grid; grid-template-columns:1fr 440px; min-height:100vh; position:relative; }
+@media(max-width:900px){ .story-layout{grid-template-columns:1fr}#one-game-scroll-section .viz-sticky {position:relative!important;top:0!important;height:auto!important} }#one-game-scroll-section /* ── SCROLL SECTIONS ──────── */
+.scroll-sections { padding:0; }#one-game-scroll-section .scroll-section {
+  min-height:100vh; display:flex; flex-direction:column; justify-content:center;
+  padding:80px 60px 80px 60px; border-bottom:1px solid var(--sepia); position:relative;
+  opacity:0; transform:translateY(20px); transition:opacity 0.5s ease, transform 0.5s ease;
+}#one-game-scroll-section .scroll-section:last-child { border-bottom:none; }#one-game-scroll-section .scroll-section.visible { opacity:1; transform:none; }#one-game-scroll-section .section-num { font-family:var(--fm); font-size:10px; letter-spacing:3px; color:var(--mid); text-transform:uppercase; margin-bottom:16px; }#one-game-scroll-section .section-num span { background:var(--ink); color:var(--paper); padding:2px 8px; border-radius:2px; margin-right:8px; }#one-game-scroll-section .section-heading { font-family:var(--ff); font-size:clamp(36px,5vw,54px); letter-spacing:3px; line-height:1; margin-bottom:20px; color:var(--ink); }#one-game-scroll-section .section-heading em { color:var(--strike); font-style:normal; }#one-game-scroll-section .section-body { font-size:17px; line-height:1.8; color:#3a3530; max-width:480px; font-weight:300; }#one-game-scroll-section .section-body strong { font-weight:600; color:var(--ink); }#one-game-scroll-section .section-body em { font-style:italic; color:var(--muted); }#one-game-scroll-section .stat-inline { display:inline-block; font-family:var(--fm); font-size:13px; font-weight:600; padding:2px 8px; border-radius:3px; margin:0 2px; }#one-game-scroll-section .stat-strike { background:rgba(200,57,43,0.12); color:var(--strike); }#one-game-scroll-section .stat-ball { background:rgba(37,99,176,0.12); color:var(--ball); }#one-game-scroll-section .stat-miss { background:rgba(245,155,0,0.15); color:var(--miss-dark); }#one-game-scroll-section .type-pills { display:flex; flex-wrap:wrap; gap:8px; margin-top:24px; }#one-game-scroll-section .type-pill { display:flex; align-items:center; gap:7px; background:var(--sepia); border-radius:20px; padding:5px 12px 5px 8px; font-family:var(--fm); font-size:11px; color:var(--ink); }#one-game-scroll-section .type-pill-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }#one-game-scroll-section .summary-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:28px; max-width:480px; }#one-game-scroll-section .summary-card { background:var(--sepia); border-radius:8px; padding:16px; display:flex; flex-direction:column; gap:4px; }#one-game-scroll-section .summary-card .big { font-family:var(--ff); font-size:38px; line-height:1; letter-spacing:2px; }#one-game-scroll-section .summary-card .label { font-family:var(--fm); font-size:9px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); }#one-game-scroll-section .accuracy-verdict { margin-top:28px; max-width:480px; background:var(--ink); color:var(--paper); border-radius:10px; padding:20px 24px; font-size:15px; line-height:1.7; font-style:italic; }#one-game-scroll-section .accuracy-verdict strong { font-style:normal; color:var(--miss); }#one-game-scroll-section .continue-btn { margin-top:32px; display:inline-flex; align-items:center; gap:8px; background:var(--strike); color:#fff; border:none; border-radius:6px; padding:12px 24px; font-family:var(--ff); font-size:16px; letter-spacing:2px; cursor:pointer; transition:all 0.15s; text-decoration:none; }#one-game-scroll-section .continue-btn:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(200,57,43,0.35); }#one-game-scroll-section /* final section */
+#scroll-section-8 { background:var(--ink); color:var(--paper); min-height:100vh; }#one-game-scroll-section #scroll-section-8 .section-heading { color:var(--paper); }#one-game-scroll-section #scroll-section-8 .section-body { color:rgba(244,240,232,0.65); }#one-game-scroll-section #scroll-section-8 .summary-card { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); }#one-game-scroll-section #scroll-section-8 .summary-card .label { color:rgba(255,255,255,0.3); }#one-game-scroll-section #scroll-section-8 .section-num { color:rgba(255,255,255,0.3); }#one-game-scroll-section #scroll-section-8 .section-num span { background:var(--paper); color:var(--ink); }#one-game-scroll-section /* ── STICKY VIZ ───────────── */
+.viz-sticky {
+  position:sticky; top:0; height:100vh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  background:var(--ink); padding:24px 20px; overflow:hidden;
+}#one-game-scroll-section .viz-progress { position:absolute; right:14px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:8px; }#one-game-scroll-section .prog-dot { width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,0.15); cursor:pointer; transition:all 0.2s; }#one-game-scroll-section .prog-dot.active { background:var(--strike); transform:scale(1.4); }#one-game-scroll-section .viz-caption { font-family:var(--fm); font-size:10px; letter-spacing:2px; color:rgba(255,255,255,0.3); text-transform:uppercase; margin-bottom:8px; text-align:center; }#one-game-scroll-section #scroll-zone-wrap { position:relative; flex-shrink:0; }#one-game-scroll-section #scroll-zone-svg { display:block; overflow:visible; }#one-game-scroll-section .viz-legend { display:flex; flex-wrap:wrap; gap:6px 12px; justify-content:center; margin-top:10px; max-width:400px; }#one-game-scroll-section .viz-leg-item { display:flex; align-items:center; gap:5px; font-family:var(--fm); font-size:9px; color:rgba(255,255,255,0.4); }#one-game-scroll-section .viz-leg-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }#one-game-scroll-section /* ── TOOLTIP ──────────────── */
+#scroll-pitch-tooltip {
+  position:fixed; pointer-events:none; background:rgba(14,16,24,0.96);
+  border:1px solid rgba(255,255,255,0.12); border-radius:8px; padding:10px 14px;
+  font-family:var(--fm); font-size:11px; color:rgba(255,255,255,0.8);
+  z-index:9999; opacity:0; transition:opacity 0.15s; max-width:200px; line-height:1.6;
+}#one-game-scroll-section #scroll-pitch-tooltip.visible { opacity:1; }#one-game-scroll-section #scroll-pitch-tooltip .tt-type { font-size:13px; font-weight:600; color:#fff; margin-bottom:4px; }#one-game-scroll-section #scroll-pitch-tooltip .tt-call-s { color:var(--strike); font-weight:600; }#one-game-scroll-section #scroll-pitch-tooltip .tt-call-b { color:#5ba3ff; font-weight:600; }#one-game-scroll-section #scroll-pitch-tooltip .tt-miss { color:var(--miss); font-weight:600; }#one-game-scroll-section /* ── BLOB LABEL (step 2) ──── */
+.blob-label { pointer-events:none; }
+
+
+/* === FINAL ON-PAGE SCROLL FIX: force the scrollytelling viz to live on the page === */
+#one-game-scroll-section {
+  width: 100%;
+  overflow: visible !important;
+  background: var(--bg) !important;
+  color: var(--text) !important;
+}
+
+#one-game-scroll-section #scroll-story {
+  width: 100%;
+  overflow: visible !important;
+}
+
+#one-game-scroll-section .story-layout {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 440px !important;
+  align-items: start !important;
+  width: 100% !important;
+  min-height: 100vh !important;
+  overflow: visible !important;
+}
+
+#one-game-scroll-section .scroll-sections {
+  min-width: 0 !important;
+  overflow: visible !important;
+}
+
+#one-game-scroll-section .scroll-section {
+  min-height: 100vh !important;
+  opacity: 1 !important;
+  transform: none !important;
+  background: linear-gradient(180deg, #101820 0%, #0d0f14 100%) !important;
+  border-bottom: 1px solid rgba(232, 234, 240, 0.08) !important;
+}
+
+#one-game-scroll-section .section-heading,
+#one-game-scroll-section .section-body strong {
+  color: #ffffff !important;
+}
+
+#one-game-scroll-section .section-body {
+  color: rgba(232, 234, 240, 0.76) !important;
+}
+
+#one-game-scroll-section #scroll-viz-sticky {
+  position: sticky !important;
+  top: 0 !important;
+  right: 0 !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  width: 440px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #0e1018 !important;
+  z-index: 5 !important;
+  overflow: hidden !important;
+}
+
+#one-game-scroll-section #scroll-zone-wrap,
+#one-game-scroll-section #scroll-zone-svg {
+  width: 400px !important;
+  height: 400px !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+#one-game-scroll-section #scroll-zone-svg * {
+  visibility: visible !important;
+}
+
+@media (max-width: 900px) {
+  #one-game-scroll-section .story-layout {
+    grid-template-columns: 1fr !important;
+  }
+  #one-game-scroll-section #scroll-viz-sticky {
+    position: relative !important;
+    width: 100% !important;
+    height: 520px !important;
+    min-height: 520px !important;
+  }
+}
+
+/* ========================================================================== */
+/* Polished on-page One Game scrollytelling section to match the main website */
+/* ========================================================================== */
+#one-game-scroll-section {
+  --scroll-panel: rgba(30, 35, 48, 0.78);
+  --scroll-panel-strong: rgba(22, 25, 32, 0.92);
+  --scroll-line: rgba(232, 234, 240, 0.10);
+  --scroll-gold: var(--accent);
+  --scroll-teal: var(--accent2);
+  width: 100% !important;
+  color: var(--text) !important;
+  font-family: 'IBM Plex Sans', sans-serif !important;
+  background:
+    radial-gradient(circle at 22% 8%, rgba(232, 200, 64, 0.12), transparent 26%),
+    radial-gradient(circle at 80% 20%, rgba(79, 168, 255, 0.11), transparent 26%),
+    radial-gradient(circle at 50% 92%, rgba(45, 96, 59, 0.24), transparent 38%),
+    linear-gradient(180deg, #101820 0%, #0d0f14 48%, #151b32 100%) !important;
+  position: relative !important;
+  overflow: visible !important;
+  border-top: 1px solid rgba(232, 234, 240, 0.08) !important;
+  border-bottom: 1px solid rgba(232, 234, 240, 0.08) !important;
+}
+
+#one-game-scroll-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.55) 0 1px, transparent 2px),
+    linear-gradient(rgba(255, 255, 255, 0.032) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.032) 1px, transparent 1px);
+  background-size: 130px 130px, 86px 86px, 86px 86px;
+  background-position: 24px 30px, center, center;
+  opacity: 0.18;
+  z-index: 0;
+}
+
+#one-game-scroll-section > * {
+  position: relative;
+  z-index: 1;
+}
+
+#one-game-scroll-section #scroll-hero {
+  min-height: 88vh !important;
+  padding: 86px 28px 72px !important;
+  background: transparent !important;
+}
+
+#one-game-scroll-section #scroll-hero::before,
+#one-game-scroll-section #scroll-hero::after {
+  display: none !important;
+}
+
+#one-game-scroll-section .hero-eyebrow {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-bottom: 16px !important;
+  padding: 7px 14px !important;
+  border: 1px solid rgba(77, 224, 192, 0.36) !important;
+  border-radius: 999px !important;
+  background: rgba(77, 224, 192, 0.08) !important;
+  color: var(--accent2) !important;
+  font-family: 'IBM Plex Mono', monospace !important;
+  font-size: 11px !important;
+  letter-spacing: 1.4px !important;
+  text-transform: uppercase !important;
+}
+
+#one-game-scroll-section .hero-eyebrow::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent2);
+  box-shadow: 0 0 14px rgba(77, 224, 192, 0.9);
+}
+
+#one-game-scroll-section .hero-title {
+  font-family: 'Bebas Neue', sans-serif !important;
+  font-size: clamp(58px, 8vw, 104px) !important;
+  letter-spacing: 2px !important;
+  line-height: 0.92 !important;
+  color: #ffffff !important;
+  margin-bottom: 18px !important;
+  text-shadow: 0 12px 34px rgba(0, 0, 0, 0.42) !important;
+}
+
+#one-game-scroll-section .hero-title em,
+#one-game-scroll-section .section-heading em {
+  color: var(--accent) !important;
+  font-style: normal !important;
+}
+
+#one-game-scroll-section .hero-body {
+  max-width: 760px !important;
+  margin: 0 auto 30px !important;
+  font-family: 'IBM Plex Sans', sans-serif !important;
+  font-size: clamp(17px, 1.65vw, 22px) !important;
+  line-height: 1.6 !important;
+  color: rgba(232, 234, 240, 0.82) !important;
+  font-style: normal !important;
+}
+
+#one-game-scroll-section .game-card {
+  width: min(560px, 100%) !important;
+  margin: 0 auto 18px !important;
+  padding: 20px 22px !important;
+  border-radius: 18px !important;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(232, 200, 64, 0.12), transparent 32%),
+    rgba(30, 35, 48, 0.78) !important;
+  border: 1px solid rgba(232, 200, 64, 0.24) !important;
+  box-shadow: 0 22px 58px rgba(0, 0, 0, 0.32) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+#one-game-scroll-section .game-matchup {
+  font-family: 'Bebas Neue', sans-serif !important;
+  font-size: 38px !important;
+  letter-spacing: 1.8px !important;
+  color: #ffffff !important;
+}
+
+#one-game-scroll-section .game-meta,
+#one-game-scroll-section .scroll-hint,
+#one-game-scroll-section .viz-caption,
+#one-game-scroll-section .section-num,
+#one-game-scroll-section .summary-card .label {
+  font-family: 'IBM Plex Mono', monospace !important;
+}
+
+#one-game-scroll-section .game-meta {
+  color: rgba(232, 234, 240, 0.56) !important;
+}
+
+#one-game-scroll-section .btn-new-game,
+#one-game-scroll-section .continue-btn {
+  background: rgba(232, 200, 64, 0.11) !important;
+  border: 1px solid rgba(232, 200, 64, 0.42) !important;
+  color: var(--accent) !important;
+  border-radius: 999px !important;
+  font-family: 'IBM Plex Mono', monospace !important;
+  font-size: 11px !important;
+  letter-spacing: 1.2px !important;
+  text-transform: uppercase !important;
+  box-shadow: none !important;
+}
+
+#one-game-scroll-section .btn-new-game:hover,
+#one-game-scroll-section .continue-btn:hover {
+  background: rgba(232, 200, 64, 0.18) !important;
+  border-color: rgba(232, 200, 64, 0.62) !important;
+  transform: translateY(-1px) !important;
+}
+
+#one-game-scroll-section .story-layout {
+  width: min(1180px, 100%) !important;
+  margin: 0 auto !important;
+  grid-template-columns: minmax(0, 1fr) 440px !important;
+  gap: 24px !important;
+  padding: 0 28px 76px !important;
+}
+
+#one-game-scroll-section .scroll-section {
+  min-height: 100vh !important;
+  padding: 80px 34px !important;
+  border-bottom: 1px solid rgba(232, 234, 240, 0.08) !important;
+  background:
+    radial-gradient(circle at 0% 20%, rgba(77, 224, 192, 0.08), transparent 32%),
+    linear-gradient(180deg, rgba(22, 25, 32, 0.70), rgba(13, 15, 20, 0.70)) !important;
+  border-left: 1px solid rgba(232, 234, 240, 0.08) !important;
+  border-right: 1px solid rgba(232, 234, 240, 0.08) !important;
+}
+
+#one-game-scroll-section .scroll-section:first-child {
+  border-top-left-radius: 24px !important;
+  border-top-right-radius: 24px !important;
+  border-top: 1px solid rgba(232, 234, 240, 0.08) !important;
+}
+
+#one-game-scroll-section .scroll-section:last-child {
+  border-bottom-left-radius: 24px !important;
+  border-bottom-right-radius: 24px !important;
+}
+
+#one-game-scroll-section .section-num {
+  color: rgba(232, 234, 240, 0.48) !important;
+  letter-spacing: 1.5px !important;
+}
+
+#one-game-scroll-section .section-num span {
+  background: rgba(77, 224, 192, 0.10) !important;
+  border: 1px solid rgba(77, 224, 192, 0.30) !important;
+  color: var(--accent2) !important;
+  border-radius: 999px !important;
+}
+
+#one-game-scroll-section .section-heading {
+  font-family: 'Bebas Neue', sans-serif !important;
+  color: #ffffff !important;
+  font-size: clamp(42px, 5vw, 64px) !important;
+  letter-spacing: 1.6px !important;
+  line-height: 0.95 !important;
+  text-shadow: 0 12px 34px rgba(0, 0, 0, 0.36) !important;
+}
+
+#one-game-scroll-section .section-body {
+  max-width: 560px !important;
+  color: rgba(232, 234, 240, 0.78) !important;
+  font-family: 'IBM Plex Sans', sans-serif !important;
+  font-size: 17px !important;
+  line-height: 1.7 !important;
+}
+
+#one-game-scroll-section .section-body strong {
+  color: #ffffff !important;
+}
+
+#one-game-scroll-section .section-body em {
+  color: rgba(232, 234, 240, 0.58) !important;
+}
+
+#one-game-scroll-section .stat-inline,
+#one-game-scroll-section .type-pill {
+  border: 1px solid rgba(232, 234, 240, 0.10) !important;
+  background: rgba(13, 15, 20, 0.42) !important;
+  color: #ffffff !important;
+}
+
+#one-game-scroll-section .stat-strike {
+  color: #ff6d62 !important;
+  border-color: rgba(255, 79, 79, 0.28) !important;
+}
+
+#one-game-scroll-section .stat-ball {
+  color: #72b8ff !important;
+  border-color: rgba(79, 168, 255, 0.28) !important;
+}
+
+#one-game-scroll-section .stat-miss {
+  color: var(--accent) !important;
+  border-color: rgba(232, 200, 64, 0.32) !important;
+}
+
+#one-game-scroll-section #scroll-viz-sticky {
+  border-radius: 24px !important;
+  top: 18px !important;
+  height: calc(100vh - 36px) !important;
+  min-height: calc(100vh - 36px) !important;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(77, 224, 192, 0.10), transparent 34%),
+    radial-gradient(circle at 50% 82%, rgba(232, 200, 64, 0.10), transparent 34%),
+    linear-gradient(180deg, rgba(30, 35, 48, 0.96), rgba(13, 15, 20, 0.92)) !important;
+  border: 1px solid rgba(77, 224, 192, 0.20) !important;
+  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.34) !important;
+}
+
+#one-game-scroll-section #scroll-viz-sticky::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(232, 234, 240, 0.06);
+  pointer-events: none;
+}
+
+#one-game-scroll-section #scroll-zone-wrap {
+  padding: 10px !important;
+  border-radius: 20px !important;
+  background: rgba(13, 15, 20, 0.34) !important;
+  border: 1px solid rgba(232, 234, 240, 0.08) !important;
+}
+
+#one-game-scroll-section .viz-caption {
+  color: var(--accent2) !important;
+  background: rgba(77, 224, 192, 0.08) !important;
+  border: 1px solid rgba(77, 224, 192, 0.22) !important;
+  border-radius: 999px !important;
+  padding: 7px 12px !important;
+  margin-bottom: 14px !important;
+}
+
+#one-game-scroll-section .viz-legend {
+  margin-top: 14px !important;
+}
+
+#one-game-scroll-section .viz-leg-item {
+  color: rgba(232, 234, 240, 0.58) !important;
+}
+
+#one-game-scroll-section .prog-dot {
+  background: rgba(232, 234, 240, 0.22) !important;
+}
+
+#one-game-scroll-section .prog-dot.active {
+  background: var(--accent) !important;
+  box-shadow: 0 0 14px rgba(232, 200, 64, 0.8) !important;
+}
+
+#one-game-scroll-section .summary-card {
+  background: rgba(13, 15, 20, 0.46) !important;
+  border: 1px solid rgba(232, 234, 240, 0.08) !important;
+  border-radius: 14px !important;
+}
+
+#one-game-scroll-section .summary-card .big {
+  color: #ffffff !important;
+}
+
+#one-game-scroll-section .summary-card .label {
+  color: rgba(232, 234, 240, 0.52) !important;
+}
+
+#one-game-scroll-section .accuracy-verdict {
+  background: rgba(232, 200, 64, 0.08) !important;
+  border: 1px solid rgba(232, 200, 64, 0.20) !important;
+  color: rgba(232, 234, 240, 0.78) !important;
+  border-radius: 14px !important;
+}
+
+#one-game-scroll-section #scroll-pitch-tooltip {
+  background: rgba(13, 15, 20, 0.96) !important;
+  border: 1px solid rgba(77, 224, 192, 0.24) !important;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35) !important;
+}
+
+@media (max-width: 900px) {
+  #one-game-scroll-section .story-layout {
+    grid-template-columns: 1fr !important;
+    padding: 0 18px 56px !important;
+  }
+
+  #one-game-scroll-section .scroll-section {
+    padding: 64px 22px !important;
+    min-height: auto !important;
+  }
+
+  #one-game-scroll-section #scroll-viz-sticky {
+    width: 100% !important;
+    height: 540px !important;
+    min-height: 540px !important;
+    top: 0 !important;
+  }
+}
+
+
+/* New call-split slide + centered red Try Another Game button */
+#one-game-scroll-section #scroll-section-2 .section-body {
+  max-width: 520px;
+}
+
+#one-game-scroll-section #scroll-section-8 .continue-btn,
+#one-game-scroll-section .continue-btn {
+  background: var(--strike);
+  border-color: rgba(255, 79, 79, 0.35);
+  color: #ffffff;
+  display: flex;
+  width: fit-content;
+  margin: 32px auto 0;
+  justify-content: center;
+  text-align: center;
+}
+
+#one-game-scroll-section #scroll-section-8 .summary-grid,
+#one-game-scroll-section #scroll-section-8 .accuracy-verdict {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#one-game-scroll-section #scroll-section-8 .section-body,
+#one-game-scroll-section #scroll-section-8 .section-heading,
+#one-game-scroll-section #scroll-section-8 .section-num {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}

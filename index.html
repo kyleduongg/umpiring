@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -226,10 +227,137 @@
     </div>
 
     <div class="scroll-cue umpire-scroll-cue">
-      <span>Now look at the real umpire data</span>
+      <span>Now, let's dive into A Full Game Behind The Plate</span>
       <span class="scroll-arrow">↓</span>
     </div>
   </div>
+</section>
+
+<!-- One Game Every Call Scrollytelling Section -->
+<!-- One Game Scroll Section - directly on the page, no iframe -->
+<section id="one-game-scroll-section" class="scroll-on-page-section">
+<!-- HERO -->
+<section id="scroll-hero">
+  <div class="hero-eyebrow">Breaking Down an MLB Game</div>
+  <h1 class="hero-title">A Game Through The Umpire’s Eyes</h1>
+  <p class="hero-body">You are dropped into a real MLB game from June 2025. Scroll through every pitch the umpire had to judge, including the locations, the calls, and the ones they got wrong.</p>
+  <div class="game-card">
+    <div>
+      <div class="game-matchup" id="scroll-hero-matchup">— @ —</div>
+      <div class="game-meta" id="scroll-hero-meta">Select a game to begin</div>
+    </div>
+    <button class="btn-new-game">⚾ New Game</button>
+  </div>
+  <a href="#scroll-story-anchor" class="scroll-hint" id="scroll-scroll-hint" style="display:none">▾ scroll to explore</a>
+</section>
+
+<!-- STORY -->
+<div id="scroll-story" style="display:none">
+<div id="scroll-story-anchor"></div>
+<div class="story-layout">
+
+  <div class="scroll-sections">
+
+    <!-- S1: All pitches spiral -->
+    <div class="scroll-section" id="scroll-section-1" data-step="1">
+      <div class="section-num"><span>01</span>The Full Picture</div>
+      <h2 class="section-heading">Every Pitch<br>Becomes A <em>Decision</em></h2>
+      <div class="section-body">
+        In this game, the home plate umpire made
+        <span class="stat-inline stat-strike" id="scroll-s1-total">—</span>
+        ball-or-strike decisions, each one in a split second with no replay or strike zone graphic to help them. Here are the pitches grouped together.
+      </div>
+    </div>
+
+    <!-- S2: Pitch types blob split -->
+    <div class="scroll-section" id="scroll-section-2" data-step="2">
+      <div class="section-num"><span>02</span>Pitch Variety</div>
+      <h2 class="section-heading">Every Pitch<br>Comes In <em>Differently</em></h2>
+      <div class="section-body">
+        The umpire is not seeing the same pitch every time. Fastballs, breaking balls, and off-speed pitches all move through the zone differently, forcing the umpire to adjust their read in less than half a second. Here are the different pitches the umpire encountered during the game.
+      </div>
+      <div class="type-pills" id="scroll-type-pills-left"></div>
+    </div>
+
+    <!-- S3: Balls vs. strikes split -->
+    <div class="scroll-section" id="scroll-section-3" data-step="3">
+      <div class="section-num"><span>03</span>Balls vs. Strikes</div>
+      <h2 class="section-heading">Then Split<br>The Calls Into<br><em>Balls & Strikes</em></h2>
+      <div class="section-body">
+        After seeing the pitch mix, the next split is the actual decision: which pitches became strikes and which pitches became balls.
+        <br><br>
+        This turns one long stream of pitches into the basic choice behind every plate appearance.
+      </div>
+    </div>
+
+    <!-- S4: All locations on zone -->
+    <div class="scroll-section" id="scroll-section-4" data-step="4">
+      <div class="section-num"><span>04</span>The Map</div>
+      <h2 class="section-heading">Where Every<br>Pitch<br><em>Crossed the Plate</em></h2>
+      <div class="section-body">
+        Here is where all <span class="stat-inline stat-strike" id="scroll-s3-total">—</span> pitches crossed home plate, plotted against the rulebook strike zone. Notice how many land right on the edges.
+      </div>
+    </div>
+
+    <!-- S4: Called strikes -->
+    <div class="scroll-section" id="scroll-section-5" data-step="5">
+      <div class="section-num"><span>05</span>Strikes</div>
+      <h2 class="section-heading">What the<br>Umpire Called<br>a <em>Strike</em></h2>
+      <div class="section-body">
+        Filtering to just <span class="stat-inline stat-strike" id="scroll-s4-strikes">—</span> called strikes. In a perfect world, all of these sit inside the zone rectangle. But the real zone is a blur — wider at the corners, tighter in the middle.
+      </div>
+    </div>
+
+    <!-- S5: Called balls -->
+    <div class="scroll-section" id="scroll-section-6" data-step="6">
+      <div class="section-num"><span>06</span>Balls</div>
+      <h2 class="section-heading">What the<br>Umpire Called<br>a <em>Ball</em></h2>
+      <div class="section-body">
+        Now filtering to <span class="stat-inline stat-ball" id="scroll-s5-balls">—</span> called balls. Watch for the ones that sneak inside the edges — pitches that were in the zone, but called ball anyway.
+      </div>
+    </div>
+
+    <!-- S6: Missed calls -->
+    <div class="scroll-section" id="scroll-section-7" data-step="7">
+      <div class="section-num"><span>07</span>The Misses</div>
+      <h2 class="section-heading">The Calls<br>They <em>Got Wrong</em></h2>
+      <div class="section-body">
+        <span class="stat-inline stat-miss" id="scroll-s6-missed">—</span> pitches where the call disagreed with Statcast's location.
+        <br><br>
+        <strong id="scroll-s6-miss-b">—</strong> inside the zone, called <em>ball</em>.<br>
+        <strong id="scroll-s6-miss-s">—</strong> outside the zone, called <em>strike</em>.
+        <br><br>These are circled in amber. Hover to inspect.
+      </div>
+    </div>
+
+    <!-- S7: Summary -->
+    <div class="scroll-section" id="scroll-section-8" data-step="8">
+      <div class="section-num"><span>08</span>The Verdict</div>
+      <h2 class="section-heading">One Game,<br>One <em>Umpire</em></h2>
+      <div class="section-body">Every ball and strike call from this game, from first pitch to last.</div>
+      <div class="summary-grid" id="scroll-summary-grid"></div>
+      <div class="accuracy-verdict" id="scroll-accuracy-verdict"></div>
+      <button class="continue-btn">⚾ Click to View a different game now!</button>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: sticky viz -->
+  <div class="viz-sticky" id="scroll-viz-sticky">
+    <div class="viz-progress" id="scroll-viz-progress"></div>
+    <div style="display:flex;flex-direction:column;align-items:center;width:100%">
+      <div class="viz-caption" id="scroll-viz-caption">Strike Zone · June 2025</div>
+      <div id="scroll-zone-wrap">
+        <svg id="scroll-zone-svg" width="400" height="400"></svg>
+      </div>
+      <div class="viz-legend" id="scroll-viz-legend"></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<div id="scroll-pitch-tooltip"></div>
 </section>
 
 <!-- Umpire Accuracy Visualization Section -->
@@ -674,7 +802,9 @@
   <button id="btn-restart">Restart Game ↺</button>
 </section>
 
+
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 <script src="js/main.js"></script>
+<script src="js/umpire-scroll.js"></script>
 </body>
 </html>
