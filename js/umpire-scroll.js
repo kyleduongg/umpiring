@@ -77,6 +77,10 @@ function loadGame(game) {
   // Fill text spans
   document.getElementById('scroll-s1-total').textContent   = game.stats.total;
   document.getElementById('scroll-s3-total').textContent   = game.stats.total;
+  const slide3Strikes = document.getElementById('scroll-s3-strikes');
+  const slide3Balls = document.getElementById('scroll-s3-balls');
+  if (slide3Strikes) slide3Strikes.textContent = game.stats.strikes;
+  if (slide3Balls) slide3Balls.textContent = game.stats.balls;
   document.getElementById('scroll-s4-strikes').textContent = game.stats.strikes;
   document.getElementById('scroll-s5-balls').textContent   = game.stats.balls;
   document.getElementById('scroll-s6-missed').textContent  = game.stats.missed;
@@ -245,7 +249,7 @@ function renderViz(step) {
   markDisplayedZoneMisses(pitches, zone);
   const captions = [
     '',
-    'All Called Pitches — Spiral View',
+    'Every Pitch The Umpire Saw',
     'Pitch Type Breakdown',
     `${currentGame.stats.strikes} Strikes vs ${currentGame.stats.balls} Balls`,
     `All ${pitches.length} Pitch Locations`,
