@@ -54,6 +54,12 @@ function loadGame(game) {
   // Fill text spans
   document.getElementById('scroll-s1-total').textContent   = game.stats.total;
   document.getElementById('scroll-s3-total').textContent   = game.stats.total;
+
+  const s3Strikes = document.getElementById('scroll-s3-strikes');
+  const s3Balls = document.getElementById('scroll-s3-balls');
+  if (s3Strikes) s3Strikes.textContent = game.stats.strikes;
+  if (s3Balls) s3Balls.textContent = game.stats.balls;
+
   document.getElementById('scroll-s4-strikes').textContent = game.stats.strikes;
   document.getElementById('scroll-s5-balls').textContent   = game.stats.balls;
   document.getElementById('scroll-s6-missed').textContent  = game.stats.missed;
