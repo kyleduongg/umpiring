@@ -27,6 +27,29 @@ const TYPE_COLORS = {
 };
 function typeColor(n){ return TYPE_COLORS[n] || '#9ca3af'; }
 
+// A pitch counts as touching the zone if the baseball overlaps the displayed strike zone.
+// This keeps the yellow highlight matched to what the viewer sees on the chart.
+const BALL_RADIUS_FT = 0.12;
+function pitchTouchesZone(p, zone) {
+  const top = zone && Number.isFinite(zone.top) ? zone.top : p.t;
+  const bot = zone && Number.isFinite(zone.bot) ? zone.bot : p.b;
+  return (
+    p.x + BALL_RADIUS_FT >= ZONE_LEFT &&
+    p.x - BALL_RADIUS_FT <= ZONE_RIGHT &&
+    p.z + BALL_RADIUS_FT >= bot &&
+    p.z - BALL_RADIUS_FT <= top
+  );
+}
+
+function markDisplayedZoneMisses(pitches, zone) {
+  pitches.forEach(p => {
+    const touches = pitchTouchesZone(p, zone);
+    p._wrongStrike = p.c === 1 && !touches;
+    p._wrongBall = p.c === 0 && touches;
+    p._actualMiss = p._wrongStrike || p._wrongBall;
+  });
+}
+
 // ══════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════
@@ -54,12 +77,6 @@ function loadGame(game) {
   // Fill text spans
   document.getElementById('scroll-s1-total').textContent   = game.stats.total;
   document.getElementById('scroll-s3-total').textContent   = game.stats.total;
-
-  const s3Strikes = document.getElementById('scroll-s3-strikes');
-  const s3Balls = document.getElementById('scroll-s3-balls');
-  if (s3Strikes) s3Strikes.textContent = game.stats.strikes;
-  if (s3Balls) s3Balls.textContent = game.stats.balls;
-
   document.getElementById('scroll-s4-strikes').textContent = game.stats.strikes;
   document.getElementById('scroll-s5-balls').textContent   = game.stats.balls;
   document.getElementById('scroll-s6-missed').textContent  = game.stats.missed;
@@ -83,7 +100,7 @@ function loadGame(game) {
     <div class="summary-card"><div class="big" style="color:var(--strike)">${game.stats.strikes}</div><div class="label">Called Strikes</div></div>
     <div class="summary-card"><div class="big" style="color:var(--ball)">${game.stats.balls}</div><div class="label">Called Balls</div></div>
     <div class="summary-card"><div class="big" style="color:var(--miss-dark)">${game.stats.missed}</div><div class="label">Missed Calls</div></div>
-    <div class="summary-card"><div class="big" style="color:var(--muted)">${game.stats.ms}+${game.stats.mb}</div><div class="label">Ball-in-zone / Strike-out</div></div>
+    <div class="summary-card"><div class="big" style="font-size:24px;line-height:1.2;letter-spacing:0.5px;color:#ffffff;"><div>${game.stats.ms} strike${game.stats.ms!==1?'s':''} called a <span style="color:var(--ball)">ball</span></div><div style="margin-top:8px;">${game.stats.mb} ball${game.stats.mb!==1?'s':''} called a <span style="color:var(--strike)">strike</span></div></div><div class="label">Miss Type Breakdown</div></div>
   `;
 
   // Verdict
@@ -225,6 +242,7 @@ function renderViz(step) {
 
   const pitches = currentGame.pitches;
   const zone    = getAvgZone(pitches);
+  markDisplayedZoneMisses(pitches, zone);
   const captions = [
     '',
     'All Called Pitches — Spiral View',
@@ -255,20 +273,38 @@ function renderViz(step) {
   else if (step === 3) renderCallSplit(pitches);
   else if (step === 4) renderZoneDots(pitches, p=>p.c===1?'rgba(200,57,43,0.75)':'rgba(37,99,176,0.65)', ()=>5, ()=>0.88, false,
       [{color:'rgba(200,57,43,0.8)',label:'Called Strike'},{color:'rgba(37,99,176,0.8)',label:'Called Ball'}]);
-  else if (step === 5) renderZoneDots(pitches.filter(p=>p.c===1), ()=>'rgba(200,57,43,0.9)', ()=>5.5, ()=>0.95, false,
-      [{color:'rgba(200,57,43,0.9)',label:'Called Strike'}],
-      pitches.filter(p=>p.c===0), 'rgba(37,99,176,0.1)');
-  else if (step === 6) renderZoneDots(pitches.filter(p=>p.c===0), ()=>'rgba(37,99,176,0.9)', ()=>5.5, ()=>0.95, false,
-      [{color:'rgba(37,99,176,0.9)',label:'Called Ball'}],
-      pitches.filter(p=>p.c===1), 'rgba(200,57,43,0.1)');
+  else if (step === 5) renderZoneDots(pitches.filter(p=>p.c===1),
+      ()=>'rgba(200,57,43,0.9)',
+      ()=>5.5,
+      ()=>0.95,
+      true,
+      [{color:'rgba(200,57,43,0.9)',label:'Called Strike'},{color:'rgba(245,155,0,0.9)',label:'Outside Zone, Called Strike'}],
+      pitches.filter(p=>p.c===0), 'rgba(37,99,176,0.1)',
+      p=>p._wrongStrike);
+  else if (step === 6) renderZoneDots(pitches.filter(p=>p.c===0),
+      ()=>'rgba(37,99,176,0.9)',
+      ()=>5.5,
+      ()=>0.95,
+      true,
+      [{color:'rgba(37,99,176,0.9)',label:'Called Ball'},{color:'rgba(245,155,0,0.9)',label:'Inside Zone, Called Ball'}],
+      pitches.filter(p=>p.c===1), 'rgba(200,57,43,0.1)',
+      p=>p._wrongBall);
   else if (step === 7) renderZoneDots(pitches,
-      p=>p.m?'#f59b00':(p.c===1?'rgba(200,57,43,0.3)':'rgba(37,99,176,0.25)'),
-      p=>p.m?7:4.5, p=>p.m?1:0.35, true,
-      [{color:'rgba(200,57,43,0.4)',label:'Strike (correct)'},{color:'rgba(37,99,176,0.4)',label:'Ball (correct)'},{color:'#f59b00',label:'Missed Call'}]);
+      p=>p._actualMiss?'#f59b00':(p.c===1?'rgba(200,57,43,0.28)':'rgba(37,99,176,0.24)'),
+      ()=>4.8,
+      p=>p._actualMiss?1:0.28,
+      true,
+      [{color:'rgba(200,57,43,0.35)',label:'Called Strike'},{color:'rgba(37,99,176,0.35)',label:'Called Ball'},{color:'#f59b00',label:'Missed Call'}],
+      null, null,
+      p=>p._actualMiss);
   else if (step === 8) renderZoneDots(pitches,
-      p=>p.m?'#f59b00':(p.c===1?'rgba(200,57,43,0.7)':'rgba(37,99,176,0.6)'),
-      p=>p.m?6:4.5, p=>p.m?1:0.65, true,
-      [{color:'rgba(200,57,43,0.8)',label:'Called Strike'},{color:'rgba(37,99,176,0.8)',label:'Called Ball'},{color:'#f59b00',label:'Missed'}]);
+      p=>p.c===1?'rgba(200,57,43,0.75)':'rgba(37,99,176,0.65)',
+      ()=>4.8,
+      p=>p._actualMiss?0.95:0.65,
+      true,
+      [{color:'rgba(200,57,43,0.8)',label:'Called Strike'},{color:'rgba(37,99,176,0.8)',label:'Called Ball'},{color:'rgba(245,155,0,0.9)',label:'Missed Call Highlight'}],
+      null, null,
+      p=>p._actualMiss);
 }
 
 // ══════════════════════════════════════
@@ -538,7 +574,7 @@ function renderBlobSplit(pitches) {
 // ══════════════════════════════════════
 //  STEPS 4–8: ZONE SCATTER
 // ══════════════════════════════════════
-function renderZoneDots(pitches, colorFn, sizeFn, opFn, showMiss, legendItems, ghostPitches, ghostColor) {
+function renderZoneDots(pitches, colorFn, sizeFn, opFn, showMiss, legendItems, ghostPitches, ghostColor, highlightFn) {
   // Ghost layer
   if (ghostPitches && ghostPitches.length) {
     dynLayer.selectAll('.ghost-dot')
@@ -553,9 +589,10 @@ function renderZoneDots(pitches, colorFn, sizeFn, opFn, showMiss, legendItems, g
       .attr('pointer-events','none');
   }
 
-  // Main dots
-  const nonMissed = pitches.filter(p => !p.m);
-  const missed    = pitches.filter(p => p.m);
+  // Main dots. Yellow indicates a highlight/ring only; the pitch keeps its original call color.
+  const isHighlighted = highlightFn || (p => showMiss && p.m);
+  const nonMissed = pitches.filter(p => !isHighlighted(p));
+  const missed    = pitches.filter(p => isHighlighted(p));
 
   function plot(data, cls) {
     dynLayer.selectAll(`.${cls}`)
@@ -566,11 +603,11 @@ function renderZoneDots(pitches, colorFn, sizeFn, opFn, showMiss, legendItems, g
       .attr('cy', p => ySc(p.z))
       .attr('r', 0)
       .attr('fill', p => colorFn(p))
-      .attr('stroke', p => p.m ? 'rgba(245,155,0,0.8)' : 'rgba(255,255,255,0.2)')
-      .attr('stroke-width', p => p.m ? 1.5 : 0.5)
+      .attr('stroke', p => isHighlighted(p) ? 'rgba(245,155,0,0.95)' : 'rgba(255,255,255,0.2)')
+      .attr('stroke-width', p => isHighlighted(p) ? 2.2 : 0.5)
       .attr('opacity', p => opFn(p))
       .attr('cursor','pointer')
-      .attr('filter', p => p.m ? 'url(#scroll-missGlow)' : null)
+      .attr('filter', p => isHighlighted(p) ? 'url(#scroll-missGlow)' : null)
       .on('mouseover', (ev,p) => showTip(ev,p))
       .on('mousemove', (ev)   => moveTip(ev))
       .on('mouseout',  ()     => hideTip())
@@ -587,7 +624,7 @@ function renderZoneDots(pitches, colorFn, sizeFn, opFn, showMiss, legendItems, g
       const ring = ringsLayer.append('circle')
         .attr('cx', xSc(p.x)).attr('cy', ySc(p.z))
         .attr('r', 9).attr('fill','none')
-        .attr('stroke','rgba(245,155,0,0.5)').attr('stroke-width',1.5)
+        .attr('stroke','rgba(245,155,0,0.7)').attr('stroke-width',1.7)
         .attr('pointer-events','none');
       function pulse() {
         ring.attr('r',9).attr('opacity',0.8)
