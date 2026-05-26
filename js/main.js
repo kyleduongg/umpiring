@@ -587,10 +587,17 @@ function makeCall(userCall) {
   const actualCallLabel = actualStrike ? 'STRIKE' : 'BALL';
   const umpireCallLabel = umpireStrike ? 'STRIKE' : 'BALL';
 
-  const umpireNote =
-    actualStrike === umpireStrike
-      ? `The real MLB umpire also called it a ${umpireCallLabel}.`
-      : `The real MLB umpire called it a ${umpireCallLabel}, but in this challenge it touches the zone, so it is a ${actualCallLabel}.`;
+  let umpireNote;
+
+  if (actualStrike === umpireStrike) {
+    umpireNote = `The real MLB umpire also called it a ${umpireCallLabel}.`;
+  } else if (actualStrike) {
+    umpireNote =
+      `The real MLB umpire called it a ${umpireCallLabel}, but in this challenge it touches the zone, so it is a ${actualCallLabel}.`;
+  } else {
+    umpireNote =
+      `The real MLB umpire called it a ${umpireCallLabel}, but in this challenge it misses the zone, so it is a ${actualCallLabel}.`;
+  }
 
   const visualBorderline = isBorderlinePitch(p);
 

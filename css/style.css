@@ -3845,3 +3845,17 @@ body {
   display: block;
   margin: 0 auto;
 }
+
+.accuracy-mini-stats {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 14px;
+  font-family: 'IBM Plex Mono', monospace;
+  line-height: 1.8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  text-align: center;
+}
