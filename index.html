@@ -446,15 +446,66 @@
 <div class="main" id="game-screen">
   <!-- Start Game Overlay -->
   <div id="game-start-overlay">
-    <div class="game-start-card">
+    <div class="game-start-card" id="game-ready-card">
       <div class="game-start-kicker">You are now behind home plate</div>
 
       <h2>Ready to Call the Zone?</h2>
 
       <p>
-        The first 3 pitches show the strike zone. After that, the strike zone disappears.
-        Make the correct ball or strike call before you reach 3 mistakes.
+        Before you begin, read the instructions to learn how the game works. Your goal is to judge each pitch as either a ball or a strike.
       </p>
+
+      <button id="btn-continue-instructions">Continue</button>
+    </div>
+
+    <div class="game-instructions-card" id="game-instructions-card">
+      <div class="game-start-kicker">Overview</div>
+
+      <h2>Learn the Rules</h2>
+
+      <div class="instructions-list">
+        <div class="instruction-item">
+          <span class="instruction-number">01</span>
+          <p>
+            You will see one pitch at a time from the umpire’s view behind home plate.
+          </p>
+        </div>
+
+        <div class="instruction-item">
+          <span class="instruction-number">02</span>
+          <p>
+            For the first 3 pitches, the strike zone will be visible so you can practice.
+          </p>
+        </div>
+
+        <div class="instruction-item">
+          <span class="instruction-number">03</span>
+          <p>
+            After the practice pitches, the strike zone disappears and you must call each pitch without the guide.
+          </p>
+        </div>
+
+        <div class="instruction-item">
+          <span class="instruction-number">04</span>
+          <p>
+            The faster the pitch, the quicker it reaches the strike zone in-game, giving you less time to decide whether it’s a ball or a strike.
+          </p>
+        </div>
+
+        <div class="instruction-item">
+          <span class="instruction-number">05</span>
+          <p>
+            If any part of the ball touches the strike zone, call it a strike. Otherwise, call it a ball.
+          </p>
+        </div>
+
+        <div class="instruction-item">
+          <span class="instruction-number">06</span>
+          <p>
+            The game ends when you make 3 mistakes. Results will be calculated after the game!
+          </p>
+        </div>
+      </div>
 
       <button id="btn-start-game">Start Game</button>
     </div>

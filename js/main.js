@@ -25,7 +25,9 @@ const FIXED_ZONE_TOP = 3.5;
 const FIXED_ZONE_BOTTOM = 1.5;
 
 const BORDERLINE_START_CORRECT = 5;
+const BORDERLINE_SECOND_LEVEL_CORRECT = 10;
 const BORDERLINE_CHANCE = 0.75;
+const BORDERLINE_SECOND_LEVEL_CHANCE = 0.90;
 
 const MLB_UMPIRE_REACTION_TIME_SECONDS = 0.45;
 const JUNE_MLB_UMPIRE_AVG_ACCURACY = 94.3;
@@ -117,7 +119,12 @@ function chooseNextPitchIndex(startIndex) {
     return startIndex;
   }
 
-  const shouldPreferBorderline = Math.random() < BORDERLINE_CHANCE;
+  const currentBorderlineChance =
+    correct >= BORDERLINE_SECOND_LEVEL_CORRECT
+      ? BORDERLINE_SECOND_LEVEL_CHANCE
+      : BORDERLINE_CHANCE;
+
+  const shouldPreferBorderline = Math.random() < currentBorderlineChance;
 
   if (!shouldPreferBorderline) {
     return startIndex;
@@ -652,7 +659,23 @@ document.getElementById('btn-next').addEventListener('click', () => {
 document.getElementById('btn-strike').addEventListener('click', () => makeCall('strike'));
 document.getElementById('btn-ball').addEventListener('click', () => makeCall('ball'));
 
+const continueButton = document.getElementById('btn-continue-instructions');
 const startButton = document.getElementById('btn-start-game');
+
+if (continueButton) {
+  continueButton.addEventListener('click', () => {
+    const readyCard = document.getElementById('game-ready-card');
+    const instructionsCard = document.getElementById('game-instructions-card');
+
+    if (readyCard) {
+      readyCard.style.display = 'none';
+    }
+
+    if (instructionsCard) {
+      instructionsCard.style.display = 'block';
+    }
+  });
+}
 
 if (startButton) {
   startButton.addEventListener('click', () => {
@@ -797,8 +820,19 @@ document.getElementById('btn-restart').addEventListener('click', () => {
   resetGameState();
 
   const overlay = document.getElementById('game-start-overlay');
+  const readyCard = document.getElementById('game-ready-card');
+  const instructionsCard = document.getElementById('game-instructions-card');
+
   if (overlay) {
     overlay.style.display = 'flex';
+  }
+
+  if (readyCard) {
+    readyCard.style.display = 'block';
+  }
+
+  if (instructionsCard) {
+    instructionsCard.style.display = 'none';
   }
 
   const comparisonSection = document.getElementById('comparison-section');
@@ -842,6 +876,17 @@ async function init() {
     hideNextButton();
     disableCallButtons();
     updateProgressText();
+
+    const readyCard = document.getElementById('game-ready-card');
+    const instructionsCard = document.getElementById('game-instructions-card');
+
+    if (readyCard) {
+      readyCard.style.display = 'block';
+    }
+
+    if (instructionsCard) {
+      instructionsCard.style.display = 'none';
+    }
 
     const feedbackText = document.getElementById('feedback-text');
     if (feedbackText) {

@@ -1148,7 +1148,101 @@ body {
   margin-bottom: 22px;
 }
 
-#btn-start-game {
+.game-instructions-card {
+  display: none;
+  width: min(680px, 100%);
+  max-height: min(82vh, 760px);
+  overflow-y: auto;
+  background: var(--panel);
+  border: 1px solid rgba(77, 224, 192, 0.34);
+  border-radius: 18px;
+  padding: 30px 28px;
+  text-align: center;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+}
+
+.game-instructions-card h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 42px;
+  letter-spacing: 2px;
+  color: var(--text);
+  margin-bottom: 18px;
+}
+
+.instructions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 0 24px;
+  text-align: left;
+}
+
+.instruction-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 13px;
+  align-items: start;
+  padding: 14px 16px;
+  border-radius: 13px;
+  background: rgba(13, 15, 20, 0.42);
+  border: 1px solid rgba(232, 234, 240, 0.08);
+}
+
+.instruction-number {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(77, 224, 192, 0.10);
+  border: 1px solid rgba(77, 224, 192, 0.28);
+  color: var(--accent2);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.instruction-item p {
+  color: rgba(232, 234, 240, 0.76);
+  line-height: 1.55;
+  font-size: 14px;
+  margin: 0;
+}
+
+.instruction-item:nth-child(4) {
+  border-color: rgba(232, 200, 64, 0.28);
+  background: rgba(232, 200, 64, 0.07);
+}
+
+.instruction-item:nth-child(4) .instruction-number {
+  background: rgba(232, 200, 64, 0.12);
+  border-color: rgba(232, 200, 64, 0.34);
+  color: var(--accent);
+}
+
+@media (max-width: 620px) {
+  .game-start-card,
+  .game-instructions-card {
+    padding: 24px 20px;
+  }
+
+  .game-start-card h2,
+  .game-instructions-card h2 {
+    font-size: 34px;
+  }
+
+  .instruction-item {
+    padding: 12px;
+  }
+
+  .instruction-item p {
+    font-size: 13px;
+  }
+}
+
+#btn-start-game,
+#btn-continue-instructions {
   padding: 14px 34px;
   border: none;
   border-radius: 10px;
@@ -1161,7 +1255,8 @@ body {
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-#btn-start-game:hover {
+#btn-start-game:hover,
+#btn-continue-instructions:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 30px rgba(232, 200, 64, 0.36);
 }
@@ -2497,7 +2592,8 @@ body {
     font-size: 34px;
   }
 
-  #btn-start-game {
+  #btn-start-game,
+#btn-continue-instructions {
     width: 100%;
     max-width: 360px;
   }
