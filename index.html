@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inside the Umpire's View</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- Intro Screen -->
+<section id="intro-screen">
+  <div class="intro-bg-glow"></div>
+
+  <!-- Baseball Animation -->
+  <div class="baseball-animation" aria-hidden="true">
+    <div class="baseball">
+      <span class="stitch stitch-left"></span>
+      <span class="stitch stitch-right"></span>
+    </div>
+  </div>
+
+  <div class="intro-content">
+    <div class="intro-kicker">One pitch. One look. No replay.</div>
+
+    <h1>Strike or Ball? Could You Call the Zone?</h1>
+
+    <p class="intro-subtitle">
+      Fans today often criticize umpires for controversial calls behind the plate. However, behind home plate, an umpire gets just one look at a pitch traveling nearly 90 to 100 mph, on average.
+    </p>
+
+    <div class="tweet-stack">
+      <img src="images/tweet1.png" alt="Tweet criticizing an umpire call" class="tweet-card tweet-card-left" />
+      <img src="images/tweet2.png" alt="Tweet criticizing umpires" class="tweet-card tweet-card-center" />
+      <img src="images/tweet3.png" alt="Tweet calling for robo umps" class="tweet-card tweet-card-right" />
+    </div>
+
+    <div class="intro-story-card">
+      <p>
+        Fans see the replay.
+        <strong>Umpires see it once.</strong>
+      </p>
+      <p>
+        Think you could do better than the umpires in the MLB? Let's keep going then! 
+      </p>
+    </div>
+
+    <div class="scroll-cue">
+      <span>Scroll to see what fans actually see</span>
+      <span class="scroll-arrow">↓</span>
+    </div>
+  </div>
+
+  <div class="intro-field">
+    <div class="intro-mound"></div>
+    <div class="intro-plate"></div>
+  </div>
+</section>
+
+<!-- Fan View Section -->
+<section id="fan-view-section">
+  <div class="fan-view-inner">
+    <div class="fan-view-header">
+      <div class="fan-view-kicker">Broadcast View</div>
+
+      <h1>What Do You See As A Fan?</h1>
+
+      <p class="fan-view-subtitle">
+        On screen, a pitch can feel clear and decisive. The broadcast gives fans a clean, replayable angle that differs from the split-second view the umpire has behind home plate.
+      </p>
+    </div>
+
+    <div class="broadcast-lab">
+      <div class="broadcast-video-card">
+        <div class="broadcast-topbar">
+          <span class="broadcast-live-dot"></span>
+          <span>Fan Broadcast Angle</span>
+          <span class="broadcast-tag">Replay Advantage</span>
+        </div>
+
+        <video
+          class="fan-video"
+          controls
+          playsinline
+          preload="metadata">
+          <source src="https://sporty-clips.mlb.com/MnJPbmRfWGw0TUFRPT1fQndZQUJ3SU1YbGNBRGxwUlZ3QUhBMWRlQUZrSFZBUUFBbDFUQ0ZFR0JsQldVVkZY.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+
+        <p class="fan-video-caption">
+          Jacob Misiorowski, a pitcher for the Milwaukee Brewers, fired a 100 mph fastball in the clip above. The umpire had only tenths of a second to make a judgment call in real time, and the pitch was ruled a strike despite appearing to miss the zone on replay.
+        </p>
+      </div>
+
+      <div class="umpire-reality-panel">
+        <div class="umpire-panel-label">What is the true reality for umpires?</div>
+
+        <p>
+          Umpires do not get a perfect TV angle, a pause button, or time to debate the zone.
+          The decision has to happen immediately as the pitch crosses the plate.
+        </p>
+      </div>
+    </div>
+
+    <div class="decision-breakdown">
+      <article class="decision-card">
+        <div class="decision-number">01</div>
+        <div>
+          <h2>Camera Angle</h2>
+          <p>
+            The TV broadcast shows the pitch from an offset center-field camera angle designed for viewers. The umpire sees the pitch from directly behind home plate, which creates a different perspective on pitch location.
+          </p>
+        </div>
+      </article>
+
+      <article class="decision-card">
+        <div class="decision-number">02</div>
+        <div>
+          <h2>Decision Speed</h2>
+          <p>
+            Fans have the leeway to pause, rewind, and judge a pitch after watching multiple replays. Umpires must make a final call in real time, often within tenths of a second, with no opportunity for a second look.
+          </p>
+        </div>
+      </article>
+
+      <article class="decision-card">
+        <div class="decision-number">03</div>
+        <div>
+          <h2>Strike Zone Judgment</h2>
+          <p>
+            The TV strike zone box is a broadcast overlay that helps viewers visualize the pitch, but umpires do not see it. They must judge the pitch’s height, width, and movement in real time without that reference.
+          </p>
+        </div>
+      </article>
+    </div>
+
+    <div class="fan-takeaway-strip">
+      <span class="takeaway-label">Key Takeaway</span>
+      <p>
+        Watching a pitch is not the same as calling it. Fans see the game through a replayable broadcast, while umpires have one live look at a fast-moving pitch and only a split second to decide.
+      </p>
+    </div>
+
+    <div class="scroll-cue fan-scroll-cue">
+      <span>Now step behind the plate</span>
+      <span class="scroll-arrow">↓</span>
+    </div>
+  </div>
+</section>
+
+<!-- Umpire View Section -->
+<section id="umpire-view-section">
+  <div class="umpire-view-inner">
+    <div class="umpire-view-header">
+      <div class="umpire-view-kicker">Umpire View</div>
+
+      <h1>What Does An Umpire Really See?</h1>
+
+      <p class="umpire-view-subtitle">
+        The broadcast view makes the pitch feel easier to judge, but the umpire sees the play from a crowded space behind the catcher.
+        This section shifts from the fan’s clean replay angle to the real-time view behind home plate.
+      </p>
+    </div>
+
+    <div class="umpire-perspective-layout">
+      <div class="umpire-view-copy">
+        <h2>The View Behind Home Plate</h2>
+
+        <p>
+          From the umpire’s position, the catcher’s setup, the batter’s movement, glove framing, and pitch speed all come together in a single split-second judgment. There is no clean broadcast angle, only a live pitch crossing the plate in real time, with no time to think or input from anyone else.
+        </p>
+
+        <div class="umpire-view-points">
+          <div class="umpire-view-point">
+            <span class="umpire-point-number">01</span>
+            <div>
+              <strong>The catcher blocks part of the picture</strong>
+              <p>The umpire is close to the zone, but the catcher’s body and glove can make the pitch harder to read.</p>
+            </div>
+          </div>
+
+          <div class="umpire-view-point">
+            <span class="umpire-point-number">02</span>
+            <div>
+              <strong>The pitch is moving fast</strong>
+              <p>A high-velocity pitch reaches the plate in less than half a second, leaving very little time to process the call.</p>
+            </div>
+          </div>
+
+          <div class="umpire-view-point">
+            <span class="umpire-point-number">03</span>
+            <div>
+              <strong>There is no broadcast box</strong>
+              <p>The umpire has to judge the strike zone without the digital box fans often see on TV.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="umpire-x-video-card">
+        <div class="umpire-x-topbar">
+          <span class="umpire-x-dot"></span>
+          <span>Umpire Cam</span>
+        </div>
+
+        <div class="umpire-x-embed">
+          <blockquote class="twitter-tweet" data-theme="dark">
+            <a href="https://x.com/MLBONFOX/status/1982995509775347843"></a>
+          </blockquote>
+        </div>
+
+        <p class="umpire-x-caption">
+          Mark Wegner, an umpire working Game 3 of the World Series, is shown in the view behind the plate. The ball reaches the plate very quickly, and the umpire must make a call at full speed through traffic, with no replay advantage.
+        </p>
+      </div>
+    </div>
+
+    <div class="umpire-takeaway-strip">
+      <span class="takeaway-label">Perspective Shift</span>
+      <p>
+        The fan has all the time in the world to watch, replay, and judge the pitch. The umpire must track it from the moment it leaves the pitcher’s hand, judge its location in real time, and make an instant call from behind the catcher.
+      </p>
+    </div>
+
+    <div class="scroll-cue umpire-scroll-cue">
+      <span>Now look at the real umpire data</span>
+      <span class="scroll-arrow">↓</span>
+    </div>
+  </div>
+</section>
+
+<!-- Umpire Accuracy Visualization Section -->
+<section id="umpire-accuracy-section">
+  <div class="umpire-accuracy-inner">
+    <div class="umpire-accuracy-header">
+      <div class="umpire-accuracy-kicker">Interactive Visualization</div>
+
+      <h1>How Accurate Are MLB Umpires?</h1>
+
+      <p class="umpire-accuracy-subtitle">
+       Before stepping behind the plate yourself, explore how MLB umpires performed throughout June 2025. Compare league-wide trends with sortable rankings that highlight accuracy, consistency, and workload behind the plate.
+      </p>
+    </div>
+
+    <div class="umpire-dashboard-layout">
+      <aside class="umpire-dashboard-side">
+        <div class="umpire-side-kicker">June 2025 Report Card</div>
+
+        <div class="umpire-hero-stat">
+          <div class="umpire-hero-num" id="umpire-hero-num">--%</div>
+          <div class="umpire-hero-label">League Average Call Accuracy</div>
+          <div class="umpire-hero-sub" id="umpire-hero-sub">
+            Loading umpire data...
+          </div>
+        </div>
+
+        <div class="umpire-mini-stats">
+          <div class="umpire-mini-stat">
+            <strong id="umpire-stat-umpires">--</strong>
+            <span>Number of Umpires</span>
+          </div>
+
+          <div class="umpire-mini-stat">
+            <strong id="umpire-stat-pitches">--</strong>
+            <span>Number of Pitches</span>
+          </div>
+
+          <div class="umpire-mini-stat">
+            <strong id="umpire-stat-games">--</strong>
+            <span>Number of Games</span>
+          </div>
+        </div>
+
+        <p class="umpire-side-note">
+          Use the controls to explore how umpire rankings change across accuracy, above-expected performance, workload, and filtered top groups.
+        </p>
+
+        <div class="umpire-side-callout">
+          <span>Why it matters</span>
+          <p>
+            Over the course of a month, umpires are responsible for thousands of called strikes & balls. Small gaps in accuracy can still add up and impact strike zone consistency across games.
+          </p>
+        </div>
+      </aside>
+
+      <div class="umpire-dashboard-main">
+        <div class="umpire-dashboard-topbar">
+          <div>
+            <div class="umpire-dashboard-label">Umpire Accuracy Leaderboard — June 2025</div>
+            <h2>MLB Umpire Performance</h2>
+            <p class="umpire-dashboard-instruction">
+              Hover over any bar to see more details about a specific umpire.
+            </p>
+          </div>
+        </div>
+
+        <div class="umpire-controls">
+          <span class="umpire-ctrl-label">Sort by</span>
+
+          <button class="umpire-sort-btn active" id="sort-accuracy">
+            Accuracy
+          </button>
+
+          <button class="umpire-sort-btn" id="sort-above-exp">
+            Above Expected
+          </button>
+
+          <button class="umpire-sort-btn" id="sort-games">
+            Games Umpired
+          </button>
+
+          <span class="umpire-ctrl-label umpire-show-label">Show</span>
+
+          <button class="umpire-limit-btn active" data-limit="30">
+            Top 30
+          </button>
+
+          <button class="umpire-limit-btn" data-limit="60">
+            Top 60
+          </button>
+
+          <button class="umpire-limit-btn" data-limit="all">
+            All
+          </button>
+
+          <span class="umpire-ctrl-label umpire-order-label">Order</span>
+
+          <button class="umpire-order-btn active" data-order="desc">
+            Descending
+          </button>
+
+          <button class="umpire-order-btn" data-order="asc">
+            Ascending
+          </button>
+        </div>
+
+        <div class="umpire-legend">
+          <div class="umpire-legend-item">
+            <div class="umpire-legend-swatch umpire-above-swatch"></div>
+            Above Average
+          </div>
+
+          <div class="umpire-legend-item">
+            <div class="umpire-legend-swatch umpire-neutral-swatch"></div>
+            Near Average
+          </div>
+
+          <div class="umpire-legend-item">
+            <div class="umpire-legend-swatch umpire-below-swatch"></div>
+            Below Average
+          </div>
+
+          <div class="umpire-legend-item">
+            <div class="umpire-legend-line"></div>
+            League Average
+          </div>
+        </div>
+
+        <div class="umpire-chart-wrap">
+          <svg id="umpire-chart-svg"></svg>
+          <div id="umpire-no-results">No umpires match your search.</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="umpire-tooltip">
+      <div class="tt-name" id="tt-name">—</div>
+
+      <div class="tt-row">
+        <span class="tt-key">Accuracy</span>
+        <span class="tt-val acc" id="tt-accuracy">—</span>
+      </div>
+
+      <div class="tt-row">
+        <span class="tt-key">Expected Accuracy</span>
+        <span class="tt-val" id="tt-expected">—</span>
+      </div>
+
+      <div class="tt-row">
+        <span class="tt-key">Above Expected</span>
+        <span class="tt-val" id="tt-above-exp">—</span>
+      </div>
+
+      <hr class="tt-divider" />
+
+      <div class="tt-row">
+        <span class="tt-key">Pitches Called</span>
+        <span class="tt-val" id="tt-pitches">—</span>
+      </div>
+
+      <div class="tt-row">
+        <span class="tt-key">Games Umpired</span>
+        <span class="tt-val" id="tt-games">—</span>
+      </div>
+
+      <div class="tt-row">
+        <span class="tt-key">Consistency</span>
+        <span class="tt-val" id="tt-consistency">—</span>
+      </div>
+
+      <div class="tt-row">
+        <span class="tt-key">Correct Calls Above Exp.</span>
+        <span class="tt-val" id="tt-correct-above">—</span>
+      </div>
+
+      <hr class="tt-divider" />
+
+      <div class="tt-key" style="margin-bottom: 4px;">
+        Accuracy Range
+      </div>
+
+      <div class="tt-range-bar" id="tt-range-bar">
+        <div class="tt-range-fill" id="tt-range-fill"></div>
+        <div class="tt-range-dot" id="tt-range-min"></div>
+        <div class="tt-range-dot" id="tt-range-max"></div>
+        <div class="tt-range-dot" id="tt-range-cur"></div>
+      </div>
+
+      <div class="tt-range-labels">
+        <span class="tt-key" id="tt-min-label">—</span>
+        <span class="tt-key" id="tt-avg-label">avg</span>
+        <span class="tt-key" id="tt-max-label">—</span>
+      </div>
+
+      <div id="tt-badge-wrap"></div>
+    </div>
+
+    <div class="umpire-accuracy-takeaway">
+      <span class="takeaway-label">What this shows</span>
+      <p>
+        Most MLB umpires correctly call the vast majority of pitches, but even small percentage differences matter. Across thousands of pitches, a one or two percent gap in accuracy can translate to hundreds of additional missed or correct calls over the course of a season.
+      </p>
+    </div>
+
+    <div class="scroll-cue umpire-accuracy-scroll-cue">
+      <span>Now try calling the zone yourself</span>
+      <span class="scroll-arrow">↓</span>
+    </div>
+  </div>
+</section>
+
+<!-- Game Screen -->
+<div class="main" id="game-screen">
+  <!-- Start Game Overlay -->
+  <div id="game-start-overlay">
+    <div class="game-start-card">
+      <div class="game-start-kicker">You are now behind home plate</div>
+
+      <h2>Ready to Call the Zone?</h2>
+
+      <p>
+        The first 3 pitches show the strike zone. After that, the guide disappears.
+        Make the correct ball or strike call before you reach 3 mistakes.
+      </p>
+
+      <button id="btn-start-game">Start Game</button>
+    </div>
+  </div>
+
+  <!-- Left -->
+  <div class="pitch-panel">
+    <!-- Count bar -->
+    <div class="count-bar">
+      <div class="count-side count-side-left">
+        <span class="count-label">Pitcher</span>
+        <span
+          style="font-size:13px;color:var(--text);font-family:'IBM Plex Mono',monospace"
+          id="pitcher-name"
+        >—</span>
+      </div>
+
+      <div class="count-side count-side-right">
+        <span class="count-label">Count</span>
+        <span class="count-val" id="count-balls">0</span>
+        <span class="count-sep">–</span>
+        <span class="count-val" id="count-strikes">0</span>
+      </div>
+    </div>
+
+    <!-- Pitch info -->
+    <div class="pitch-info">
+      <div>
+        <div class="pitch-type-badge" id="pitch-type-badge">—</div>
+      </div>
+      <div class="pitch-speed" id="pitch-speed">— <span>mph</span></div>
+      <div id="pitch-travel-note" style="font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace"></div>
+    </div>
+
+    <!-- Zone -->
+    <div class="zone-wrapper">
+      <div class="phase-msg" id="phase-msg">◆ PRACTICE MODE — Strike zone visible</div>
+      <svg id="zone-svg" width="340" height="380"></svg>
+
+      <button id="btn-next" class="btn-next-floating">Next Pitch →</button>
+    </div>
+
+    <!-- Call Buttons -->
+    <div class="call-buttons">
+      <button class="btn-call" id="btn-strike">⚾ Strike</button>
+      <button class="btn-call" id="btn-ball">✕ Ball</button>
+    </div>
+
+    <!-- Feedback -->
+    <div id="feedback-toast">
+      <span id="feedback-icon">🎯</span>
+      <span id="feedback-text" style="color:var(--muted)">Click Start Game when you are ready to call pitches.</span>
+    </div>
+  </div>
+
+  <!-- Right -->
+  <div class="right-panel">
+    <!-- Phase notice -->
+    <div class="phase-card" id="phase-card">
+      <strong id="phase-label">📋 Practice Phase</strong>
+      <span id="phase-desc">The strike zone box is shown for the first 3 pitches. After that, you get no guide.</span>
+    </div>
+
+    <!-- Progress -->
+    <div class="panel-card">
+      <h3>Progress</h3>
+      <div class="pitch-dots" id="pitch-dots"></div>
+      <div class="progress-text" id="progress-text">Pitch 1 · Errors 0/3 · 3 left</div>
+    </div>
+
+    <!-- Accuracy -->
+    <div class="panel-card">
+      <h3>Your Accuracy</h3>
+      <div class="acc-bar-bg">
+        <div class="acc-bar-fill" id="acc-bar" style="width:0%"></div>
+      </div>
+
+      <div class="acc-label">
+        <span id="acc-pct">0%</span>
+      </div>
+
+      <div style="font-size:11px;color:var(--muted);margin-top:12px;font-family:'IBM Plex Mono',monospace;line-height:1.8;display:flex;gap:18px;flex-wrap:wrap;">
+        <span><strong id="side-correct" style="color:var(--accent);font-size:16px;">0</strong> correct</span>
+        <span><strong id="side-pitches" style="color:var(--accent);font-size:16px;">0</strong> pitches</span>
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="panel-card">
+      <h3>Legend</h3>
+
+      <div class="legend-row">
+        <div class="legend-dot" style="background:var(--strike)"></div>
+        Called Strike
+      </div>
+
+      <div class="legend-row">
+        <div class="legend-dot" style="background:var(--ball)"></div>
+        Called Ball
+      </div>
+
+      <div class="legend-row">
+        <div class="legend-dot" style="background:var(--correct); border: 2px solid white"></div>
+        Your correct call
+      </div>
+
+      <div class="legend-row">
+        <div class="legend-dot" style="background:var(--wrong); border: 2px solid white"></div>
+        Your incorrect call
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Comparison Section -->
+<section id="comparison-section">
+  <h1>How Did You Perform?</h1>
+
+  <p class="comparison-subtitle">
+    After playing as an umpire, let's now compare your accuracy to the June 2025 MLB average and measure your decision speed against estimated MLB call times.
+  </p>
+
+  <div class="comparison-grid">
+    <!-- Accuracy Reveal Card -->
+    <div class="comparison-card reveal-card" id="accuracy-reveal-card">
+      <div class="reveal-cover">
+        <div class="reveal-icon">🎯</div>
+        <button class="btn-reveal-card" data-target="accuracy-reveal-card">👁 Reveal</button>
+      </div>
+
+      <div class="reveal-content">
+        <h2>Accuracy</h2>
+        <div class="comparison-caption">Correct Ball/Strike Calls</div>
+
+        <div class="comparison-values">
+          <div>
+            <div class="comparison-label">You</div>
+            <div class="comparison-number" id="compare-user-accuracy">--%</div>
+          </div>
+
+          <div class="comparison-vs">vs</div>
+
+          <div>
+            <div class="comparison-label">June Umpire Avg</div>
+            <div class="comparison-number" id="compare-mlb-accuracy">--%</div>
+          </div>
+        </div>
+
+        <p class="comparison-note" id="compare-accuracy-note">
+          Finish a game to see your comparison.
+        </p>
+      </div>
+    </div>
+
+    <!-- Speed Reveal Card -->
+    <div class="comparison-card reveal-card" id="speed-reveal-card">
+      <div class="reveal-cover">
+        <div class="reveal-icon">⏱</div>
+        <button class="btn-reveal-card" data-target="speed-reveal-card">👁 Reveal</button>
+      </div>
+
+      <div class="reveal-content">
+        <h2>Speed</h2>
+        <div class="comparison-caption">Average Response Time</div>
+
+        <div class="comparison-values">
+          <div>
+            <div class="comparison-label">You</div>
+            <div class="comparison-number" id="compare-user-speed">--s</div>
+          </div>
+
+          <div class="comparison-vs">vs</div>
+
+          <div>
+            <div class="comparison-label">MLB Umpire Avg</div>
+            <div class="comparison-number" id="compare-mlb-speed">--s</div>
+          </div>
+        </div>
+
+        <p class="comparison-note" id="compare-speed-note">
+          Finish a game to see your comparison.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="comparison-summary hidden-summary" id="comparison-summary">
+    Play Umpire Mode above to see how you compare.
+  </div>
+
+  <button id="btn-restart">Restart Game ↺</button>
+</section>
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
