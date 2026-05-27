@@ -77,10 +77,6 @@ function loadGame(game) {
   // Fill text spans
   document.getElementById('scroll-s1-total').textContent   = game.stats.total;
   document.getElementById('scroll-s3-total').textContent   = game.stats.total;
-  const slide3Strikes = document.getElementById('scroll-s3-strikes');
-  const slide3Balls = document.getElementById('scroll-s3-balls');
-  if (slide3Strikes) slide3Strikes.textContent = game.stats.strikes;
-  if (slide3Balls) slide3Balls.textContent = game.stats.balls;
   document.getElementById('scroll-s4-strikes').textContent = game.stats.strikes;
   document.getElementById('scroll-s5-balls').textContent   = game.stats.balls;
   document.getElementById('scroll-s6-missed').textContent  = game.stats.missed;
@@ -111,11 +107,11 @@ function loadGame(game) {
   const missRate = (game.stats.missed/game.stats.total*100).toFixed(1);
   let verdict;
   if (game.stats.acc >= 94) {
-    verdict = `With <strong>${game.stats.acc}%</strong> accuracy, this was a strong outing. The umpire missed only <strong>${game.stats.missed}</strong> of ${game.stats.total} pitches — ${missRate}% miss rate. Even at this level, several misses came on pitches within an inch of the zone boundary, where no human eye can be consistently perfect.`;
+    verdict = `With <strong>${game.stats.acc}%</strong> accuracy, this was a strong outing. The umpire missed only <strong>${game.stats.missed}</strong> of ${game.stats.total} pitches, a miss rate of ${missRate}%. Even in a strong game, a few calls can still go wrong near the edge of the zone, where the margin is extremely small.`;
   } else if (game.stats.acc >= 90) {
-    verdict = `At <strong>${game.stats.acc}%</strong>, the umpire got most calls right — but missed <strong>${game.stats.missed}</strong> pitches (${missRate}%). The toughest calls were borderline pitches right on the zone edge, where a batter's height and a pitcher's movement conspire to make certainty impossible.`;
+    verdict = `At <strong>${game.stats.acc}%</strong> accuracy, the umpire got most calls right, but the missed calls still matter. The umpire missed <strong>${game.stats.missed}</strong> pitches (${missRate}%), often on pitches close enough to the zone that the difference between right and wrong was only a few inches.`;
   } else {
-    verdict = `At <strong>${game.stats.acc}%</strong>, this was a rough game behind the plate. <strong>${game.stats.missed}</strong> pitches — ${missRate}% of all calls — went the wrong way. Some were clear misses; others borderline pitches that could have gone either way. All happened in under half a second.`;
+    verdict = `At <strong>${game.stats.acc}%</strong> accuracy, this was a difficult game behind the plate. <strong>${game.stats.missed}</strong> pitches, or ${missRate}% of all calls, went the wrong way. Some were clear misses, while others were close edge pitches that had to be judged in under half a second.`;
   }
   document.getElementById('scroll-accuracy-verdict').innerHTML = verdict;
 
@@ -282,7 +278,7 @@ function renderViz(step) {
       ()=>5.5,
       ()=>0.95,
       true,
-      [{color:'rgba(200,57,43,0.9)',label:'Called Strike'},{color:'rgba(245,155,0,0.9)',label:'Outside Zone, Called Strike'}],
+      [{color:'rgba(200,57,43,0.9)',label:'Called Strike'},{color:'rgba(245,155,0,0.9)',label:'A Ball Called A Strike'}],
       pitches.filter(p=>p.c===0), 'rgba(37,99,176,0.1)',
       p=>p._wrongStrike);
   else if (step === 6) renderZoneDots(pitches.filter(p=>p.c===0),
@@ -290,7 +286,7 @@ function renderViz(step) {
       ()=>5.5,
       ()=>0.95,
       true,
-      [{color:'rgba(37,99,176,0.9)',label:'Called Ball'},{color:'rgba(245,155,0,0.9)',label:'Inside Zone, Called Ball'}],
+      [{color:'rgba(37,99,176,0.9)',label:'Called Ball'},{color:'rgba(245,155,0,0.9)',label:'A Strike Called A Ball'}],
       pitches.filter(p=>p.c===1), 'rgba(200,57,43,0.1)',
       p=>p._wrongBall);
   else if (step === 7) renderZoneDots(pitches,
@@ -302,11 +298,11 @@ function renderViz(step) {
       null, null,
       p=>p._actualMiss);
   else if (step === 8) renderZoneDots(pitches,
-      p=>p.c===1?'rgba(200,57,43,0.75)':'rgba(37,99,176,0.65)',
+      p=>p._actualMiss ? '#f59b00' : (p.c===1?'rgba(200,57,43,0.75)':'rgba(37,99,176,0.65)'),
       ()=>4.8,
-      p=>p._actualMiss?0.95:0.65,
+      p=>p._actualMiss?1:0.65,
       true,
-      [{color:'rgba(200,57,43,0.8)',label:'Called Strike'},{color:'rgba(37,99,176,0.8)',label:'Called Ball'},{color:'rgba(245,155,0,0.9)',label:'Missed Call Highlight'}],
+      [{color:'rgba(200,57,43,0.8)',label:'Called Strike'},{color:'rgba(37,99,176,0.8)',label:'Called Ball'},{color:'rgba(245,155,0,0.95)',label:'Missed Call'}],
       null, null,
       p=>p._actualMiss);
 }
@@ -661,8 +657,11 @@ function showTip(event, p) {
   const callLabel = p.c===1?'Called Strike':'Called Ball';
   const callClass = p.c===1?'tt-call-s':'tt-call-b';
   const speedStr  = p.v ? `${p.v} mph · ` : '';
-  const missLine  = p.m ? '<div class="tt-miss">⚠ Missed Call</div>' : '';
-  const zoneNote  = p.m ? (p.c===1?'Outside zone, called strike':'Inside zone, called ball') : '';
+  const isDisplayedMiss = p._actualMiss || p.m;
+  const missLine = isDisplayedMiss ? '<div class="tt-miss">⚠ Missed Call</div>' : '';
+  const zoneNote = isDisplayedMiss
+    ? (p._wrongStrike || p.c === 1 ? 'A ball called a strike' : 'A strike called a ball')
+    : '';
   tooltip.innerHTML = `
     <div class="tt-type">${p.n}</div>
     <div class="${callClass}">${callLabel}</div>
