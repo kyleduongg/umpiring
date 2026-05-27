@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,13 +30,45 @@
     <h1>Strike or Ball? Could You Call the Zone?</h1>
 
     <p class="intro-subtitle">
-      Fans today often criticize umpires for controversial calls behind the plate. However, behind home plate, an umpire gets just one look at a pitch traveling nearly 90 to 100 mph, on average.
+      Fans today often criticize umpires for controversial calls behind the plate. However, behind home plate, an umpire gets just one look at a pitch traveling nearly 85 to 100 mph, on average.
     </p>
 
-    <div class="tweet-stack">
-      <img src="images/tweet1.png" alt="Tweet criticizing an umpire call" class="tweet-card tweet-card-left" />
-      <img src="images/tweet2.png" alt="Tweet criticizing umpires" class="tweet-card tweet-card-center" />
-      <img src="images/tweet3.png" alt="Tweet calling for robo umps" class="tweet-card tweet-card-right" />
+    <div class="intro-media-grid">
+      <div class="intro-video-card">
+        <div class="intro-video-topbar">
+          <span class="intro-live-dot"></span>
+          <span>A Controversial Call From Umpire Angel Hernandez</span>
+        </div>
+
+        <video
+          class="intro-video"
+          controls
+          playsinline
+          preload="metadata">
+          <source src="https://sporty-clips.mlb.com/bHZ5eTdfV0ZRVkV3dEdEUT09X0JnQUZCd2RWQXdJQVhBZFVBZ0FBQWxCVUFGaFFVVlVBQzF4UlZRQlhBd0pXQjFkVQ==.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+
+        <p class="fan-video-caption intro-video-caption">
+          In the 9th inning of a one-run game, Kyle Schwarber faced Josh Hader and was called out on a controversial strike three. Schwarber exploded, fans were furious, and one split-second call became the center of the game.
+        </p>
+      </div>
+
+      <div class="intro-reaction-panel reaction-reveal-card" id="intro-reaction-card">
+        <div class="reaction-reveal-cover">
+          <div class="reaction-reveal-icon">💬</div>
+          <p>Fans were not happy.<br>See how fans reacted to this call.</p>
+          <button class="reaction-toggle" id="reaction-toggle" type="button">
+            👁 Reveal Reactions
+          </button>
+        </div>
+
+        <div class="intro-tweet-column" id="intro-reactions">
+          <img src="images/tweet1.png" alt="Tweet criticizing an umpire call" class="tweet-card tweet-card-left" />
+          <img src="images/tweet2.png" alt="Tweet criticizing umpires" class="tweet-card tweet-card-center" />
+          <img src="images/tweet3.png" alt="Tweet calling for robo umps" class="tweet-card tweet-card-right" />
+        </div>
+      </div>
     </div>
 
     <div class="intro-story-card">
@@ -44,7 +77,10 @@
         <strong>Umpires see it once.</strong>
       </p>
       <p>
-        Think you could do better than the umpires in the MLB? Let's keep going then! 
+        One pitch. One angle. One split-second call. <strong>One chance.</strong>
+      </p>
+      <p>
+        Think you could do better than the umpires in the MLB? Let's keep going then!
       </p>
     </div>
 
@@ -90,18 +126,26 @@
           Your browser does not support the video tag.
         </video>
 
-        <p class="fan-video-caption">
+        <p class="fan-video-caption intro-video-caption">
           Jacob Misiorowski, a pitcher for the Milwaukee Brewers, fired a 100 mph fastball in the clip above. The umpire had only tenths of a second to make a judgment call in real time, and the pitch was ruled a strike despite appearing to miss the zone on replay.
         </p>
       </div>
 
-      <div class="umpire-reality-panel">
-        <div class="umpire-panel-label">What is the true reality for umpires?</div>
+      <div class="umpire-reality-panel umpire-reality-flashcard" id="umpire-reality-flashcard">
+        <button class="umpire-flashcard-cover" id="umpire-flashcard-toggle" type="button" aria-label="Reveal the true reality for umpires">
+          <span class="umpire-flashcard-icon">👁</span>
+          <span class="umpire-flashcard-small">Click to reveal</span>
+          <span class="umpire-flashcard-title">What is the true reality for umpires?</span>
+        </button>
 
-        <p>
-          Umpires do not get a perfect TV angle, a pause button, or time to debate the zone.
-          The decision has to happen immediately as the pitch crosses the plate.
-        </p>
+        <div class="umpire-flashcard-content">
+          <div class="umpire-panel-label">What is the true reality for umpires?</div>
+
+          <p>
+            Umpires do not get a perfect TV angle, a pause button, or time to debate the zone.
+            The decision has to happen immediately as the pitch crosses the plate.
+          </p>
+        </div>
       </div>
     </div>
 
@@ -808,6 +852,26 @@
 </section>
 
 
+
+<script>
+  const reactionToggle = document.getElementById('reaction-toggle');
+  const introReactionCard = document.getElementById('intro-reaction-card');
+
+  if (reactionToggle && introReactionCard) {
+    reactionToggle.addEventListener('click', () => {
+      introReactionCard.classList.add('revealed');
+    });
+  }
+
+  const umpireFlashcardToggle = document.getElementById('umpire-flashcard-toggle');
+  const umpireRealityFlashcard = document.getElementById('umpire-reality-flashcard');
+
+  if (umpireFlashcardToggle && umpireRealityFlashcard) {
+    umpireFlashcardToggle.addEventListener('click', () => {
+      umpireRealityFlashcard.classList.add('revealed');
+    });
+  }
+</script>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 <script src="js/main.js"></script>
 <script src="js/umpire-scroll.js"></script>

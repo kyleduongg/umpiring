@@ -77,6 +77,8 @@ function loadGame(game) {
   // Fill text spans
   document.getElementById('scroll-s1-total').textContent   = game.stats.total;
   document.getElementById('scroll-s3-total').textContent   = game.stats.total;
+  document.getElementById('scroll-s3-strikes').textContent = game.stats.strikes;
+  document.getElementById('scroll-s3-balls').textContent   = game.stats.balls;
   document.getElementById('scroll-s4-strikes').textContent = game.stats.strikes;
   document.getElementById('scroll-s5-balls').textContent   = game.stats.balls;
   document.getElementById('scroll-s6-missed').textContent  = game.stats.missed;
@@ -100,7 +102,7 @@ function loadGame(game) {
     <div class="summary-card"><div class="big" style="color:var(--strike)">${game.stats.strikes}</div><div class="label">Called Strikes</div></div>
     <div class="summary-card"><div class="big" style="color:var(--ball)">${game.stats.balls}</div><div class="label">Called Balls</div></div>
     <div class="summary-card"><div class="big" style="color:var(--miss-dark)">${game.stats.missed}</div><div class="label">Missed Calls</div></div>
-    <div class="summary-card"><div class="big" style="font-size:24px;line-height:1.2;letter-spacing:0.5px;color:#ffffff;"><div>${game.stats.ms} strike${game.stats.ms!==1?'s':''} called a <span style="color:var(--ball)">ball</span></div><div style="margin-top:8px;">${game.stats.mb} ball${game.stats.mb!==1?'s':''} called a <span style="color:var(--strike)">strike</span></div></div><div class="label">Miss Type Breakdown</div></div>
+    <div class="summary-card"><div class="big" style="font-size:20px;line-height:1.35;letter-spacing:0.3px;color:#ffffff;"><div style="white-space:nowrap;">${game.stats.ms} strike${game.stats.ms!==1?'s':''} called a <span style="color:var(--ball)">ball</span></div><div style="white-space:nowrap;margin-top:8px;">${game.stats.mb} ball${game.stats.mb!==1?'s':''} called a <span style="color:var(--strike)">strike</span></div></div><div class="label">Miss Type Breakdown</div></div>
   `;
 
   // Verdict

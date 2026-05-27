@@ -4502,3 +4502,387 @@ umpire-scroll-story {
   margin-left: auto;
   margin-right: auto;
 }
+
+
+/* ── Intro video + reaction toggle ── */
+.intro-media-grid {
+  width: min(1120px, 100%);
+  margin: 24px auto 28px;
+  display: grid;
+  grid-template-columns: minmax(520px, 1.35fr) minmax(300px, 0.85fr);
+  gap: 20px;
+  align-items: center;
+}
+
+.intro-video-card {
+  position: relative;
+  padding: 14px;
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(30, 35, 48, 0.90), rgba(22, 25, 32, 0.86));
+  border: 1px solid rgba(77, 224, 192, 0.30);
+  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+}
+
+.intro-video-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 18px;
+  background:
+    linear-gradient(90deg, rgba(77, 224, 192, 0.20), transparent 18%, transparent 82%, rgba(232, 200, 64, 0.14));
+  opacity: 0.5;
+}
+
+.intro-video-topbar {
+  position: relative;
+  z-index: 2;
+  height: 34px;
+  margin-bottom: 12px;
+  padding: 0 10px;
+  border-radius: 9px;
+  background: rgba(13, 15, 20, 0.66);
+  border: 1px solid rgba(232, 234, 240, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: rgba(232, 234, 240, 0.78);
+  text-transform: uppercase;
+}
+
+.intro-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--strike);
+  box-shadow: 0 0 12px rgba(255, 79, 79, 0.75);
+}
+
+.intro-video-tag {
+  margin-left: auto;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(232, 200, 64, 0.10);
+  color: var(--accent);
+  border: 1px solid rgba(232, 200, 64, 0.22);
+}
+
+.intro-video {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: none;
+  border-radius: 12px;
+  background: #000;
+  object-fit: cover;
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.36);
+}
+
+.intro-reaction-panel {
+  display: grid;
+  align-content: stretch;
+  min-height: 100%;
+}
+
+.reaction-reveal-card {
+  position: relative;
+  min-height: 360px;
+  border-radius: 18px;
+  border: 1px solid rgba(77, 224, 192, 0.30);
+  background:
+    radial-gradient(circle at 50% 25%, rgba(77, 224, 192, 0.12), transparent 38%),
+    linear-gradient(180deg, rgba(30, 35, 48, 0.90), rgba(22, 25, 32, 0.86));
+  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.42);
+  overflow: hidden;
+}
+
+.reaction-reveal-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 50% 32%, rgba(255,255,255,0.10), transparent 34%),
+    linear-gradient(135deg, rgba(98, 117, 190, 0.94), rgba(79, 91, 150, 0.96));
+  border-radius: 18px;
+  transition: opacity 0.28s ease, transform 0.28s ease, visibility 0.28s ease;
+}
+
+.reaction-reveal-card.revealed .reaction-reveal-cover {
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.03);
+  pointer-events: none;
+}
+
+.reaction-reveal-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.22);
+  font-size: 30px;
+  box-shadow: 0 18px 38px rgba(0,0,0,0.18);
+}
+
+.reaction-reveal-cover p {
+  max-width: 290px;
+  color: rgba(255,255,255,0.82);
+  font-size: 15px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.reaction-toggle {
+  min-width: 240px;
+  border: 2px solid rgba(255,255,255,0.36);
+  border-radius: 14px;
+  padding: 17px 28px;
+  background: rgba(255,255,255,0.18);
+  color: #ffffff;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 20px 46px rgba(0, 0, 0, 0.28);
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.reaction-toggle:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.26);
+  border-color: rgba(255,255,255,0.60);
+}
+
+.intro-tweet-column {
+  min-height: 360px;
+  display: grid;
+  gap: 12px;
+  align-content: center;
+  padding: 18px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 900px) {
+  .intro-media-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Smaller intro reaction reveal card ── */
+.intro-reaction-panel.reaction-reveal-card,
+.reaction-reveal-card {
+  min-height: 220px !important;
+}
+
+.reaction-reveal-cover {
+  inset: auto !important;
+  left: 50% !important;
+  top: 50% !important;
+  width: min(340px, 92%) !important;
+  min-height: 190px !important;
+  padding: 18px 20px !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+.reaction-reveal-card.revealed .reaction-reveal-cover {
+  transform: translate(-50%, -50%) scale(1.03) !important;
+}
+
+.reaction-reveal-icon {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 14px !important;
+  font-size: 22px !important;
+}
+
+.reaction-reveal-cover p {
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+  max-width: 250px !important;
+}
+
+.reaction-toggle {
+  min-width: 190px !important;
+  padding: 12px 18px !important;
+  border-radius: 12px !important;
+  font-size: 13px !important;
+  letter-spacing: 1.5px !important;
+}
+
+/* Restore one-by-one tweet reveal animation */
+.reaction-reveal-card .intro-tweet-column .tweet-card {
+  opacity: 0 !important;
+  transform: translateY(18px) scale(0.96) !important;
+  filter: blur(3px) !important;
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s ease,
+    filter 0.45s ease !important;
+}
+
+.reaction-reveal-card.revealed .intro-tweet-column .tweet-card {
+  opacity: 1 !important;
+  transform: translateY(0) scale(1) !important;
+  filter: blur(0) !important;
+}
+
+.reaction-reveal-card.revealed .intro-tweet-column .tweet-card:nth-child(1) {
+  transition-delay: 0.12s !important;
+}
+
+.reaction-reveal-card.revealed .intro-tweet-column .tweet-card:nth-child(2) {
+  transition-delay: 0.38s !important;
+}
+
+.reaction-reveal-card.revealed .intro-tweet-column .tweet-card:nth-child(3) {
+  transition-delay: 0.64s !important;
+}
+
+/* Final tune: remove the revealed tweet background and make tweets slightly larger */
+.reaction-reveal-card.revealed {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  overflow: visible !important;
+}
+
+.reaction-reveal-card.revealed::before,
+.reaction-reveal-card.revealed::after {
+  display: none !important;
+}
+
+.reaction-reveal-card.revealed .intro-tweet-column {
+  padding: 0 !important;
+  min-height: auto !important;
+  gap: 14px !important;
+}
+
+.reaction-reveal-card.revealed .intro-tweet-column .tweet-card {
+  width: min(650px, 100%) !important;
+  border-radius: 14px !important;
+}
+
+@media (min-width: 901px) {
+  .intro-media-grid {
+    grid-template-columns: minmax(500px, 1.08fr) minmax(420px, 1fr) !important;
+  }
+}
+
+#intro-screen .intro-video-card .intro-video-caption,
+#intro-screen .intro-media-grid .intro-video-card .intro-video-caption,
+#intro-screen .fan-video-caption.intro-video-caption {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  text-align: left !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  align-self: stretch !important;
+}
+
+
+/* Umpire reality flashcard reveal */
+.umpire-reality-flashcard {
+  cursor: pointer;
+  min-height: 360px;
+}
+
+.umpire-reality-flashcard::before {
+  z-index: 1;
+}
+
+.umpire-flashcard-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(117, 151, 235, 0.30), transparent 34%),
+    linear-gradient(135deg, rgba(89, 123, 211, 0.88), rgba(55, 71, 130, 0.88));
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 28px;
+  text-align: center;
+  cursor: pointer;
+  transition: opacity 0.35s ease, visibility 0.35s ease, transform 0.35s ease;
+}
+
+.umpire-flashcard-cover:hover {
+  transform: scale(1.01);
+}
+
+.umpire-flashcard-icon {
+  width: 62px;
+  height: 62px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  font-size: 24px;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.20);
+}
+
+.umpire-flashcard-small {
+  font-family: 'IBM Plex Mono', monospace;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.umpire-flashcard-title {
+  max-width: 330px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 38px;
+  line-height: 0.95;
+  letter-spacing: 1.5px;
+}
+
+.umpire-flashcard-content {
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(10px);
+  transition: opacity 0.35s ease, filter 0.35s ease, transform 0.35s ease;
+}
+
+.umpire-reality-flashcard.revealed .umpire-flashcard-cover {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.umpire-reality-flashcard.revealed .umpire-flashcard-content {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
