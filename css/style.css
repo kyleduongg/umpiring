@@ -4025,7 +4025,7 @@ umpire-scroll-story {
   padding:80px 60px 80px 60px; border-bottom:1px solid var(--sepia); position:relative;
   opacity:0; transform:translateY(20px); transition:opacity 0.5s ease, transform 0.5s ease;
 }#one-game-scroll-section .scroll-section:last-child { border-bottom:none; }#one-game-scroll-section .scroll-section.visible { opacity:1; transform:none; }#one-game-scroll-section .section-num { font-family:var(--fm); font-size:10px; letter-spacing:3px; color:var(--mid); text-transform:uppercase; margin-bottom:16px; }#one-game-scroll-section .section-num span { background:var(--ink); color:var(--paper); padding:2px 8px; border-radius:2px; margin-right:8px; }#one-game-scroll-section .section-heading { font-family:var(--ff); font-size:clamp(36px,5vw,54px); letter-spacing:3px; line-height:1; margin-bottom:20px; color:var(--ink); }#one-game-scroll-section .section-heading em { color:var(--strike); font-style:normal; }#one-game-scroll-section .section-body { font-size:17px; line-height:1.8; color:#3a3530; max-width:480px; font-weight:300; }#one-game-scroll-section .section-body strong { font-weight:600; color:var(--ink); }#one-game-scroll-section .section-body em { font-style:italic; color:var(--muted); }#one-game-scroll-section .stat-inline { display:inline-block; font-family:var(--fm); font-size:13px; font-weight:600; padding:2px 8px; border-radius:3px; margin:0 2px; }#one-game-scroll-section .stat-strike { background:rgba(200,57,43,0.12); color:var(--strike); }#one-game-scroll-section .stat-ball { background:rgba(37,99,176,0.12); color:var(--ball); }#one-game-scroll-section .stat-miss { background:rgba(245,155,0,0.15); color:var(--miss-dark); }#one-game-scroll-section .type-pills { display:flex; flex-wrap:wrap; gap:8px; margin-top:24px; }#one-game-scroll-section .type-pill { display:flex; align-items:center; gap:7px; background:var(--sepia); border-radius:20px; padding:5px 12px 5px 8px; font-family:var(--fm); font-size:11px; color:var(--ink); }#one-game-scroll-section .type-pill-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }#one-game-scroll-section .summary-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:28px; max-width:480px; }#one-game-scroll-section .summary-card { background:var(--sepia); border-radius:8px; padding:16px; display:flex; flex-direction:column; gap:4px; }#one-game-scroll-section .summary-card .big { font-family:var(--ff); font-size:38px; line-height:1; letter-spacing:2px; }#one-game-scroll-section .summary-card .label { font-family:var(--fm); font-size:9px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); }#one-game-scroll-section .accuracy-verdict { margin-top:28px; max-width:480px; background:var(--ink); color:var(--paper); border-radius:10px; padding:20px 24px; font-size:15px; line-height:1.7; font-style:italic; }#one-game-scroll-section .accuracy-verdict strong { font-style:normal; color:var(--miss); }#one-game-scroll-section .continue-btn { margin-top:32px; display:inline-flex; align-items:center; gap:8px; background:var(--strike); color:#fff; border:none; border-radius:6px; padding:12px 24px; font-family:var(--ff); font-size:16px; letter-spacing:2px; cursor:pointer; transition:all 0.15s; text-decoration:none; }#one-game-scroll-section .continue-btn:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(200,57,43,0.35); }#one-game-scroll-section /* final section */
-#scroll-section-8 { background:var(--ink); color:var(--paper); min-height:100vh; }#one-game-scroll-section #scroll-section-8 .section-heading { color:var(--paper); }#one-game-scroll-section #scroll-section-8 .section-body { color:rgba(244,240,232,0.65); }#one-game-scroll-section #scroll-section-8 .summary-card { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); }#one-game-scroll-section #scroll-section-8 .summary-card .label { color:rgba(255,255,255,0.3); }#one-game-scroll-section #scroll-section-8 .section-num { color:rgba(255,255,255,0.3); }#one-game-scroll-section #scroll-section-8 .section-num span { background:var(--paper); color:var(--ink); }#one-game-scroll-section /* ── STICKY VIZ ───────────── */
+#scroll-section-9 { background:var(--ink); color:var(--paper); min-height:100vh; }#one-game-scroll-section #scroll-section-9 .section-heading { color:var(--paper); }#one-game-scroll-section #scroll-section-9 .section-body { color:rgba(244,240,232,0.65); }#one-game-scroll-section #scroll-section-9 .summary-card { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); }#one-game-scroll-section #scroll-section-9 .summary-card .label { color:rgba(255,255,255,0.3); }#one-game-scroll-section #scroll-section-9 .section-num { color:rgba(255,255,255,0.3); }#one-game-scroll-section #scroll-section-9 .section-num span { background:var(--paper); color:var(--ink); }#one-game-scroll-section /* ── STICKY VIZ ───────────── */
 .viz-sticky {
   position:sticky; top:0; height:100vh;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -4477,7 +4477,7 @@ umpire-scroll-story {
   max-width: 520px;
 }
 
-#one-game-scroll-section #scroll-section-8 .continue-btn,
+#one-game-scroll-section #scroll-section-9 .continue-btn,
 #one-game-scroll-section .continue-btn {
   background: var(--strike);
   border-color: rgba(255, 79, 79, 0.35);
@@ -4489,15 +4489,15 @@ umpire-scroll-story {
   text-align: center;
 }
 
-#one-game-scroll-section #scroll-section-8 .summary-grid,
-#one-game-scroll-section #scroll-section-8 .accuracy-verdict {
+#one-game-scroll-section #scroll-section-9 .summary-grid,
+#one-game-scroll-section #scroll-section-9 .accuracy-verdict {
   margin-left: auto;
   margin-right: auto;
 }
 
-#one-game-scroll-section #scroll-section-8 .section-body,
-#one-game-scroll-section #scroll-section-8 .section-heading,
-#one-game-scroll-section #scroll-section-8 .section-num {
+#one-game-scroll-section #scroll-section-9 .section-body,
+#one-game-scroll-section #scroll-section-9 .section-heading,
+#one-game-scroll-section #scroll-section-9 .section-num {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
@@ -4885,4 +4885,90 @@ umpire-scroll-story {
   opacity: 1;
   filter: blur(0);
   transform: translateY(0);
+}
+
+
+/* Missed pitch type slide */
+#one-game-scroll-section .miss-type-grid {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  max-width: 560px;
+}
+
+#one-game-scroll-section .miss-type-card {
+  background: rgba(13, 15, 20, 0.48);
+  border: 1px solid rgba(232, 200, 64, 0.20);
+  border-radius: 14px;
+  padding: 15px 16px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+}
+
+#one-game-scroll-section .miss-type-topline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: var(--accent);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+#one-game-scroll-section .miss-type-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  box-shadow: 0 0 12px rgba(232, 200, 64, 0.42);
+}
+
+#one-game-scroll-section .miss-type-title {
+  color: #ffffff;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  line-height: 1;
+  letter-spacing: 1.2px;
+  margin-bottom: 6px;
+}
+
+#one-game-scroll-section .miss-type-kind {
+  color: rgba(232, 234, 240, 0.78);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  margin-bottom: 8px;
+}
+
+#one-game-scroll-section .miss-type-note {
+  color: rgba(232, 234, 240, 0.58);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+@media (max-width: 700px) {
+  #one-game-scroll-section .miss-type-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Keep the missed-pitch-type cards readable when a game has many miss categories. */
+#one-game-scroll-section .miss-type-grid {
+  align-items: stretch;
+}
+
+#one-game-scroll-section .miss-type-card {
+  min-height: 0;
+}
+
+#one-game-scroll-section .miss-type-grid .miss-type-card:nth-child(n+5) {
+  padding: 12px 14px;
+}
+
+#one-game-scroll-section .miss-type-grid .miss-type-card:nth-child(n+5) .miss-type-title {
+  font-size: 22px;
+}
+
+#one-game-scroll-section .miss-type-grid .miss-type-card:nth-child(n+5) .miss-type-note {
+  font-size: 12px;
 }

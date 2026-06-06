@@ -27,18 +27,26 @@ const TYPE_COLORS = {
 };
 function typeColor(n){ return TYPE_COLORS[n] || '#9ca3af'; }
 
-// A pitch counts as touching the zone if the baseball overlaps the displayed strike zone.
-// This keeps the yellow highlight matched to what the viewer sees on the chart.
-const BALL_RADIUS_FT = 0.12;
+// A pitch counts as touching the zone if the VISIBLE dot touches or overlaps the displayed strike-zone box.
+// This matches the on-screen logic the viewer is using when they judge whether a called ball clipped the zone.
+const ZONE_TOUCH_DOT_RADIUS_PX = 7.0;
 function pitchTouchesZone(p, zone) {
   const top = zone && Number.isFinite(zone.top) ? zone.top : p.t;
   const bot = zone && Number.isFinite(zone.bot) ? zone.bot : p.b;
-  return (
-    p.x + BALL_RADIUS_FT >= ZONE_LEFT &&
-    p.x - BALL_RADIUS_FT <= ZONE_RIGHT &&
-    p.z + BALL_RADIUS_FT >= bot &&
-    p.z - BALL_RADIUS_FT <= top
-  );
+
+  const cx = xSc(p.x);
+  const cy = ySc(p.z);
+  const left = xSc(ZONE_LEFT);
+  const right = xSc(ZONE_RIGHT);
+  const topPx = ySc(top);
+  const botPx = ySc(bot);
+
+  const nearestX = Math.max(left, Math.min(cx, right));
+  const nearestY = Math.max(topPx, Math.min(cy, botPx));
+  const dx = cx - nearestX;
+  const dy = cy - nearestY;
+
+  return (dx * dx + dy * dy) <= (ZONE_TOUCH_DOT_RADIUS_PX * ZONE_TOUCH_DOT_RADIUS_PX);
 }
 
 function markDisplayedZoneMisses(pitches, zone) {
@@ -50,12 +58,28 @@ function markDisplayedZoneMisses(pitches, zone) {
   });
 }
 
+function getDisplayedStats(game) {
+  const pitches = game.pitches || [];
+  const zone = getAvgZone(pitches);
+  markDisplayedZoneMisses(pitches, zone);
+
+  const total = pitches.length;
+  const strikes = pitches.filter(p => p.c === 1).length;
+  const balls = pitches.filter(p => p.c === 0).length;
+  const ms = pitches.filter(p => p._wrongBall).length;      // strike called a ball
+  const mb = pitches.filter(p => p._wrongStrike).length;    // ball called a strike
+  const missed = ms + mb;
+  const acc = total ? (((total - missed) / total) * 100).toFixed(1) : '0.0';
+
+  return { ...game.stats, total, strikes, balls, ms, mb, missed, acc };
+}
+
 // ══════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════
 let currentGame = null;
 let currentStep = 0;
-const TOTAL_STEPS = 8;
+const TOTAL_STEPS = 9;
 
 // ══════════════════════════════════════
 //  GAME LOADING
@@ -69,21 +93,26 @@ function loadGame(game) {
   currentGame = game;
   currentStep = 0;
 
+  // Recalculate misses from the same displayed-zone logic used to draw yellow highlights.
+  // This keeps the text counts, pitch-type breakdown, and final summary synced with the graph.
+  const stats = getDisplayedStats(game);
+  game.displayStats = stats;
+
   document.getElementById('scroll-hero-matchup').textContent = `${game.away} @ ${game.home}`;
-  document.getElementById('scroll-hero-meta').textContent    = `${game.date} · ${game.stats.total} called pitches`;
+  document.getElementById('scroll-hero-meta').textContent    = `${game.date} · ${stats.total} called pitches`;
   document.getElementById('scroll-scroll-hint').style.display = 'block';
   document.getElementById('scroll-story').style.display = 'block';
 
   // Fill text spans
-  document.getElementById('scroll-s1-total').textContent   = game.stats.total;
-  document.getElementById('scroll-s3-total').textContent   = game.stats.total;
-  document.getElementById('scroll-s3-strikes').textContent = game.stats.strikes;
-  document.getElementById('scroll-s3-balls').textContent   = game.stats.balls;
-  document.getElementById('scroll-s4-strikes').textContent = game.stats.strikes;
-  document.getElementById('scroll-s5-balls').textContent   = game.stats.balls;
-  document.getElementById('scroll-s6-missed').textContent  = game.stats.missed;
-  document.getElementById('scroll-s6-miss-b').textContent  = `${game.stats.ms} pitch${game.stats.ms!==1?'es':''}`;
-  document.getElementById('scroll-s6-miss-s').textContent  = `${game.stats.mb} pitch${game.stats.mb!==1?'es':''}`;
+  document.getElementById('scroll-s1-total').textContent   = stats.total;
+  document.getElementById('scroll-s3-total').textContent   = stats.total;
+  document.getElementById('scroll-s3-strikes').textContent = stats.strikes;
+  document.getElementById('scroll-s3-balls').textContent   = stats.balls;
+  document.getElementById('scroll-s4-strikes').textContent = stats.strikes;
+  document.getElementById('scroll-s5-balls').textContent   = stats.balls;
+  document.getElementById('scroll-s6-missed').textContent  = stats.missed;
+  document.getElementById('scroll-s6-miss-b').textContent  = `${stats.ms} pitch${stats.ms!==1?'es':''}`;
+  document.getElementById('scroll-s6-miss-s').textContent  = `${stats.mb} pitch${stats.mb!==1?'es':''}`;
 
   // Type pills
   const pills = document.getElementById('scroll-type-pills-left');
@@ -97,23 +126,23 @@ function loadGame(game) {
 
   // Summary grid
   document.getElementById('scroll-summary-grid').innerHTML = `
-    <div class="summary-card"><div class="big" style="color:var(--correct)">${game.stats.acc}%</div><div class="label">Call Accuracy</div></div>
-    <div class="summary-card"><div class="big" style="color:var(--ink)">${game.stats.total}</div><div class="label">Total Called Pitches</div></div>
-    <div class="summary-card"><div class="big" style="color:var(--strike)">${game.stats.strikes}</div><div class="label">Called Strikes</div></div>
-    <div class="summary-card"><div class="big" style="color:var(--ball)">${game.stats.balls}</div><div class="label">Called Balls</div></div>
-    <div class="summary-card"><div class="big" style="color:var(--miss-dark)">${game.stats.missed}</div><div class="label">Missed Calls</div></div>
-    <div class="summary-card"><div class="big" style="font-size:20px;line-height:1.35;letter-spacing:0.3px;color:#ffffff;"><div style="white-space:nowrap;">${game.stats.ms} strike${game.stats.ms!==1?'s':''} called a <span style="color:var(--ball)">ball</span></div><div style="white-space:nowrap;margin-top:8px;">${game.stats.mb} ball${game.stats.mb!==1?'s':''} called a <span style="color:var(--strike)">strike</span></div></div><div class="label">Miss Type Breakdown</div></div>
+    <div class="summary-card"><div class="big" style="color:var(--correct)">${stats.acc}%</div><div class="label">Call Accuracy</div></div>
+    <div class="summary-card"><div class="big" style="color:var(--ink)">${stats.total}</div><div class="label">Total Called Pitches</div></div>
+    <div class="summary-card"><div class="big" style="color:var(--strike)">${stats.strikes}</div><div class="label">Called Strikes</div></div>
+    <div class="summary-card"><div class="big" style="color:var(--ball)">${stats.balls}</div><div class="label">Called Balls</div></div>
+    <div class="summary-card"><div class="big" style="color:var(--miss-dark)">${stats.missed}</div><div class="label">Missed Calls</div></div>
+    <div class="summary-card"><div class="big" style="font-size:20px;line-height:1.35;letter-spacing:0.3px;color:#ffffff;"><div style="white-space:nowrap;">${stats.ms} strike${stats.ms!==1?'s':''} called a <span style="color:var(--ball)">ball</span></div><div style="white-space:nowrap;margin-top:8px;">${stats.mb} ball${stats.mb!==1?'s':''} called a <span style="color:var(--strike)">strike</span></div></div><div class="label">Miss Type Breakdown</div></div>
   `;
 
   // Verdict
-  const missRate = (game.stats.missed/game.stats.total*100).toFixed(1);
+  const missRate = (stats.missed/stats.total*100).toFixed(1);
   let verdict;
-  if (game.stats.acc >= 94) {
-    verdict = `With <strong>${game.stats.acc}%</strong> accuracy, this was a strong outing. The umpire missed only <strong>${game.stats.missed}</strong> of ${game.stats.total} pitches, a miss rate of ${missRate}%. Even in a strong game, a few calls can still go wrong near the edge of the zone, where the margin is extremely small.`;
-  } else if (game.stats.acc >= 90) {
-    verdict = `At <strong>${game.stats.acc}%</strong> accuracy, the umpire got most calls right, but the missed calls still matter. The umpire missed <strong>${game.stats.missed}</strong> pitches (${missRate}%), often on pitches close enough to the zone that the difference between right and wrong was only a few inches.`;
+  if (stats.acc >= 94) {
+    verdict = `With <strong>${stats.acc}%</strong> accuracy, this was a strong outing. The umpire missed only <strong>${stats.missed}</strong> of ${stats.total} pitches, a miss rate of ${missRate}%. Even in a strong game, a few calls can still go wrong near the edge of the zone, where the margin is extremely small.`;
+  } else if (stats.acc >= 90) {
+    verdict = `At <strong>${stats.acc}%</strong> accuracy, the umpire got most calls right, but the missed calls still matter. The umpire missed <strong>${stats.missed}</strong> pitches (${missRate}%), often on pitches close enough to the zone that the difference between right and wrong was only a few inches.`;
   } else {
-    verdict = `At <strong>${game.stats.acc}%</strong> accuracy, this was a difficult game behind the plate. <strong>${game.stats.missed}</strong> pitches, or ${missRate}% of all calls, went the wrong way. Some were clear misses, while others were close edge pitches that had to be judged in under half a second.`;
+    verdict = `At <strong>${stats.acc}%</strong> accuracy, this was a difficult game behind the plate. <strong>${stats.missed}</strong> pitches, or ${missRate}% of all calls, went the wrong way. Some were clear misses, while others were close edge pitches that had to be judged in under half a second.`;
   }
   document.getElementById('scroll-accuracy-verdict').innerHTML = verdict;
 
@@ -124,7 +153,10 @@ function loadGame(game) {
     const dot = document.createElement('div');
     dot.className = 'prog-dot' + (i === 1 ? ' active' : '');
     dot.id = `scroll-prog-${i}`;
-    dot.onclick = () => document.getElementById(`scroll-section-${i}`).scrollIntoView({behavior:'smooth'});
+    dot.onclick = () => {
+      const target = document.getElementById(`scroll-section-${i}`);
+      if (target) target.scrollIntoView({behavior:'smooth'});
+    };
     prog.appendChild(dot);
   }
 
@@ -245,20 +277,23 @@ function renderViz(step) {
   const pitches = currentGame.pitches;
   const zone    = getAvgZone(pitches);
   markDisplayedZoneMisses(pitches, zone);
+  const stats = currentGame.displayStats || getDisplayedStats(currentGame);
+  currentGame.displayStats = stats;
   const captions = [
     '',
     'Every Pitch The Umpire Saw',
     'Pitch Type Breakdown',
-    `${currentGame.stats.strikes} Strikes vs ${currentGame.stats.balls} Balls`,
+    `${stats.strikes} Strikes vs ${stats.balls} Balls`,
     `All ${pitches.length} Pitch Locations`,
-    `${currentGame.stats.strikes} Called Strikes`,
-    `${currentGame.stats.balls} Called Balls`,
-    `${currentGame.stats.missed} Missed Calls`,
+    `${stats.strikes} Called Strikes`,
+    `${stats.balls} Called Balls`,
+    `${stats.missed} Missed Calls`,
+    'Missed Calls By Pitch Type',
     'Game Summary'
   ];
   document.getElementById('scroll-viz-caption').textContent = captions[step] || '';
 
-  if (step <= 3) {
+  if (step <= 3 || step === 8) {
     // Clear zone bg axes too
     bgLayer.selectAll('*').remove();
     G.selectAll('.axis-x,.axis-y').remove();
@@ -299,7 +334,8 @@ function renderViz(step) {
       [{color:'rgba(200,57,43,0.35)',label:'Called Strike'},{color:'rgba(37,99,176,0.35)',label:'Called Ball'},{color:'#f59b00',label:'Missed Call'}],
       null, null,
       p=>p._actualMiss);
-  else if (step === 8) renderZoneDots(pitches,
+  else if (step === 8) renderMissTypeClusters(pitches.filter(p=>p._actualMiss));
+  else if (step === 9) renderZoneDots(pitches,
       p=>p._actualMiss ? '#f59b00' : (p.c===1?'rgba(200,57,43,0.75)':'rgba(37,99,176,0.65)'),
       ()=>4.8,
       p=>p._actualMiss?1:0.65,
@@ -444,6 +480,148 @@ function renderCallSplit(pitches) {
   renderLegend([
     {color:'rgba(200,57,43,0.92)', label:'Called Strike'},
     {color:'rgba(37,99,176,0.92)', label:'Called Ball'}
+  ]);
+}
+
+// ══════════════════════════════════════
+//  STEP 8: MISSED CALLS BY PITCH TYPE
+// ══════════════════════════════════════
+function renderMissTypeClusters(missedPitches) {
+  const shortPitchName = name => ({
+    '4-Seam Fastball': '4-Seam FB',
+    'Split-Finger': 'Splitter',
+    'Knuckle Curve': 'Knuckle',
+  }[name] || name);
+
+  const groupsMap = {};
+  missedPitches.forEach(p => {
+    const key = p.n || 'Unknown';
+    if (!groupsMap[key]) groupsMap[key] = [];
+    groupsMap[key].push(p);
+  });
+
+  const groups = Object.entries(groupsMap)
+    .sort((a, b) => b[1].length - a[1].length)
+    .map(([name, data]) => ({
+      name,
+      data,
+      red: data.filter(p => p._wrongStrike).length,
+      blue: data.filter(p => p._wrongBall).length,
+    }));
+
+  const PHI = Math.PI * (3 - Math.sqrt(5));
+  const titleY = 24;
+  const rowsTop = 55;
+  const rowsBottom = PH - 24;
+  const rowH = Math.min(48, (rowsBottom - rowsTop) / Math.max(groups.length, 1));
+  const textX = 38;
+  const countX = 22;
+  const dotsX = PW * 0.86;
+
+  dynLayer.append('text')
+    .attr('x', PW / 2)
+    .attr('y', titleY)
+    .attr('text-anchor', 'middle')
+    .attr('fill', 'rgba(255,255,255,0.84)')
+    .attr('font-family', 'IBM Plex Mono, monospace')
+    .attr('font-size', '10px')
+    .attr('letter-spacing', '2px')
+    .text('MISSED CALLS GROUPED BY PITCH TYPE');
+
+  // Soft row cards keep the pitch-type breakdown readable in the small sticky panel.
+  const nodes = [];
+  groups.forEach((group, idx) => {
+    const y = rowsTop + idx * rowH + rowH / 2;
+    const n = Math.max(group.data.length, 1);
+    const spread = Math.min(20, 8 + Math.sqrt(n) * 4.8);
+
+    dynLayer.append('rect')
+      .attr('x', 8)
+      .attr('y', y - rowH / 2 + 3)
+      .attr('width', PW - 16)
+      .attr('height', rowH - 6)
+      .attr('rx', 10)
+      .attr('fill', idx % 2 === 0 ? 'rgba(255,255,255,0.035)' : 'rgba(255,255,255,0.018)')
+      .attr('stroke', 'rgba(255,255,255,0.055)')
+      .attr('opacity', 0)
+      .transition().delay(80 + idx * 45).duration(250).attr('opacity', 1);
+
+    group.data.forEach((p, i) => {
+      const dotSpacing = 13;
+      const totalWidth = (group.data.length - 1) * dotSpacing;
+      nodes.push({
+        ...p,
+        tx: dotsX - totalWidth / 2 + i * dotSpacing,
+        ty: y,
+        displayColor: p._wrongStrike ? 'rgba(200,57,43,0.92)' : 'rgba(37,99,176,0.92)',
+      });
+    });
+
+    dynLayer.append('text')
+      .attr('x', countX)
+      .attr('y', y + 8)
+      .attr('text-anchor', 'middle')
+      .attr('fill', 'rgba(255,255,255,0.95)')
+      .attr('font-family', 'Bebas Neue, sans-serif')
+      .attr('font-size', '26px')
+      .attr('letter-spacing', '1.2px')
+      .attr('opacity', 0)
+      .text(group.data.length)
+      .transition().delay(170 + idx * 45).duration(220).attr('opacity', 1);
+
+    dynLayer.append('text')
+      .attr('x', textX)
+      .attr('y', y - 7)
+      .attr('text-anchor', 'start')
+      .attr('fill', typeColor(group.name))
+      .attr('font-family', 'IBM Plex Mono, monospace')
+      .attr('font-size', '9.2px')
+      .attr('font-weight', '700')
+      .attr('opacity', 0)
+      .text(shortPitchName(group.name))
+      .transition().delay(220 + idx * 45).duration(220).attr('opacity', 0.98);
+
+    const parts = [];
+    if (group.red) parts.push(`${group.red} ball called strike`);
+    if (group.blue) parts.push(`${group.blue} strike called ball`);
+
+    dynLayer.append('text')
+      .attr('x', textX)
+      .attr('y', y + 9)
+      .attr('text-anchor', 'start')
+      .attr('fill', 'rgba(255,255,255,0.50)')
+      .attr('font-family', 'IBM Plex Mono, monospace')
+      .attr('font-size', '7.6px')
+      .attr('letter-spacing', '0.1px')
+      .attr('opacity', 0)
+      .text(parts.join('  &  '))
+      .transition().delay(270 + idx * 45).duration(220).attr('opacity', 1);
+  });
+
+  dynLayer.selectAll('.miss-type-dot')
+    .data(nodes)
+    .enter().append('circle')
+    .attr('class', 'miss-type-dot')
+    .attr('cx', PW / 2)
+    .attr('cy', PH / 2)
+    .attr('r', 0)
+    .attr('fill', d => d.displayColor)
+    .attr('stroke', 'rgba(255,255,255,0.28)')
+    .attr('stroke-width', 0.7)
+    .attr('opacity', 0)
+    .attr('cursor', 'pointer')
+    .on('mouseover', (ev,d) => showTip(ev,d))
+    .on('mousemove', (ev)   => moveTip(ev))
+    .on('mouseout',  ()     => hideTip())
+    .transition().duration(650).delay((d,i) => 120 + i * 10).ease(d3.easeCubicOut)
+    .attr('cx', d => d.tx)
+    .attr('cy', d => d.ty)
+    .attr('r', 5)
+    .attr('opacity', 0.95);
+
+  renderLegend([
+    {color:'rgba(200,57,43,0.92)', label:'A Ball Called A Strike'},
+    {color:'rgba(37,99,176,0.92)', label:'A Strike Called A Ball'}
   ]);
 }
 
@@ -689,7 +867,8 @@ function hideTip() { tooltip.classList.remove('visible'); }
 // ══════════════════════════════════════
 const stepMap = {
   'scroll-section-1':1,'scroll-section-2':2,'scroll-section-3':3,'scroll-section-4':4,
-  'scroll-section-5':5,'scroll-section-6':6,'scroll-section-7':7,'scroll-section-8':8
+  'scroll-section-5':5,'scroll-section-6':6,'scroll-section-7':7,'scroll-section-8':8,
+  'scroll-section-9':9
 };
 
 const observer = new IntersectionObserver(entries => {
