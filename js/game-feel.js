@@ -63,7 +63,6 @@
     over()    { [392, 311, 233].forEach((f, i) => tone(f, i * 0.17, 0.32, 'sine', 0.16)); }
   };
 
-
   let elScore, elCombo, elComboTxt, elMult, elOuts, elSoundBtn, elFloaters, elFlash, zoneWrap;
   let activeCallouts = 0;
 
@@ -218,20 +217,22 @@
   };
 
   const RANKS = [
-    { min: 0,    badge: '🧢', title: 'Sandlot Rookie',     blurb: 'Everyone starts somewhere — keep your eye on the zone.' },
-    { min: 900,  badge: '⚾', title: 'Single-A Call-Up',    blurb: 'Solid instincts behind the plate. The bigs are watching.' },
-    { min: 2000, badge: '🎯', title: 'Big-League Umpire',   blurb: "You're calling games with the best of them." },
-    { min: 3500, badge: '⭐', title: 'All-Star Arbiter',    blurb: 'Elite zone awareness. The crowd respects your eye.' },
-    { min: 5200, badge: '🧤', title: 'Gold-Glove Eyes',     blurb: 'Almost nothing gets past you out there.' },
-    { min: 7500, badge: '🏆', title: 'Hall-of-Fame Vision', blurb: 'Legendary. Cooperstown is on the line.' }
+    { minAcc: 0,  min: 0,    badge: '🧢', title: 'Sandlot Rookie',     blurb: 'Everyone starts somewhere — keep your eye on the zone.' },
+    { minAcc: 62, min: 300,  badge: '⚾', title: 'Single-A Call-Up',    blurb: 'Finding your footing behind the plate. Keep sharpening that eye.' },
+    { minAcc: 75, min: 900,  badge: '🎯', title: 'Big-League Umpire',   blurb: "Solid, dependable calls — you belong in the show." },
+    { minAcc: 84, min: 1800, badge: '⭐', title: 'All-Star Arbiter',    blurb: 'Elite zone awareness. The crowd respects your eye.' },
+    { minAcc: 90, min: 2800, badge: '🧤', title: 'Gold-Glove Eyes',     blurb: 'Almost nothing gets past you out there.' },
+    { minAcc: 94, min: 4000, badge: '🏆', title: 'Hall-of-Fame Vision', blurb: 'You out-umped the umps. Cooperstown is on the line.' }
   ];
-  function rankFor(score) {
+  function rankFor(score, accuracyPct) {
+    const acc = (typeof accuracyPct === 'number') ? accuracyPct : 0;
     let r = RANKS[0];
-    for (const tier of RANKS) if (score >= tier.min) r = tier;
+    for (const tier of RANKS) {
+      if (acc >= tier.minAcc && score >= tier.min) r = tier;
+    }
     return r;
   }
 
-  /* ------------------------------------------------------------- public -- */
   GF.onStart = function (onComplete) {
     build();
     resumeAudio();
@@ -260,19 +261,26 @@
       GF.bestCombo = Math.max(GF.bestCombo, GF.combo);
       const mult = multiplier();
 
-      const speedBonus = Math.max(0, Math.round(((pitch.speed || 85) - 80) * 4));
-      const edgeBonus = borderline ? 150 : 0;
+      // Difficulty from how close the pitch was to the zone edge.
+      // d ~ 0px = right on the edge (brutal call); large = an obvious ball/strike.
+      const d = (typeof info.edgeDistancePx === 'number') ? info.edgeDistancePx : 45;
+      const MAX_D = 80;
+      const diff = Math.max(0, Math.min(1, (MAX_D - d) / MAX_D)); // 0 = easy, 1 = hardest
+      // Quadratic ramp: obvious pitches pay almost nothing, edge pitches pay big.
+      const difficultyPoints = Math.round(20 + diff * diff * 280);
+
+      const speedBonus = Math.max(0, Math.round(((pitch.speed || 85) - 82) * 3));
       const quickBonus = responseTime > 0
-        ? Math.max(0, Math.min(120, Math.round((1600 - responseTime) / 12)))
+        ? Math.max(0, Math.min(80, Math.round((1400 - responseTime) / 14)))
         : 0;
 
-      let earned = Math.round((100 + speedBonus + edgeBonus + quickBonus) * mult);
+      let earned = Math.round((difficultyPoints + speedBonus + quickBonus) * mult);
       // Practice pitches (zone visible) are easy — award far fewer points.
-      if (info.practice) earned = Math.max(10, Math.round(earned * 0.2));
+      if (info.practice) earned = Math.max(8, Math.round(earned * 0.2));
       GF.score += earned;
       GF.pointsThisGame += earned;
 
-      const big = mult >= 3 || edgeBonus > 0;
+      const big = mult >= 3 || diff >= 0.7;
       let label = '+' + earned;
       if (mult > 1) label += ' <span style="font-size:.6em;opacity:.85">×' + mult + '</span>';
       spawnFloat(label, big ? 'big' : 'correct');
@@ -314,7 +322,7 @@
     const old = document.getElementById('gf-rank');
     if (old) old.remove();
 
-    const r = rankFor(GF.score);
+    const r = rankFor(GF.score, stats.accuracyPct);
     const banner = el('div', 'gf-rank');
     banner.id = 'gf-rank';
     banner.innerHTML =

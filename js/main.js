@@ -1,4 +1,3 @@
-// ─── Data ───────────────────────────────────────────────────────────────────
 let PITCHES = [];
 
 const PITCH_NAMES = {
@@ -7,7 +6,6 @@ const PITCH_NAMES = {
   FS: 'Split-Finger', KC: 'Knuckle Curve'
 };
 
-// ─── State ────────────────────────────────────────────────────────────────
 let currentIdx = 0;
 let correct = 0;
 let attempted = 0;
@@ -19,6 +17,14 @@ let gameStarted = false;
 let autoNextTimer = null;
 
 const AUTO_NEXT_DELAY_MS = 1250;
+
+const CALL_TIME_LIMIT_MS = 2000;
+let timedMode = false;
+let timedIntroShown = false;
+let callCountdownTimer = null;
+let countdownStartTimer = null;
+let countdownRAF = null;
+let callDeadline = 0;
 
 const PRACTICE_COUNT = 3;
 const MAX_ERRORS = 3;
@@ -245,8 +251,105 @@ function clearAutoNextTimer() {
   }
 }
 
+// ─── Timed mode: the 2-second call clock ────────────────────────────────────
+function ensureCallTimerUI() {
+  let wrap = document.getElementById('call-timer');
+  if (wrap) return wrap;
+  const panel = document.querySelector('.pitch-panel');
+  const zoneWrap = document.querySelector('.zone-wrapper');
+  if (!panel || !zoneWrap) return null;
+  wrap = document.createElement('div');
+  wrap.id = 'call-timer';
+  wrap.className = 'call-timer';
+  wrap.innerHTML =
+    '<div class="call-timer-row">' +
+      '<span class="call-timer-label">⏱ CALL CLOCK</span>' +
+      '<span class="call-timer-num">2.0s</span>' +
+    '</div>' +
+    '<div class="call-timer-track"><div class="call-timer-fill"></div></div>';
+  panel.insertBefore(wrap, zoneWrap);
+  return wrap;
+}
+
+function showCountdownUI() {
+  const wrap = ensureCallTimerUI();
+  if (wrap) wrap.classList.add('show');
+}
+
+function hideCountdownUI() {
+  const wrap = document.getElementById('call-timer');
+  if (wrap) { wrap.classList.remove('show'); wrap.classList.remove('urgent'); }
+}
+
+function updateCountdownUI(remaining) {
+  const wrap = document.getElementById('call-timer');
+  if (!wrap) return;
+  const num = wrap.querySelector('.call-timer-num');
+  const fill = wrap.querySelector('.call-timer-fill');
+  const pct = Math.max(0, Math.min(100, (remaining / CALL_TIME_LIMIT_MS) * 100));
+  let color = 'var(--accent2)';
+  if (remaining <= 700) color = 'var(--strike)';
+  else if (remaining <= 1200) color = 'var(--accent)';
+  if (fill) { fill.style.width = pct + '%'; fill.style.background = color; }
+  if (num) { num.textContent = (remaining / 1000).toFixed(1) + 's'; num.style.color = color; }
+  wrap.classList.toggle('urgent', remaining <= 700);
+}
+
+function clearCallTimers() {
+  if (callCountdownTimer) { clearTimeout(callCountdownTimer); callCountdownTimer = null; }
+  if (countdownStartTimer) { clearTimeout(countdownStartTimer); countdownStartTimer = null; }
+  if (countdownRAF) { cancelAnimationFrame(countdownRAF); countdownRAF = null; }
+  hideCountdownUI();
+}
+
+function tickCountdown() {
+  const remaining = Math.max(0, callDeadline - performance.now());
+  updateCountdownUI(remaining);
+  if (remaining > 0) {
+    countdownRAF = requestAnimationFrame(tickCountdown);
+  }
+}
+
+function beginCallCountdown() {
+  countdownStartTimer = null;
+  if (awaitingNext || !gameStarted) return;
+  callDeadline = performance.now() + CALL_TIME_LIMIT_MS;
+  showCountdownUI();
+  tickCountdown();
+  callCountdownTimer = setTimeout(handleCallTimeout, CALL_TIME_LIMIT_MS);
+}
+
+function handleCallTimeout() {
+  callCountdownTimer = null;
+  if (awaitingNext || !gameStarted) return;
+  makeCall('__timeout__');
+}
+
+function showTimedIntro(onContinue) {
+  const overlay = document.createElement('div');
+  overlay.className = 'timed-intro-overlay';
+  overlay.innerHTML =
+    '<div class="timed-intro-card">' +
+      '<div class="timed-intro-badge">⏱️</div>' +
+      '<h2>Now Let\u2019s Make It Harder</h2>' +
+      '<p>Real umpires have to make the call the instant the pitch hits the plate. ' +
+      'From here on you get just <strong>two seconds</strong> to call every pitch \u2014 ' +
+      'let the clock run out and it counts as a blown call.</p>' +
+      '<button type="button" class="timed-intro-btn">Play On \u2014 2.0s Clock</button>' +
+    '</div>';
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => overlay.classList.add('show'));
+  const finish = () => {
+    overlay.classList.remove('show');
+    setTimeout(() => overlay.remove(), 250);
+    if (typeof onContinue === 'function') onContinue();
+  };
+  overlay.querySelector('.timed-intro-btn').addEventListener('click', finish);
+}
+
 function goToNextPitch() {
   clearAutoNextTimer();
+  clearCallTimers();
 
   if (!gameStarted) return;
 
@@ -315,6 +418,9 @@ function resetGameState() {
   pitchStartTime = null;
   responseTimes = [];
   gameStarted = false;
+  timedMode = false;
+  timedIntroShown = false;
+  clearCallTimers();
 
   PITCHES = shuffleArray(PITCHES);
 
@@ -566,6 +672,7 @@ function updateProgressText() {
 // ─── Load pitch ───────────────────────────────────────────────────────────
 function loadPitch(idx) {
   clearAutoNextTimer();
+  clearCallTimers();
 
   const p = PITCHES[idx];
   if (!p) return;
@@ -685,6 +792,10 @@ function loadPitch(idx) {
 
   awaitingNext = false;
   pitchStartTime = performance.now();
+
+  if (timedMode) {
+    countdownStartTimer = setTimeout(beginCallCountdown, pitchAnimationDuration);
+  }
 }
 
 // ─── Call handler ─────────────────────────────────────────────────────────
@@ -693,6 +804,9 @@ function makeCall(userCall) {
   if (awaitingNext) return;
 
   awaitingNext = true;
+  clearCallTimers();
+
+  const timedOut = userCall === '__timeout__';
 
   const responseTime = pitchStartTime ? performance.now() - pitchStartTime : 0;
   if (responseTime > 0) {
@@ -706,7 +820,7 @@ function makeCall(userCall) {
   const userStrike = userCall === 'strike';
   const actualStrike = isPitchInFixedStrikeZone(p);
   const umpireStrike = p.call === 'called_strike';
-  const isCorrect = userStrike === actualStrike;
+  const isCorrect = timedOut ? false : (userStrike === actualStrike);
 
   attempted++;
 
@@ -758,7 +872,7 @@ function makeCall(userCall) {
   const text = document.getElementById('feedback-text');
 
   toast.className = isCorrect ? 'correct' : 'wrong';
-  icon.textContent = isCorrect ? '✅' : '❌';
+  icon.textContent = isCorrect ? '✅' : (timedOut ? '⏰' : '❌');
 
   const actualCallLabel = actualStrike ? 'STRIKE' : 'BALL';
   const umpireCallLabel = umpireStrike ? 'STRIKE' : 'BALL';
@@ -781,9 +895,13 @@ function makeCall(userCall) {
     ? ` This was a close edge pitch.`
     : '';
 
+  const verdictLead = timedOut
+    ? `<strong>Too slow!</strong> You ran out the clock. `
+    : `<strong>${isCorrect ? 'Correct!' : 'Wrong!'}</strong> `;
+
   text.style.color = 'var(--text)';
   text.innerHTML =
-    `<strong>${isCorrect ? 'Correct!' : 'Wrong!'}</strong> This pitch is a <strong style="color:${actualStrike ? 'var(--strike)' : 'var(--ball)'}">${actualCallLabel}</strong>. ${umpireNote}${diffNote}<span style="color:var(--muted);font-size:12px"> (${p.pitch_type} @ ${p.speed} mph from ${p.pitcher})</span>`;
+    `${verdictLead}This pitch is a <strong style="color:${actualStrike ? 'var(--strike)' : 'var(--ball)'}">${actualCallLabel}</strong>. ${umpireNote}${diffNote}<span style="color:var(--muted);font-size:12px"> (${p.pitch_type} @ ${p.speed} mph from ${p.pitcher})</span>`;
 
   updateStats();
   updateProgressText();
@@ -795,12 +913,26 @@ function makeCall(userCall) {
       pitch: p,
       responseTime: responseTime,
       borderline: visualBorderline,
+      edgeDistancePx: getDistanceFromZoneEdgePx(p),
       practice: currentIdx < PRACTICE_COUNT,
       errors: errors
     });
   }
 
   const gameOver = errors >= MAX_ERRORS || attempted >= PITCHES.length;
+
+  // First time the player gets more than 5 correct: introduce the call clock.
+  if (!gameOver && !timedMode && !timedIntroShown && correct > 5) {
+    timedIntroShown = true;
+    clearAutoNextTimer();
+    hideNextButton();
+    showTimedIntro(() => {
+      timedMode = true;
+      goToNextPitch();
+    });
+    return;
+  }
+
   scheduleAutoNext(gameOver);
 }
 

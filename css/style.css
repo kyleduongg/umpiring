@@ -4974,8 +4974,6 @@ umpire-scroll-story {
 }
 
 
-
-/* --- Refined game visuals --- */
 #game-screen {
   position: relative;
   background:
@@ -5119,6 +5117,7 @@ umpire-scroll-story {
   }
 }
 
+
 .gf-hud {
   display: flex; align-items: center; justify-content: space-between;
   gap: 10px; flex-wrap: wrap; margin: 0 0 14px; padding: 9px 14px;
@@ -5152,6 +5151,7 @@ umpire-scroll-story {
 }
 .gf-sound:hover { border-color: var(--accent); }
 
+/* floaters + flashes anchored over the zone */
 .gf-floaters { position: absolute; inset: 0; pointer-events: none; overflow: visible; z-index: 7; }
 .gf-float {
   position: absolute; left: 50%; top: 44%; transform: translate(-50%, -50%);
@@ -5239,6 +5239,7 @@ umpire-scroll-story {
 .gf-rank-row strong { display: block; font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; color: var(--text); }
 .gf-rank-blurb { margin-top: 16px; font-size: 13px; line-height: 1.6; color: var(--text); opacity: .85; }
 
+/* Scoreboard card placement in the right column */
 .gf-scoreboard .gf-sb-top {
   display: flex; align-items: flex-end; justify-content: space-between;
   gap: 10px; flex-wrap: wrap;
@@ -5255,3 +5256,50 @@ umpire-scroll-story {
   text-transform: uppercase; color: var(--muted);
 }
 .gf-scoreboard .gf-outs .gf-out { font-size: 20px; }
+
+
+.call-timer {
+  display: none; margin: 0 0 14px; padding: 10px 14px; border-radius: 12px;
+  border: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(26,44,34,.9), rgba(19,30,24,.9));
+  font-family: 'IBM Plex Mono', monospace;
+}
+.call-timer.show { display: block; }
+.call-timer-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; }
+.call-timer-label { font-size: 10px; letter-spacing: 2px; color: var(--muted); }
+.call-timer-num { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; color: var(--accent2); }
+.call-timer-track { height: 8px; border-radius: 99px; background: rgba(255,255,255,.07); overflow: hidden; }
+.call-timer-fill { height: 100%; width: 100%; border-radius: 99px; background: var(--accent2); }
+.call-timer.urgent { animation: ctPulse .5s infinite alternate; }
+@keyframes ctPulse {
+  from { box-shadow: 0 0 0 rgba(255,79,79,0); }
+  to   { box-shadow: 0 0 16px rgba(255,79,79,.55); }
+}
+
+.timed-intro-overlay {
+  position: fixed; inset: 0; z-index: 10000; display: flex;
+  align-items: center; justify-content: center; padding: 24px;
+  background: rgba(8,14,11,.78); opacity: 0; transition: opacity .25s ease;
+}
+.timed-intro-overlay.show { opacity: 1; }
+.timed-intro-card {
+  max-width: 460px; text-align: center; padding: 32px 28px; border-radius: 18px;
+  border: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(26,44,34,.98), rgba(19,30,24,.98));
+  transform: scale(.9); transition: transform .25s cubic-bezier(.2,.8,.2,1);
+}
+.timed-intro-overlay.show .timed-intro-card { transform: scale(1); }
+.timed-intro-badge { font-size: 52px; }
+.timed-intro-card h2 {
+  font-family: 'Bebas Neue', sans-serif; font-size: 34px; letter-spacing: 2px;
+  color: var(--accent); margin: 6px 0 12px;
+}
+.timed-intro-card p { color: var(--text); opacity: .9; line-height: 1.6; font-size: 15px; margin-bottom: 22px; }
+.timed-intro-card strong { color: var(--accent2); }
+.timed-intro-btn {
+  font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px;
+  color: #0b1310; background: var(--accent); border: none; border-radius: 10px;
+  padding: 12px 26px; cursor: pointer; transition: transform .1s ease, filter .15s ease;
+}
+.timed-intro-btn:hover { filter: brightness(1.08); }
+.timed-intro-btn:active { transform: scale(.96); }
