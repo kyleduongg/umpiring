@@ -27,8 +27,6 @@ const PLATE_HALF_WIDTH_FT = 0.708;
 const FIXED_ZONE_TOP = 3.5;
 const FIXED_ZONE_BOTTOM = 1.5;
 
-// Keep game pitches visible inside the umpire-view screen.
-// This removes extreme Statcast locations that would animate partly off the SVG.
 const SCREEN_MIN_X = -2.2;
 const SCREEN_MAX_X = 2.2;
 const SCREEN_MIN_Z = 0.35;
@@ -38,6 +36,9 @@ const BORDERLINE_START_CORRECT = 4;
 const BORDERLINE_SECOND_LEVEL_CORRECT = 8;
 const BORDERLINE_CHANCE = 0.90;
 const BORDERLINE_SECOND_LEVEL_CHANCE = 0.97;
+
+const HOT_STREAK_THRESHOLD = 5;
+const HOT_STREAK_HARD_POOL = 6;
 
 const MLB_UMPIRE_REACTION_TIME_SECONDS = 0.45;
 const JUNE_MLB_UMPIRE_AVG_ACCURACY = 94.3;
@@ -140,6 +141,12 @@ function isOnScreenPitch(pitch) {
   );
 }
 
+function getCurrentStreak() {
+  return (window.GameFeel && typeof window.GameFeel.combo === 'number')
+    ? window.GameFeel.combo
+    : 0;
+}
+
 function chooseNextPitchIndex(startIndex) {
   const onScreenIndexes = [];
   const borderlineIndexes = [];
@@ -154,16 +161,30 @@ function chooseNextPitchIndex(startIndex) {
     }
   }
 
+  const hotStreak = getCurrentStreak() >= HOT_STREAK_THRESHOLD;
+
+  // ON FIRE (5+ streak): punish the player with the very closest edge pitches.
+  if (hotStreak && borderlineIndexes.length > 0) {
+    const hardestFirst = borderlineIndexes
+      .slice()
+      .sort((a, b) =>
+        getDistanceFromZoneEdgePx(PITCHES[a]) - getDistanceFromZoneEdgePx(PITCHES[b]));
+    const poolSize = Math.max(1, Math.min(HOT_STREAK_HARD_POOL, hardestFirst.length));
+    return hardestFirst[Math.floor(Math.random() * poolSize)];
+  }
+
   // Before the game gets harder, still avoid extreme off-screen pitches.
-  if (correct < BORDERLINE_START_CORRECT) {
+  if (!hotStreak && correct < BORDERLINE_START_CORRECT) {
     if (onScreenIndexes.length === 0) return startIndex;
     return onScreenIndexes[0];
   }
 
-  const currentBorderlineChance =
+  let currentBorderlineChance =
     correct >= BORDERLINE_SECOND_LEVEL_CORRECT
       ? BORDERLINE_SECOND_LEVEL_CHANCE
       : BORDERLINE_CHANCE;
+
+  if (hotStreak) currentBorderlineChance = 0.98;
 
   const shouldPreferBorderline = Math.random() < currentBorderlineChance;
 
@@ -256,9 +277,9 @@ function scheduleAutoNext(gameOver) {
   const feedbackText = document.getElementById('feedback-text');
   if (feedbackText) {
     const bufferMessage = gameOver
-      ? '<br><span style="color:var(--muted);font-size:12px">Showing your results in a moment...</span>'
+      ? ''
       : '<br><span style="color:var(--muted);font-size:12px">Next pitch coming up...</span>';
-    feedbackText.innerHTML += bufferMessage;
+    if (bufferMessage) feedbackText.innerHTML += bufferMessage;
   }
 
   autoNextTimer = setTimeout(() => {
@@ -301,6 +322,7 @@ function resetGameState() {
   buildDots();
   hideNextButton();
   disableCallButtons();
+  if (window.GameFeel) GameFeel.reset();
 
   const toast = document.getElementById('feedback-toast');
   const icon = document.getElementById('feedback-icon');
@@ -485,13 +507,6 @@ fieldLayer.append('path')
     `M ${xScale(-2.42)} ${yScale(5.1)} Q ${xScale(0)} ${yScale(4.1)} ${xScale(2.42)} ${yScale(5.1)} L ${xScale(2.42)} ${yScale(5.8)} L ${xScale(-2.42)} ${yScale(5.8)} Z`
   )
   .attr('fill', 'rgba(4,8,14,0.58)');
-
-fieldLayer.append('text')
-  .attr('class', 'view-caption')
-  .attr('x', plotW / 2)
-  .attr('y', 16)
-  .attr('text-anchor', 'middle')
-  .text('Umpire View · Behind Home Plate');
 
 const zoneBox = g.append('rect')
   .attr('class', 'zone-box')
@@ -773,6 +788,18 @@ function makeCall(userCall) {
   updateStats();
   updateProgressText();
 
+  if (window.GameFeel) {
+    GameFeel.onCall({
+      isCorrect: isCorrect,
+      userCall: userCall,
+      pitch: p,
+      responseTime: responseTime,
+      borderline: visualBorderline,
+      practice: currentIdx < PRACTICE_COUNT,
+      errors: errors
+    });
+  }
+
   const gameOver = errors >= MAX_ERRORS || attempted >= PITCHES.length;
   scheduleAutoNext(gameOver);
 }
@@ -835,7 +862,11 @@ if (startButton) {
       overlay.style.display = 'none';
     }
 
-    loadPitch(0);
+    if (window.GameFeel) {
+      GameFeel.onStart(() => loadPitch(0));
+    } else {
+      loadPitch(0);
+    }
   });
 }
 
@@ -877,6 +908,16 @@ function showResults() {
   if (!comparisonSection) return;
 
   comparisonSection.classList.add('show');
+
+  if (window.GameFeel) {
+    GameFeel.onGameOver({
+      correct: correct,
+      errors: errors,
+      attempted: attempted,
+      accuracyPct: userAccuracyPct,
+      avgTime: avgUserTime
+    });
+  }
 
   const userAccuracyEl = document.getElementById('compare-user-accuracy');
   const umpireAccuracyEl = document.getElementById('compare-mlb-accuracy');

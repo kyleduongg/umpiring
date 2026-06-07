@@ -5119,3 +5119,139 @@ umpire-scroll-story {
   }
 }
 
+.gf-hud {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; flex-wrap: wrap; margin: 0 0 14px; padding: 9px 14px;
+  border-radius: 14px; border: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(26,44,34,.92), rgba(19,30,24,.92));
+  font-family: 'IBM Plex Mono', monospace;
+}
+.gf-hud-group { display: flex; align-items: center; gap: 10px; }
+.gf-score-wrap { display: flex; flex-direction: column; line-height: 1; }
+.gf-score-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+.gf-score {
+  font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 1px;
+  color: var(--accent); text-shadow: 0 0 14px rgba(230,162,60,.35);
+  transition: transform .12s ease;
+}
+.gf-score.bump { transform: scale(1.18); }
+.gf-combo-wrap { display: flex; align-items: center; gap: 6px; opacity: .4; transition: opacity .2s ease; }
+.gf-combo-wrap.live { opacity: 1; }
+.gf-combo-fire { font-size: 18px; filter: grayscale(1) opacity(.6); transition: filter .2s ease; }
+.gf-combo-wrap.live .gf-combo-fire { filter: none; animation: gfFlicker .55s infinite alternate; }
+@keyframes gfFlicker { from { transform: scale(1) rotate(-5deg); } to { transform: scale(1.18) rotate(5deg); } }
+.gf-combo-txt { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; color: var(--accent2); }
+.gf-mult { font-size: 11px; font-weight: 600; color: var(--accent2); }
+.gf-outs { display: flex; align-items: center; gap: 5px; }
+.gf-out { font-size: 18px; transition: transform .25s ease, filter .25s ease; }
+.gf-out.lost { filter: grayscale(1) brightness(.65); transform: scale(.85) rotate(14deg); }
+.gf-sound {
+  background: none; border: 1px solid var(--border); color: var(--text);
+  border-radius: 8px; cursor: pointer; font-size: 15px; padding: 4px 9px; line-height: 1;
+  transition: border-color .15s ease;
+}
+.gf-sound:hover { border-color: var(--accent); }
+
+.gf-floaters { position: absolute; inset: 0; pointer-events: none; overflow: visible; z-index: 7; }
+.gf-float {
+  position: absolute; left: 50%; top: 44%; transform: translate(-50%, -50%);
+  font-family: 'Bebas Neue', sans-serif; font-size: 40px; letter-spacing: 1px;
+  text-shadow: 0 2px 14px rgba(0,0,0,.55); white-space: nowrap;
+  animation: gfFloat 1.05s ease-out forwards;
+}
+@keyframes gfFloat {
+  0%   { opacity: 0; transform: translate(-50%, -30%) scale(.6); }
+  18%  { opacity: 1; transform: translate(-50%, -62%) scale(1.12); }
+  100% { opacity: 0; transform: translate(-50%, -145%) scale(1); }
+}
+.gf-callout {
+  position: absolute; left: 50%; top: 12%; transform: translateX(-50%);
+  font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 3px;
+  color: var(--accent2); text-shadow: 0 0 18px rgba(87,184,106,.6); white-space: nowrap;
+  animation: gfCallout 1.15s ease-out forwards;
+}
+@keyframes gfCallout {
+  0%   { opacity: 0; transform: translateX(-50%) scale(.4); }
+  25%  { opacity: 1; transform: translateX(-50%) scale(1.15); }
+  72%  { opacity: 1; transform: translateX(-50%) scale(1); }
+  100% { opacity: 0; transform: translateX(-50%) scale(1); }
+}
+.gf-flash { position: absolute; inset: 0; pointer-events: none; border-radius: 16px; opacity: 0; z-index: 6; }
+.gf-flash.go-correct { animation: gfFlashG .5s ease-out; }
+.gf-flash.go-wrong   { animation: gfFlashR .5s ease-out; }
+@keyframes gfFlashG {
+  0% { opacity: .55; box-shadow: inset 0 0 60px var(--correct);
+       background: radial-gradient(circle, rgba(69,207,110,.25), transparent 70%); }
+  100% { opacity: 0; }
+}
+@keyframes gfFlashR {
+  0% { opacity: .55; box-shadow: inset 0 0 60px var(--wrong);
+       background: radial-gradient(circle, rgba(255,79,79,.25), transparent 70%); }
+  100% { opacity: 0; }
+}
+.gf-shake { animation: gfShake .4s ease; }
+@keyframes gfShake {
+  0%,100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); } 40% { transform: translateX(7px); }
+  60% { transform: translateX(-5px); } 80% { transform: translateX(3px); }
+}
+
+.gf-playball {
+  position: fixed; inset: 0; z-index: 9999; display: flex;
+  align-items: center; justify-content: center; pointer-events: none;
+  background: radial-gradient(circle, rgba(11,19,16,.5), rgba(11,19,16,.85));
+  animation: gfPlayballBg 1.15s ease-out forwards;
+}
+.gf-playball span {
+  font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 12vw, 120px);
+  letter-spacing: 6px; color: var(--accent); text-shadow: 0 0 40px rgba(230,162,60,.6);
+  animation: gfPlayball 1.15s cubic-bezier(.2,.8,.2,1) forwards;
+}
+@keyframes gfPlayball {
+  0%  { opacity: 0; transform: scale(.3) rotate(-6deg); }
+  30% { opacity: 1; transform: scale(1.05); }
+  70% { opacity: 1; transform: scale(1); }
+  100%{ opacity: 0; transform: scale(1.4); }
+}
+@keyframes gfPlayballBg { 0% { opacity: 0; } 25% { opacity: 1; } 100% { opacity: 0; } }
+
+.btn-call { transition: transform .08s ease, box-shadow .15s ease; }
+.btn-call:active { transform: scale(.94); }
+.btn-call.gf-press { animation: gfPress .18s ease; }
+@keyframes gfPress { 0% { transform: scale(1); } 50% { transform: scale(.9); } 100% { transform: scale(1); } }
+
+.gf-rank {
+  margin: 0 auto 26px; max-width: 640px; text-align: center;
+  padding: 26px 24px; border-radius: 18px; position: relative; overflow: hidden;
+  border: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(26,44,34,.95), rgba(19,30,24,.95));
+}
+.gf-rank::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(circle at 50% 0%, rgba(230,162,60,.16), transparent 60%);
+}
+.gf-rank-kicker { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); }
+.gf-rank-badge { font-size: 54px; margin: 6px 0 2px; }
+.gf-rank-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(34px, 6vw, 52px); letter-spacing: 2px; color: var(--accent); line-height: 1; }
+.gf-rank-score { font-family: 'Bebas Neue', sans-serif; font-size: 40px; color: var(--accent2); margin-top: 10px; line-height: 1; }
+.gf-rank-score small { display: block; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 2px; color: var(--muted); margin-top: 2px; }
+.gf-rank-row { display: flex; justify-content: center; gap: 26px; flex-wrap: wrap; margin-top: 16px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+.gf-rank-row strong { display: block; font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; color: var(--text); }
+.gf-rank-blurb { margin-top: 16px; font-size: 13px; line-height: 1.6; color: var(--text); opacity: .85; }
+
+.gf-scoreboard .gf-sb-top {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 10px; flex-wrap: wrap;
+}
+.gf-scoreboard .gf-score { font-size: 36px; }
+.gf-scoreboard .gf-combo-wrap { gap: 5px; }
+.gf-scoreboard .gf-sb-bottom {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border);
+}
+.gf-outs-wrap { display: flex; align-items: center; gap: 10px; }
+.gf-outs-label {
+  font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--muted);
+}
+.gf-scoreboard .gf-outs .gf-out { font-size: 20px; }
