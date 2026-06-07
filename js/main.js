@@ -16,6 +16,9 @@ let awaitingNext = false;
 let pitchStartTime = null;
 let responseTimes = [];
 let gameStarted = false;
+let autoNextTimer = null;
+
+const AUTO_NEXT_DELAY_MS = 1250;
 
 const PRACTICE_COUNT = 3;
 const MAX_ERRORS = 3;
@@ -24,10 +27,17 @@ const PLATE_HALF_WIDTH_FT = 0.708;
 const FIXED_ZONE_TOP = 3.5;
 const FIXED_ZONE_BOTTOM = 1.5;
 
-const BORDERLINE_START_CORRECT = 5;
-const BORDERLINE_SECOND_LEVEL_CORRECT = 10;
-const BORDERLINE_CHANCE = 0.75;
-const BORDERLINE_SECOND_LEVEL_CHANCE = 0.90;
+// Keep game pitches visible inside the umpire-view screen.
+// This removes extreme Statcast locations that would animate partly off the SVG.
+const SCREEN_MIN_X = -2.2;
+const SCREEN_MAX_X = 2.2;
+const SCREEN_MIN_Z = 0.35;
+const SCREEN_MAX_Z = 4.75;
+
+const BORDERLINE_START_CORRECT = 4;
+const BORDERLINE_SECOND_LEVEL_CORRECT = 8;
+const BORDERLINE_CHANCE = 0.90;
+const BORDERLINE_SECOND_LEVEL_CHANCE = 0.97;
 
 const MLB_UMPIRE_REACTION_TIME_SECONDS = 0.45;
 const JUNE_MLB_UMPIRE_AVG_ACCURACY = 94.3;
@@ -114,9 +124,40 @@ function isBorderlinePitch(pitch) {
   return getDistanceFromZoneEdgePx(pitch) <= 18;
 }
 
+function isOnScreenPitch(pitch) {
+  if (!pitch) return false;
+
+  const x = Number(pitch.plate_x);
+  const z = Number(pitch.plate_z);
+
+  return (
+    Number.isFinite(x) &&
+    Number.isFinite(z) &&
+    x >= SCREEN_MIN_X &&
+    x <= SCREEN_MAX_X &&
+    z >= SCREEN_MIN_Z &&
+    z <= SCREEN_MAX_Z
+  );
+}
+
 function chooseNextPitchIndex(startIndex) {
+  const onScreenIndexes = [];
+  const borderlineIndexes = [];
+
+  for (let i = startIndex; i < PITCHES.length; i++) {
+    if (!isOnScreenPitch(PITCHES[i])) continue;
+
+    onScreenIndexes.push(i);
+
+    if (isBorderlinePitch(PITCHES[i])) {
+      borderlineIndexes.push(i);
+    }
+  }
+
+  // Before the game gets harder, still avoid extreme off-screen pitches.
   if (correct < BORDERLINE_START_CORRECT) {
-    return startIndex;
+    if (onScreenIndexes.length === 0) return startIndex;
+    return onScreenIndexes[0];
   }
 
   const currentBorderlineChance =
@@ -126,24 +167,17 @@ function chooseNextPitchIndex(startIndex) {
 
   const shouldPreferBorderline = Math.random() < currentBorderlineChance;
 
-  if (!shouldPreferBorderline) {
-    return startIndex;
+  if (shouldPreferBorderline && borderlineIndexes.length > 0) {
+    const randomPick = Math.floor(Math.random() * borderlineIndexes.length);
+    return borderlineIndexes[randomPick];
   }
 
-  const borderlineIndexes = [];
-
-  for (let i = startIndex; i < PITCHES.length; i++) {
-    if (isBorderlinePitch(PITCHES[i])) {
-      borderlineIndexes.push(i);
-    }
+  if (onScreenIndexes.length > 0) {
+    const randomPick = Math.floor(Math.random() * onScreenIndexes.length);
+    return onScreenIndexes[randomPick];
   }
 
-  if (borderlineIndexes.length === 0) {
-    return startIndex;
-  }
-
-  const randomPick = Math.floor(Math.random() * borderlineIndexes.length);
-  return borderlineIndexes[randomPick];
+  return startIndex;
 }
 
 function moveSelectedPitchIntoCurrentSlot(currentSlot, selectedIndex) {
@@ -183,6 +217,56 @@ function hideNextButton() {
   nextButton.style.setProperty('display', 'none', 'important');
 }
 
+function clearAutoNextTimer() {
+  if (autoNextTimer) {
+    clearTimeout(autoNextTimer);
+    autoNextTimer = null;
+  }
+}
+
+function goToNextPitch() {
+  clearAutoNextTimer();
+
+  if (!gameStarted) return;
+
+  const gameOver = errors >= MAX_ERRORS || attempted >= PITCHES.length;
+
+  if (gameOver) {
+    showResults();
+    return;
+  }
+
+  currentIdx++;
+
+  if (currentIdx >= PITCHES.length) {
+    showResults();
+    return;
+  }
+
+  const selectedIndex = chooseNextPitchIndex(currentIdx);
+  moveSelectedPitchIntoCurrentSlot(currentIdx, selectedIndex);
+
+  loadPitch(currentIdx);
+}
+
+function scheduleAutoNext(gameOver) {
+  clearAutoNextTimer();
+  hideNextButton();
+
+  const feedbackText = document.getElementById('feedback-text');
+  if (feedbackText) {
+    const bufferMessage = gameOver
+      ? '<br><span style="color:var(--muted);font-size:12px">Showing your results in a moment...</span>'
+      : '<br><span style="color:var(--muted);font-size:12px">Next pitch coming up...</span>';
+    feedbackText.innerHTML += bufferMessage;
+  }
+
+  autoNextTimer = setTimeout(() => {
+    autoNextTimer = null;
+    goToNextPitch();
+  }, AUTO_NEXT_DELAY_MS);
+}
+
 function disableCallButtons() {
   const strikeButton = document.getElementById('btn-strike');
   const ballButton = document.getElementById('btn-ball');
@@ -200,6 +284,8 @@ function enableCallButtons() {
 }
 
 function resetGameState() {
+  clearAutoNextTimer();
+
   currentIdx = 0;
   correct = 0;
   attempted = 0;
@@ -253,49 +339,105 @@ const g = svg.append('g')
 const fieldLayer = g.append('g').attr('class', 'umpire-field-view');
 
 const defs = svg.append('defs');
+
+const bgGrad = defs.append('linearGradient')
+  .attr('id', 'umpBgGrad')
+  .attr('x1', '0%').attr('y1', '0%')
+  .attr('x2', '0%').attr('y2', '100%');
+bgGrad.append('stop').attr('offset', '0%').attr('stop-color', '#08130f');
+bgGrad.append('stop').attr('offset', '55%').attr('stop-color', '#0c1a14');
+bgGrad.append('stop').attr('offset', '100%').attr('stop-color', '#0a130f');
+
+const grassGrad = defs.append('linearGradient')
+  .attr('id', 'umpGrassGrad')
+  .attr('x1', '0%').attr('y1', '0%')
+  .attr('x2', '0%').attr('y2', '100%');
+grassGrad.append('stop').attr('offset', '0%').attr('stop-color', '#244f3b');
+grassGrad.append('stop').attr('offset', '50%').attr('stop-color', '#1b4332');
+grassGrad.append('stop').attr('offset', '100%').attr('stop-color', '#153426');
+
 const dirtGrad = defs.append('radialGradient')
   .attr('id', 'dirtGrad')
   .attr('cx', '50%')
-  .attr('cy', '85%')
-  .attr('r', '75%');
+  .attr('cy', '78%')
+  .attr('r', '80%');
+dirtGrad.append('stop').attr('offset', '0%').attr('stop-color', '#a67242').attr('stop-opacity', 0.95);
+dirtGrad.append('stop').attr('offset', '48%').attr('stop-color', '#80542f').attr('stop-opacity', 0.86);
+dirtGrad.append('stop').attr('offset', '100%').attr('stop-color', '#261d18').attr('stop-opacity', 0.28);
 
-dirtGrad.append('stop')
-  .attr('offset', '0%')
-  .attr('stop-color', '#8a5a32')
-  .attr('stop-opacity', 0.95);
-
-dirtGrad.append('stop')
-  .attr('offset', '65%')
-  .attr('stop-color', '#4b3826')
-  .attr('stop-opacity', 0.72);
-
-dirtGrad.append('stop')
-  .attr('offset', '100%')
-  .attr('stop-color', '#182016')
-  .attr('stop-opacity', 0.65);
+const zoneGlow = defs.append('filter')
+  .attr('id', 'zoneGlow')
+  .attr('x', '-50%').attr('y', '-50%')
+  .attr('width', '200%').attr('height', '200%');
+zoneGlow.append('feGaussianBlur')
+  .attr('stdDeviation', 3.2)
+  .attr('result', 'blur');
+const zoneMerge = zoneGlow.append('feMerge');
+zoneMerge.append('feMergeNode').attr('in', 'blur');
+zoneMerge.append('feMergeNode').attr('in', 'SourceGraphic');
 
 fieldLayer.append('rect')
   .attr('x', -MARGIN.left)
   .attr('y', -MARGIN.top)
   .attr('width', W)
   .attr('height', H)
-  .attr('fill', '#101820');
+  .attr('fill', 'url(#umpBgGrad)');
+
+fieldLayer.append('ellipse')
+  .attr('cx', xScale(-1.95))
+  .attr('cy', yScale(4.95))
+  .attr('rx', 52)
+  .attr('ry', 22)
+  .attr('fill', 'rgba(255,255,255,0.06)');
+
+fieldLayer.append('ellipse')
+  .attr('cx', xScale(1.95))
+  .attr('cy', yScale(4.95))
+  .attr('rx', 52)
+  .attr('ry', 22)
+  .attr('fill', 'rgba(255,255,255,0.06)');
 
 fieldLayer.append('path')
   .attr(
     'd',
-    `M ${xScale(-2.5)} ${yScale(5)} C ${xScale(-1.8)} ${yScale(3.8)}, ${xScale(1.8)} ${yScale(3.8)}, ${xScale(2.5)} ${yScale(5)} L ${xScale(2.5)} ${plotH} L ${xScale(-2.5)} ${plotH} Z`
+    `M ${xScale(-2.45)} ${yScale(5.05)} C ${xScale(-1.7)} ${yScale(4.08)}, ${xScale(1.7)} ${yScale(4.08)}, ${xScale(2.45)} ${yScale(5.05)} L ${xScale(2.45)} ${plotH} L ${xScale(-2.45)} ${plotH} Z`
   )
-  .attr('fill', '#1d5a3a')
-  .attr('opacity', 0.48);
+  .attr('fill', 'url(#umpGrassGrad)')
+  .attr('opacity', 0.96);
+
+fieldLayer.append('path')
+  .attr(
+    'd',
+    `M ${xScale(-0.52)} ${yScale(5.05)} C ${xScale(-0.34)} ${yScale(4.2)}, ${xScale(0.34)} ${yScale(4.2)}, ${xScale(0.52)} ${yScale(5.05)} L ${xScale(0.34)} ${plotH} L ${xScale(-0.34)} ${plotH} Z`
+  )
+  .attr('fill', 'rgba(255,255,255,0.035)');
+
+fieldLayer.append('line')
+  .attr('x1', xScale(-0.85)).attr('y1', yScale(0.58))
+  .attr('x2', xScale(-2.16)).attr('y2', yScale(4.48))
+  .attr('stroke', 'rgba(245,245,245,0.18)')
+  .attr('stroke-width', 1.4);
+
+fieldLayer.append('line')
+  .attr('x1', xScale(0.85)).attr('y1', yScale(0.58))
+  .attr('x2', xScale(2.16)).attr('y2', yScale(4.48))
+  .attr('stroke', 'rgba(245,245,245,0.18)')
+  .attr('stroke-width', 1.4);
 
 fieldLayer.append('ellipse')
   .attr('cx', xScale(0))
-  .attr('cy', yScale(0.65))
-  .attr('rx', plotW * 0.46)
-  .attr('ry', 78)
+  .attr('cy', yScale(0.68))
+  .attr('rx', plotW * 0.47)
+  .attr('ry', 82)
   .attr('fill', 'url(#dirtGrad)')
-  .attr('opacity', 0.92);
+  .attr('opacity', 0.96);
+
+fieldLayer.append('ellipse')
+  .attr('cx', xScale(0))
+  .attr('cy', yScale(1.95))
+  .attr('rx', 78)
+  .attr('ry', 20)
+  .attr('fill', 'rgba(232,200,64,0.08)');
 
 const plateTop = yScale(0.48);
 const plateBottom = yScale(0.08);
@@ -308,47 +450,64 @@ fieldLayer.append('polygon')
     'points',
     `${plateLeft},${plateTop} ${plateRight},${plateTop} ${plateRight},${(plateTop + plateBottom) / 2} ${plateMid},${plateBottom} ${plateLeft},${(plateTop + plateBottom) / 2}`
   )
-  .attr('fill', 'rgba(238,238,226,0.95)')
+  .attr('fill', 'rgba(245,245,236,0.98)')
   .attr('stroke', 'rgba(255,255,255,0.95)')
   .attr('stroke-width', 1.5);
+
+fieldLayer.append('rect')
+  .attr('x', xScale(-0.62))
+  .attr('y', yScale(0.62))
+  .attr('width', xScale(0.62) - xScale(-0.62))
+  .attr('height', 14)
+  .attr('fill', 'rgba(255,255,255,0.05)')
+  .attr('stroke', 'rgba(255,255,255,0.10)');
 
 fieldLayer.append('path')
   .attr(
     'd',
-    `M ${xScale(-1.45)} ${plotH + 12} C ${xScale(-1.0)} ${yScale(0.55)}, ${xScale(1.0)} ${yScale(0.55)}, ${xScale(1.45)} ${plotH + 12} Z`
+    `M ${xScale(-1.52)} ${plotH + 14} C ${xScale(-1.1)} ${yScale(0.55)}, ${xScale(1.1)} ${yScale(0.55)}, ${xScale(1.52)} ${plotH + 14} Z`
   )
-  .attr('fill', 'rgba(7,9,13,0.72)')
+  .attr('fill', 'rgba(7,9,13,0.78)')
   .attr('stroke', 'rgba(255,255,255,0.08)');
 
 fieldLayer.append('path')
   .attr(
     'd',
-    `M ${xScale(-0.56)} ${yScale(0.92)} C ${xScale(-0.38)} ${yScale(1.25)}, ${xScale(0.38)} ${yScale(1.25)}, ${xScale(0.56)} ${yScale(0.92)} L ${xScale(0.45)} ${yScale(0.62)} C ${xScale(0.2)} ${yScale(0.74)}, ${xScale(-0.2)} ${yScale(0.74)}, ${xScale(-0.45)} ${yScale(0.62)} Z`
+    `M ${xScale(-0.6)} ${yScale(0.92)} C ${xScale(-0.42)} ${yScale(1.28)}, ${xScale(0.42)} ${yScale(1.28)}, ${xScale(0.6)} ${yScale(0.92)} L ${xScale(0.46)} ${yScale(0.62)} C ${xScale(0.24)} ${yScale(0.75)}, ${xScale(-0.24)} ${yScale(0.75)}, ${xScale(-0.46)} ${yScale(0.62)} Z`
   )
-  .attr('fill', 'rgba(16,19,28,0.88)')
+  .attr('fill', 'rgba(18,22,33,0.90)')
   .attr('stroke', 'rgba(232,234,240,0.16)')
   .attr('stroke-width', 1.2);
+
+fieldLayer.append('path')
+  .attr(
+    'd',
+    `M ${xScale(-2.42)} ${yScale(5.1)} Q ${xScale(0)} ${yScale(4.1)} ${xScale(2.42)} ${yScale(5.1)} L ${xScale(2.42)} ${yScale(5.8)} L ${xScale(-2.42)} ${yScale(5.8)} Z`
+  )
+  .attr('fill', 'rgba(4,8,14,0.58)');
 
 fieldLayer.append('text')
   .attr('class', 'view-caption')
   .attr('x', plotW / 2)
-  .attr('y', 14)
+  .attr('y', 16)
   .attr('text-anchor', 'middle')
-  .text('Umpire view: behind home plate');
+  .text('Umpire View · Behind Home Plate');
 
 const zoneBox = g.append('rect')
   .attr('class', 'zone-box')
-  .attr('fill', 'none')
-  .attr('stroke', '#e8c840')
-  .attr('stroke-width', 2)
-  .attr('stroke-dasharray', '5,3')
-  .attr('rx', 2)
+  .attr('fill', 'rgba(255,255,255,0.015)')
+  .attr('stroke', '#e6a23c')
+  .attr('stroke-width', 2.2)
+  .attr('stroke-dasharray', '6,4')
+  .attr('filter', 'url(#zoneGlow)')
+  .attr('rx', 3)
   .attr('opacity', 0);
 
 const pitchCircle = g.append('circle')
   .attr('r', 0)
   .attr('fill', 'transparent')
-  .attr('stroke', 'none')
+  .attr('stroke', 'rgba(255,255,255,0.95)')
+  .attr('stroke-width', 1.5)
   .attr('opacity', 0);
 
 const resultRing = g.append('circle')
@@ -391,6 +550,8 @@ function updateProgressText() {
 
 // ─── Load pitch ───────────────────────────────────────────────────────────
 function loadPitch(idx) {
+  clearAutoNextTimer();
+
   const p = PITCHES[idx];
   if (!p) return;
 
@@ -417,7 +578,7 @@ function loadPitch(idx) {
     .attr('width', xScale(zoneRight) - xScale(zoneLeft))
     .attr('height', yScale(FIXED_ZONE_BOTTOM) - yScale(FIXED_ZONE_TOP))
     .attr('opacity', showZone ? 1 : 0)
-    .attr('stroke', '#e8c840');
+    .attr('stroke', '#e6a23c');
 
   const phaseMsg = document.getElementById('phase-msg');
   const phaseLabel = document.getElementById('phase-label');
@@ -613,7 +774,7 @@ function makeCall(userCall) {
   updateProgressText();
 
   const gameOver = errors >= MAX_ERRORS || attempted >= PITCHES.length;
-  showNextButton(gameOver ? 'See Results ↓' : 'Next Pitch →');
+  scheduleAutoNext(gameOver);
 }
 
 // ─── Stats ────────────────────────────────────────────────────────────────
@@ -640,28 +801,7 @@ function updateStats() {
 }
 
 // ─── Buttons ──────────────────────────────────────────────────────────────
-document.getElementById('btn-next').addEventListener('click', () => {
-  if (!gameStarted) return;
-
-  const gameOver = errors >= MAX_ERRORS || attempted >= PITCHES.length;
-
-  if (gameOver) {
-    showResults();
-    return;
-  }
-
-  currentIdx++;
-
-  if (currentIdx >= PITCHES.length) {
-    showResults();
-    return;
-  }
-
-  const selectedIndex = chooseNextPitchIndex(currentIdx);
-  moveSelectedPitchIntoCurrentSlot(currentIdx, selectedIndex);
-
-  loadPitch(currentIdx);
-});
+document.getElementById('btn-next').addEventListener('click', goToNextPitch);
 
 document.getElementById('btn-strike').addEventListener('click', () => makeCall('strike'));
 document.getElementById('btn-ball').addEventListener('click', () => makeCall('ball'));
@@ -686,6 +826,7 @@ if (continueButton) {
 
 if (startButton) {
   startButton.addEventListener('click', () => {
+    clearAutoNextTimer();
     gameStarted = true;
 
     const overlay = document.getElementById('game-start-overlay');
@@ -876,7 +1017,8 @@ async function init() {
 
     const loadedPitches = await response.json();
 
-    PITCHES = shuffleArray(loadedPitches);
+    const playablePitches = loadedPitches.filter(isOnScreenPitch);
+    PITCHES = shuffleArray(playablePitches.length >= 20 ? playablePitches : loadedPitches);
 
     buildDots();
     updateStats();
@@ -944,8 +1086,8 @@ async function initUmpireAccuracyFromJson() {
 function initUmpireAccuracyViz(RAW) {
   const AVG = RAW.avg;
   let currentSort = 'accuracy';
-  let currentLimit = 30;
-  let currentOrder = 'desc';
+  let currentLimit = 'all';
+  let currentOrder = 'asc';
   let searchTerm = '';
 
   const margin = { top: 20, right: 80, bottom: 10, left: 152 };
@@ -1014,7 +1156,7 @@ function initUmpireAccuracyViz(RAW) {
   }
 
   function getUmpireBarColor(d) {
-    if (d.accuracy >= AVG + 0.5) return '#38c9a8';
+    if (d.accuracy >= AVG + 0.5) return '#45b86a';
     if (d.accuracy < AVG - 0.5) return '#e05050';
     return '#5a7090';
   }
@@ -1090,7 +1232,7 @@ function initUmpireAccuracyViz(RAW) {
 
     xAxisGroup
       .selectAll('.tick line')
-      .attr('stroke', '#2a3045')
+      .attr('stroke', '#2e4636')
       .attr('stroke-dasharray', '3,3');
 
     xAxisGroup.select('.domain').remove();
@@ -1119,7 +1261,7 @@ function initUmpireAccuracyViz(RAW) {
       .attr('x2', avgX)
       .attr('y1', margin.top - 4)
       .attr('y2', margin.top + data.length * (barHeight + barGap) + 8)
-      .attr('stroke', '#e8c840')
+      .attr('stroke', '#e6a23c')
       .attr('stroke-width', 1.5)
       .attr('stroke-dasharray', '5,4')
       .attr('opacity', 0.75);

@@ -1,15 +1,15 @@
 :root {
-  --bg: #0d0f14;
-  --surface: #161920;
-  --panel: #1e2330;
-  --border: #2a3045;
-  --accent: #e8c840;
-  --accent2: #4de0c0;
+  --bg: #0b1310;
+  --surface: #131e18;
+  --panel: #1a2c22;
+  --border: #2e4636;
+  --accent: #e6a23c;
+  --accent2: #57b86a;
   --strike: #ff4f4f;
   --ball: #4fa8ff;
-  --text: #e8eaf0;
-  --muted: #6b7590;
-  --correct: #3ecf6e;
+  --text: #eef2ec;
+  --muted: #7c8a7e;
+  --correct: #45cf6e;
   --wrong: #ff4f4f;
 }
 
@@ -45,10 +45,10 @@ body {
   text-align: center;
   padding: 54px 24px 150px;
   background:
-    radial-gradient(circle at 18% 18%, rgba(79, 168, 255, 0.18), transparent 24%),
-    radial-gradient(circle at 82% 18%, rgba(232, 200, 64, 0.14), transparent 20%),
+    radial-gradient(circle at 18% 18%, rgba(74, 150, 92, 0.18), transparent 24%),
+    radial-gradient(circle at 82% 18%, rgba(230, 162, 60, 0.14), transparent 20%),
     radial-gradient(circle at 50% 78%, rgba(45, 96, 59, 0.24), transparent 30%),
-    linear-gradient(180deg, #151b32 0%, #101820 52%, #0d0f14 100%);
+    linear-gradient(180deg, #112318 0%, #0d1a14 52%, #0b1310 100%);
 }
 
 #intro-screen::before {
@@ -58,8 +58,8 @@ body {
   pointer-events: none;
   background-image:
     radial-gradient(circle, rgba(255, 255, 255, 0.85) 0 1.4px, transparent 2.5px),
-    radial-gradient(circle, rgba(232, 200, 64, 0.35) 0 1px, transparent 2px),
-    radial-gradient(circle, rgba(77, 224, 192, 0.28) 0 1px, transparent 2px);
+    radial-gradient(circle, rgba(230, 162, 60, 0.35) 0 1px, transparent 2px),
+    radial-gradient(circle, rgba(87, 184, 106, 0.28) 0 1px, transparent 2px);
   background-size: 190px 190px, 140px 140px, 95px 95px;
   background-position: 20px 40px, 80px 120px, 45px 70px;
   opacity: 0.18;
@@ -71,7 +71,7 @@ body {
   pointer-events: none;
   background:
     radial-gradient(circle at 50% 28%, rgba(255, 255, 255, 0.08), transparent 26%),
-    radial-gradient(circle at 50% 58%, rgba(232, 200, 64, 0.10), transparent 30%);
+    radial-gradient(circle at 50% 58%, rgba(230, 162, 60, 0.10), transparent 30%);
 }
 
 /* Animated baseball flying through intro */
@@ -241,10 +241,10 @@ body {
   display: inline-block;
   margin-bottom: 14px;
   padding: 7px 14px;
-  border: 1px solid rgba(232, 200, 64, 0.38);
+  border: 1px solid rgba(230, 162, 60, 0.38);
   border-radius: 999px;
   color: var(--accent);
-  background: rgba(232, 200, 64, 0.08);
+  background: rgba(230, 162, 60, 0.08);
   font-family: 'IBM Plex Mono', monospace;
   font-size: 12px;
   letter-spacing: 1px;
@@ -304,9 +304,9 @@ body {
   max-width: 780px;
   margin: 28px auto 26px;
   padding: 20px 22px;
-  border: 1px solid rgba(77, 224, 192, 0.34);
+  border: 1px solid rgba(87, 184, 106, 0.34);
   border-radius: 16px;
-  background: rgba(30, 35, 48, 0.74);
+  background: rgba(26, 44, 34, 0.74);
   backdrop-filter: blur(8px);
   box-shadow: 0 18px 42px rgba(0, 0, 0, 0.24);
 }
@@ -379,7 +379,7 @@ body {
   transform: translateX(-50%);
   border-radius: 50% 50% 0 0;
   background: rgba(19, 48, 32, 0.38);
-  border-top: 1px solid rgba(77, 224, 192, 0.14);
+  border-top: 1px solid rgba(87, 184, 106, 0.14);
 }
 
 .intro-mound {
@@ -411,10 +411,10 @@ body {
   min-height: 100vh;
   padding: 74px 28px 58px;
   background:
-    radial-gradient(circle at 18% 18%, rgba(79, 168, 255, 0.12), transparent 25%),
-    radial-gradient(circle at 78% 24%, rgba(232, 200, 64, 0.11), transparent 22%),
+    radial-gradient(circle at 18% 18%, rgba(74, 150, 92, 0.12), transparent 25%),
+    radial-gradient(circle at 78% 24%, rgba(230, 162, 60, 0.11), transparent 22%),
     radial-gradient(circle at 50% 88%, rgba(45, 96, 59, 0.24), transparent 36%),
-    linear-gradient(180deg, #0d0f14 0%, #111827 48%, #101820 100%);
+    linear-gradient(180deg, #0b1310 0%, #0f1c15 48%, #0d1a14 100%);
   color: var(--text);
   position: relative;
   overflow: hidden;
@@ -428,7 +428,7 @@ body {
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    radial-gradient(circle, rgba(232, 200, 64, 0.28) 0 1px, transparent 2px);
+    radial-gradient(circle, rgba(230, 162, 60, 0.28) 0 1px, transparent 2px);
   background-size: 80px 80px, 80px 80px, 150px 150px;
   background-position: center, center, 40px 60px;
   opacity: 0.32;
@@ -452,9 +452,9 @@ body {
   gap: 8px;
   margin-bottom: 12px;
   padding: 7px 14px;
-  border: 1px solid rgba(232, 200, 64, 0.36);
+  border: 1px solid rgba(230, 162, 60, 0.36);
   border-radius: 999px;
-  background: rgba(232, 200, 64, 0.08);
+  background: rgba(230, 162, 60, 0.08);
   color: var(--accent);
   font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
@@ -468,7 +468,7 @@ body {
   height: 7px;
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 14px rgba(232, 200, 64, 0.9);
+  box-shadow: 0 0 14px rgba(230, 162, 60, 0.9);
 }
 
 #fan-view-section h1 {
@@ -501,8 +501,8 @@ body {
 
 .broadcast-video-card {
   background:
-    linear-gradient(180deg, rgba(30, 35, 48, 0.92), rgba(22, 25, 32, 0.88));
-  border: 1px solid rgba(77, 224, 192, 0.30);
+    linear-gradient(180deg, rgba(26, 44, 34, 0.92), rgba(22, 25, 32, 0.88));
+  border: 1px solid rgba(87, 184, 106, 0.30);
   border-radius: 18px;
   padding: 16px;
   box-shadow: 0 26px 70px rgba(0, 0, 0, 0.42);
@@ -518,7 +518,7 @@ body {
   pointer-events: none;
   border-radius: 18px;
   background:
-    linear-gradient(90deg, rgba(77, 224, 192, 0.22), transparent 18%, transparent 82%, rgba(232, 200, 64, 0.16));
+    linear-gradient(90deg, rgba(87, 184, 106, 0.22), transparent 18%, transparent 82%, rgba(230, 162, 60, 0.16));
   opacity: 0.45;
 }
 
@@ -529,7 +529,7 @@ body {
   margin-bottom: 12px;
   padding: 0 10px;
   border-radius: 9px;
-  background: rgba(13, 15, 20, 0.66);
+  background: rgba(11, 19, 16, 0.66);
   border: 1px solid rgba(232, 234, 240, 0.08);
   display: flex;
   align-items: center;
@@ -553,9 +553,9 @@ body {
   margin-left: auto;
   padding: 4px 8px;
   border-radius: 999px;
-  background: rgba(232, 200, 64, 0.10);
+  background: rgba(230, 162, 60, 0.10);
   color: var(--accent);
-  border: 1px solid rgba(232, 200, 64, 0.22);
+  border: 1px solid rgba(230, 162, 60, 0.22);
 }
 
 .fan-video {
@@ -586,9 +586,9 @@ body {
   border-radius: 18px;
   padding: 22px;
   background:
-    radial-gradient(circle at 60% 18%, rgba(232, 200, 64, 0.12), transparent 32%),
-    rgba(30, 35, 48, 0.74);
-  border: 1px solid rgba(232, 200, 64, 0.25);
+    radial-gradient(circle at 60% 18%, rgba(230, 162, 60, 0.12), transparent 32%),
+    rgba(26, 44, 34, 0.74);
+  border: 1px solid rgba(230, 162, 60, 0.25);
   box-shadow: 0 22px 55px rgba(0, 0, 0, 0.30);
   display: flex;
   flex-direction: column;
@@ -604,7 +604,7 @@ body {
   right: 18px;
   width: 72px;
   height: 72px;
-  border: 1px solid rgba(232, 200, 64, 0.18);
+  border: 1px solid rgba(230, 162, 60, 0.18);
   border-radius: 50%;
 }
 
@@ -632,9 +632,9 @@ body {
 }
 
 .decision-card {
-  background: rgba(30, 35, 48, 0.74);
-  border: 1px solid rgba(77, 224, 192, 0.20);
-  border-top: 3px solid rgba(77, 224, 192, 0.75);
+  background: rgba(26, 44, 34, 0.74);
+  border: 1px solid rgba(87, 184, 106, 0.20);
+  border-top: 3px solid rgba(87, 184, 106, 0.75);
   border-radius: 14px;
   padding: 18px;
   display: grid;
@@ -650,8 +650,8 @@ body {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: rgba(232, 200, 64, 0.12);
-  border: 1px solid rgba(232, 200, 64, 0.30);
+  background: rgba(230, 162, 60, 0.12);
+  border: 1px solid rgba(230, 162, 60, 0.30);
   color: var(--accent);
   font-family: 'IBM Plex Mono', monospace;
   font-size: 12px;
@@ -676,8 +676,8 @@ body {
   padding: 18px 22px;
   border-radius: 16px;
   background:
-    linear-gradient(90deg, rgba(232, 200, 64, 0.16), rgba(77, 224, 192, 0.08));
-  border: 1px solid rgba(232, 200, 64, 0.30);
+    linear-gradient(90deg, rgba(230, 162, 60, 0.16), rgba(87, 184, 106, 0.08));
+  border: 1px solid rgba(230, 162, 60, 0.30);
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 18px;
@@ -688,9 +688,9 @@ body {
 .takeaway-label {
   padding: 8px 12px;
   border-radius: 999px;
-  background: rgba(13, 15, 20, 0.56);
+  background: rgba(11, 19, 16, 0.56);
   color: var(--accent);
-  border: 1px solid rgba(232, 200, 64, 0.25);
+  border: 1px solid rgba(230, 162, 60, 0.25);
   font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
   letter-spacing: 1.2px;
@@ -742,10 +742,10 @@ body {
   min-height: 100vh;
   padding: 76px 28px 64px;
   background:
-    radial-gradient(circle at 22% 18%, rgba(232, 200, 64, 0.12), transparent 24%),
-    radial-gradient(circle at 78% 28%, rgba(79, 168, 255, 0.11), transparent 24%),
+    radial-gradient(circle at 22% 18%, rgba(230, 162, 60, 0.12), transparent 24%),
+    radial-gradient(circle at 78% 28%, rgba(74, 150, 92, 0.11), transparent 24%),
     radial-gradient(circle at 50% 88%, rgba(45, 96, 59, 0.28), transparent 36%),
-    linear-gradient(180deg, #101820 0%, #0d0f14 48%, #151b32 100%);
+    linear-gradient(180deg, #0d1a14 0%, #0b1310 48%, #112318 100%);
   color: var(--text);
   position: relative;
   overflow: hidden;
@@ -783,9 +783,9 @@ body {
   gap: 8px;
   margin-bottom: 12px;
   padding: 7px 14px;
-  border: 1px solid rgba(77, 224, 192, 0.36);
+  border: 1px solid rgba(87, 184, 106, 0.36);
   border-radius: 999px;
-  background: rgba(77, 224, 192, 0.08);
+  background: rgba(87, 184, 106, 0.08);
   color: var(--accent2);
   font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
@@ -799,7 +799,7 @@ body {
   height: 7px;
   border-radius: 50%;
   background: var(--accent2);
-  box-shadow: 0 0 14px rgba(77, 224, 192, 0.9);
+  box-shadow: 0 0 14px rgba(87, 184, 106, 0.9);
 }
 
 #umpire-view-section h1 {
@@ -831,9 +831,9 @@ body {
 
 .umpire-view-copy {
   background:
-    radial-gradient(circle at 18% 16%, rgba(232, 200, 64, 0.12), transparent 32%),
-    rgba(30, 35, 48, 0.78);
-  border: 1px solid rgba(232, 200, 64, 0.24);
+    radial-gradient(circle at 18% 16%, rgba(230, 162, 60, 0.12), transparent 32%),
+    rgba(26, 44, 34, 0.78);
+  border: 1px solid rgba(230, 162, 60, 0.24);
   border-radius: 18px;
   padding: 26px;
   box-shadow: 0 22px 58px rgba(0, 0, 0, 0.32);
@@ -870,7 +870,7 @@ body {
   align-items: start;
   padding: 14px;
   border-radius: 13px;
-  background: rgba(13, 15, 20, 0.42);
+  background: rgba(11, 19, 16, 0.42);
   border: 1px solid rgba(232, 234, 240, 0.08);
 }
 
@@ -880,8 +880,8 @@ body {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: rgba(77, 224, 192, 0.10);
-  border: 1px solid rgba(77, 224, 192, 0.26);
+  background: rgba(87, 184, 106, 0.10);
+  border: 1px solid rgba(87, 184, 106, 0.26);
   color: var(--accent2);
   font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
@@ -903,8 +903,8 @@ body {
 
 .umpire-x-video-card {
   background:
-    linear-gradient(180deg, rgba(30, 35, 48, 0.94), rgba(22, 25, 32, 0.90));
-  border: 1px solid rgba(77, 224, 192, 0.32);
+    linear-gradient(180deg, rgba(26, 44, 34, 0.94), rgba(22, 25, 32, 0.90));
+  border: 1px solid rgba(87, 184, 106, 0.32);
   border-radius: 18px;
   padding: 16px;
   box-shadow: 0 26px 70px rgba(0, 0, 0, 0.42);
@@ -919,7 +919,7 @@ body {
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(90deg, rgba(77, 224, 192, 0.18), transparent 22%, transparent 78%, rgba(232, 200, 64, 0.14));
+    linear-gradient(90deg, rgba(87, 184, 106, 0.18), transparent 22%, transparent 78%, rgba(230, 162, 60, 0.14));
   opacity: 0.5;
 }
 
@@ -930,7 +930,7 @@ body {
   margin-bottom: 12px;
   padding: 0 10px;
   border-radius: 9px;
-  background: rgba(13, 15, 20, 0.66);
+  background: rgba(11, 19, 16, 0.66);
   border: 1px solid rgba(232, 234, 240, 0.08);
   display: flex;
   align-items: center;
@@ -947,7 +947,7 @@ body {
   height: 8px;
   border-radius: 50%;
   background: var(--accent2);
-  box-shadow: 0 0 12px rgba(77, 224, 192, 0.75);
+  box-shadow: 0 0 12px rgba(87, 184, 106, 0.75);
 }
 
 .umpire-x-embed {
@@ -956,7 +956,7 @@ body {
   min-height: 380px;
   border-radius: 12px;
   background:
-    radial-gradient(circle at 50% 35%, rgba(77, 224, 192, 0.10), transparent 34%),
+    radial-gradient(circle at 50% 35%, rgba(87, 184, 106, 0.10), transparent 34%),
     rgba(0, 0, 0, 0.35);
   border: 1px solid rgba(232, 234, 240, 0.08);
   display: flex;
@@ -985,8 +985,8 @@ body {
   padding: 18px 22px;
   border-radius: 16px;
   background:
-    linear-gradient(90deg, rgba(77, 224, 192, 0.13), rgba(232, 200, 64, 0.10));
-  border: 1px solid rgba(77, 224, 192, 0.28);
+    linear-gradient(90deg, rgba(87, 184, 106, 0.13), rgba(230, 162, 60, 0.10));
+  border: 1px solid rgba(87, 184, 106, 0.28);
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 18px;
@@ -1105,7 +1105,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 28px;
-  background: rgba(13, 15, 20, 0.78);
+  background: rgba(11, 19, 16, 0.78);
   backdrop-filter: blur(8px);
   border-radius: 14px;
 }
@@ -1113,7 +1113,7 @@ body {
 .game-start-card {
   width: min(560px, 100%);
   background: var(--panel);
-  border: 1px solid rgba(232, 200, 64, 0.32);
+  border: 1px solid rgba(230, 162, 60, 0.32);
   border-radius: 18px;
   padding: 30px 28px;
   text-align: center;
@@ -1125,8 +1125,8 @@ body {
   margin-bottom: 12px;
   padding: 6px 12px;
   border-radius: 999px;
-  background: rgba(232, 200, 64, 0.08);
-  border: 1px solid rgba(232, 200, 64, 0.26);
+  background: rgba(230, 162, 60, 0.08);
+  border: 1px solid rgba(230, 162, 60, 0.26);
   color: var(--accent);
   font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
@@ -1154,7 +1154,7 @@ body {
   max-height: min(82vh, 760px);
   overflow-y: auto;
   background: var(--panel);
-  border: 1px solid rgba(77, 224, 192, 0.34);
+  border: 1px solid rgba(87, 184, 106, 0.34);
   border-radius: 18px;
   padding: 30px 28px;
   text-align: center;
@@ -1184,7 +1184,7 @@ body {
   align-items: start;
   padding: 14px 16px;
   border-radius: 13px;
-  background: rgba(13, 15, 20, 0.42);
+  background: rgba(11, 19, 16, 0.42);
   border: 1px solid rgba(232, 234, 240, 0.08);
 }
 
@@ -1194,8 +1194,8 @@ body {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: rgba(77, 224, 192, 0.10);
-  border: 1px solid rgba(77, 224, 192, 0.28);
+  background: rgba(87, 184, 106, 0.10);
+  border: 1px solid rgba(87, 184, 106, 0.28);
   color: var(--accent2);
   font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
@@ -1211,13 +1211,13 @@ body {
 }
 
 .instruction-item:nth-child(4) {
-  border-color: rgba(232, 200, 64, 0.28);
-  background: rgba(232, 200, 64, 0.07);
+  border-color: rgba(230, 162, 60, 0.28);
+  background: rgba(230, 162, 60, 0.07);
 }
 
 .instruction-item:nth-child(4) .instruction-number {
-  background: rgba(232, 200, 64, 0.12);
-  border-color: rgba(232, 200, 64, 0.34);
+  background: rgba(230, 162, 60, 0.12);
+  border-color: rgba(230, 162, 60, 0.34);
   color: var(--accent);
 }
 
@@ -1258,7 +1258,7 @@ body {
 #btn-start-game:hover,
 #btn-continue-instructions:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(232, 200, 64, 0.36);
+  box-shadow: 0 10px 30px rgba(230, 162, 60, 0.36);
 }
 
 /* ── Left Panel: Pitch View ── */
@@ -1398,7 +1398,7 @@ body {
   margin: 0;
   width: max-content;
   max-width: calc(100% - 24px);
-  background: rgba(13, 15, 20, 0.85);
+  background: rgba(11, 19, 16, 0.85);
   border: 1px solid var(--accent);
   border-radius: 6px;
   padding: 6px 14px;
@@ -1596,8 +1596,8 @@ body {
 
 /* Phase notice */
 .phase-card {
-  background: rgba(232, 200, 64, 0.07);
-  border: 1px solid rgba(232, 200, 64, 0.25);
+  background: rgba(230, 162, 60, 0.07);
+  border: 1px solid rgba(230, 162, 60, 0.25);
   border-radius: 8px;
   padding: 12px 16px;
   font-size: 12px;
@@ -1636,13 +1636,13 @@ body {
   letter-spacing: 1.6px;
   cursor: pointer;
   transition: all 0.15s ease;
-  box-shadow: 0 10px 26px rgba(232, 200, 64, 0.24);
+  box-shadow: 0 10px 26px rgba(230, 162, 60, 0.24);
   z-index: 8;
 }
 
 .btn-next-floating:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 34px rgba(232, 200, 64, 0.36);
+  box-shadow: 0 14px 34px rgba(230, 162, 60, 0.36);
 }
 
 /* ── Comparison Section ── */
@@ -1684,7 +1684,7 @@ body {
 
 .comparison-card {
   background: var(--panel);
-  border: 1px solid rgba(77, 224, 192, 0.65);
+  border: 1px solid rgba(87, 184, 106, 0.65);
   border-radius: 12px;
   padding: 24px 22px 26px;
   text-align: center;
@@ -1772,7 +1772,7 @@ body {
 }
 
 #comparison-section #btn-restart:hover {
-  box-shadow: 0 4px 20px rgba(232, 200, 64, 0.4);
+  box-shadow: 0 4px 20px rgba(230, 162, 60, 0.4);
   transform: translateY(-2px);
 }
 
@@ -1897,10 +1897,10 @@ body {
   min-height: 100vh;
   padding: 76px 28px 70px;
   background:
-    radial-gradient(circle at 18% 18%, rgba(77, 224, 192, 0.11), transparent 24%),
-    radial-gradient(circle at 82% 22%, rgba(232, 200, 64, 0.10), transparent 23%),
+    radial-gradient(circle at 18% 18%, rgba(87, 184, 106, 0.11), transparent 24%),
+    radial-gradient(circle at 82% 22%, rgba(230, 162, 60, 0.10), transparent 23%),
     radial-gradient(circle at 50% 92%, rgba(45, 96, 59, 0.24), transparent 38%),
-    linear-gradient(180deg, #151b32 0%, #101820 46%, #0d0f14 100%);
+    linear-gradient(180deg, #112318 0%, #0d1a14 46%, #0b1310 100%);
   color: var(--text);
   position: relative;
   overflow: hidden;
@@ -1914,7 +1914,7 @@ body {
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.032) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.032) 1px, transparent 1px),
-    radial-gradient(circle, rgba(232, 200, 64, 0.22) 0 1px, transparent 2px);
+    radial-gradient(circle, rgba(230, 162, 60, 0.22) 0 1px, transparent 2px);
   background-size: 84px 84px, 84px 84px, 145px 145px;
   background-position: center, center, 42px 62px;
   opacity: 0.28;
@@ -1938,9 +1938,9 @@ body {
   gap: 8px;
   margin-bottom: 12px;
   padding: 7px 14px;
-  border: 1px solid rgba(232, 200, 64, 0.36);
+  border: 1px solid rgba(230, 162, 60, 0.36);
   border-radius: 999px;
-  background: rgba(232, 200, 64, 0.08);
+  background: rgba(230, 162, 60, 0.08);
   color: var(--accent);
   font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
@@ -1954,7 +1954,7 @@ body {
   height: 7px;
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 14px rgba(232, 200, 64, 0.9);
+  box-shadow: 0 0 14px rgba(230, 162, 60, 0.9);
 }
 
 #umpire-accuracy-section h1 {
@@ -1988,7 +1988,7 @@ body {
   color: var(--accent2);
   letter-spacing: 2px;
   line-height: 1;
-  text-shadow: 0 0 28px rgba(77, 224, 192, 0.18);
+  text-shadow: 0 0 28px rgba(87, 184, 106, 0.18);
 }
 
 .umpire-hero-label {
@@ -2030,7 +2030,7 @@ body {
 }
 
 .umpire-sort-btn {
-  background: rgba(30, 35, 48, 0.78);
+  background: rgba(26, 44, 34, 0.78);
   border: 1px solid rgba(232, 234, 240, 0.10);
   border-radius: 7px;
   padding: 8px 14px;
@@ -2049,13 +2049,13 @@ body {
 }
 
 .umpire-sort-btn.active {
-  background: rgba(77, 224, 192, 0.10);
-  border-color: rgba(77, 224, 192, 0.54);
+  background: rgba(87, 184, 106, 0.10);
+  border-color: rgba(87, 184, 106, 0.54);
   color: var(--accent2);
 }
 
 .umpire-limit-btn {
-  background: rgba(30, 35, 48, 0.78);
+  background: rgba(26, 44, 34, 0.78);
   border: 1px solid rgba(232, 234, 240, 0.10);
   border-radius: 7px;
   padding: 8px 14px;
@@ -2074,8 +2074,8 @@ body {
 }
 
 .umpire-limit-btn.active {
-  background: rgba(232, 200, 64, 0.10);
-  border-color: rgba(232, 200, 64, 0.54);
+  background: rgba(230, 162, 60, 0.10);
+  border-color: rgba(230, 162, 60, 0.54);
   color: var(--accent);
 }
 
@@ -2088,7 +2088,7 @@ body {
 }
 
 #umpire-search-box {
-  background: rgba(30, 35, 48, 0.78);
+  background: rgba(26, 44, 34, 0.78);
   border: 1px solid rgba(232, 234, 240, 0.10);
   border-radius: 7px;
   padding: 8px 12px 8px 31px;
@@ -2161,8 +2161,8 @@ body {
   padding: 16px 18px 8px;
   border-radius: 20px;
   background:
-    linear-gradient(180deg, rgba(30, 35, 48, 0.76), rgba(22, 25, 32, 0.66));
-  border: 1px solid rgba(77, 224, 192, 0.22);
+    linear-gradient(180deg, rgba(26, 44, 34, 0.76), rgba(22, 25, 32, 0.66));
+  border: 1px solid rgba(87, 184, 106, 0.22);
   box-shadow: 0 26px 70px rgba(0, 0, 0, 0.34);
   position: relative;
   overflow-x: auto;
@@ -2186,8 +2186,8 @@ body {
 #umpire-tooltip {
   position: fixed;
   pointer-events: none;
-  background: rgba(30, 35, 48, 0.98);
-  border: 1px solid rgba(77, 224, 192, 0.22);
+  background: rgba(26, 44, 34, 0.98);
+  border: 1px solid rgba(87, 184, 106, 0.22);
   border-radius: 12px;
   padding: 14px 16px;
   width: 270px;
@@ -2268,7 +2268,7 @@ body {
   position: absolute;
   height: 100%;
   border-radius: 4px;
-  background: rgba(77, 224, 192, 0.34);
+  background: rgba(87, 184, 106, 0.34);
 }
 
 #umpire-tooltip .tt-range-dot {
@@ -2316,15 +2316,15 @@ body {
 }
 
 .tt-badge.elite {
-  background: rgba(77, 224, 192, 0.15);
+  background: rgba(87, 184, 106, 0.15);
   color: var(--accent2);
-  border: 1px solid rgba(77, 224, 192, 0.30);
+  border: 1px solid rgba(87, 184, 106, 0.30);
 }
 
 .tt-badge.good {
-  background: rgba(232, 200, 64, 0.12);
+  background: rgba(230, 162, 60, 0.12);
   color: var(--accent);
-  border: 1px solid rgba(232, 200, 64, 0.25);
+  border: 1px solid rgba(230, 162, 60, 0.25);
 }
 
 .tt-badge.below {
@@ -2369,8 +2369,8 @@ body {
   padding: 18px 22px;
   border-radius: 16px;
   background:
-    linear-gradient(90deg, rgba(232, 200, 64, 0.14), rgba(77, 224, 192, 0.09));
-  border: 1px solid rgba(232, 200, 64, 0.28);
+    linear-gradient(90deg, rgba(230, 162, 60, 0.14), rgba(87, 184, 106, 0.09));
+  border: 1px solid rgba(230, 162, 60, 0.28);
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 18px;
@@ -2621,7 +2621,7 @@ body {
 }
 
 .umpire-order-btn {
-  background: rgba(30, 35, 48, 0.78);
+  background: rgba(26, 44, 34, 0.78);
   border: 1px solid rgba(232, 234, 240, 0.10);
   border-radius: 7px;
   padding: 8px 14px;
@@ -2640,8 +2640,8 @@ body {
 }
 
 .umpire-order-btn.active {
-  background: rgba(77, 224, 192, 0.10);
-  border-color: rgba(77, 224, 192, 0.54);
+  background: rgba(87, 184, 106, 0.10);
+  border-color: rgba(87, 184, 106, 0.54);
   color: var(--accent2);
 }
 
@@ -2695,10 +2695,10 @@ body {
   padding: 24px 22px;
   border-radius: 22px;
   background:
-    radial-gradient(circle at 24% 8%, rgba(232, 200, 64, 0.16), transparent 34%),
-    radial-gradient(circle at 100% 70%, rgba(77, 224, 192, 0.12), transparent 36%),
-    linear-gradient(180deg, rgba(30, 35, 48, 0.96), rgba(13, 15, 20, 0.90));
-  border: 1px solid rgba(232, 200, 64, 0.28);
+    radial-gradient(circle at 24% 8%, rgba(230, 162, 60, 0.16), transparent 34%),
+    radial-gradient(circle at 100% 70%, rgba(87, 184, 106, 0.12), transparent 36%),
+    linear-gradient(180deg, rgba(26, 44, 34, 0.96), rgba(11, 19, 16, 0.90));
+  border: 1px solid rgba(230, 162, 60, 0.28);
   box-shadow: 0 26px 70px rgba(0, 0, 0, 0.38);
   overflow: hidden;
 }
@@ -2722,8 +2722,8 @@ body {
   margin-bottom: 22px;
   padding: 7px 11px;
   border-radius: 999px;
-  background: rgba(232, 200, 64, 0.09);
-  border: 1px solid rgba(232, 200, 64, 0.26);
+  background: rgba(230, 162, 60, 0.09);
+  border: 1px solid rgba(230, 162, 60, 0.26);
   color: var(--accent);
   font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
@@ -2737,7 +2737,7 @@ body {
   height: 7px;
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 12px rgba(232, 200, 64, 0.85);
+  box-shadow: 0 0 12px rgba(230, 162, 60, 0.85);
 }
 
 .umpire-dashboard-side .umpire-hero-stat {
@@ -2752,7 +2752,7 @@ body {
   font-size: clamp(66px, 7vw, 92px);
   line-height: 0.88;
   color: var(--accent2);
-  text-shadow: 0 0 34px rgba(77, 224, 192, 0.22);
+  text-shadow: 0 0 34px rgba(87, 184, 106, 0.22);
 }
 
 .umpire-dashboard-side .umpire-hero-label {
@@ -2785,7 +2785,7 @@ body {
   gap: 14px;
   padding: 12px 13px;
   border-radius: 13px;
-  background: rgba(13, 15, 20, 0.46);
+  background: rgba(11, 19, 16, 0.46);
   border: 1px solid rgba(232, 234, 240, 0.08);
 }
 
@@ -2821,8 +2821,8 @@ body {
   margin-top: 18px;
   padding: 14px;
   border-radius: 14px;
-  background: rgba(232, 200, 64, 0.08);
-  border: 1px solid rgba(232, 200, 64, 0.20);
+  background: rgba(230, 162, 60, 0.08);
+  border: 1px solid rgba(230, 162, 60, 0.20);
 }
 
 .umpire-side-callout span {
@@ -2846,9 +2846,9 @@ body {
   padding: 18px;
   border-radius: 24px;
   background:
-    radial-gradient(circle at 100% 0%, rgba(77, 224, 192, 0.10), transparent 32%),
-    linear-gradient(180deg, rgba(22, 25, 32, 0.82), rgba(13, 15, 20, 0.76));
-  border: 1px solid rgba(77, 224, 192, 0.20);
+    radial-gradient(circle at 100% 0%, rgba(87, 184, 106, 0.10), transparent 32%),
+    linear-gradient(180deg, rgba(22, 25, 32, 0.82), rgba(11, 19, 16, 0.76));
+  border: 1px solid rgba(87, 184, 106, 0.20);
   box-shadow: 0 26px 70px rgba(0, 0, 0, 0.30);
 }
 
@@ -2883,8 +2883,8 @@ body {
   flex: 0 0 auto;
   padding: 8px 12px;
   border-radius: 999px;
-  background: rgba(77, 224, 192, 0.08);
-  border: 1px solid rgba(77, 224, 192, 0.24);
+  background: rgba(87, 184, 106, 0.08);
+  border: 1px solid rgba(87, 184, 106, 0.24);
   color: var(--accent2);
   font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
@@ -2940,7 +2940,7 @@ body {
   padding: 14px 14px 8px;
   border-radius: 18px;
   background:
-    linear-gradient(180deg, rgba(30, 35, 48, 0.58), rgba(13, 15, 20, 0.58));
+    linear-gradient(180deg, rgba(26, 44, 34, 0.58), rgba(11, 19, 16, 0.58));
   border: 1px solid rgba(232, 234, 240, 0.08);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.018);
 }
@@ -3083,7 +3083,7 @@ body {
   gap: 8px;
   padding: 7px 12px;
   border-radius: 999px;
-  background: rgba(30, 35, 48, 0.46);
+  background: rgba(26, 44, 34, 0.46);
   border: 1px solid rgba(232, 234, 240, 0.08);
   color: var(--muted);
   font-family: 'IBM Plex Mono', monospace;
@@ -3099,7 +3099,7 @@ body {
 }
 
 .umpire-above-swatch {
-  background: linear-gradient(90deg, rgba(131, 219, 200, 0.92), rgba(77, 224, 192, 0.92));
+  background: linear-gradient(90deg, rgba(120, 196, 138, 0.92), rgba(87, 184, 106, 0.92));
 }
 
 .umpire-below-swatch {
@@ -3109,7 +3109,7 @@ body {
 .umpire-legend-line {
   width: 26px;
   height: 0;
-  border-top: 2px dashed #e8c840;
+  border-top: 2px dashed #e6a23c;
   opacity: 0.95;
   flex: 0 0 auto;
 }
@@ -3120,7 +3120,7 @@ body {
   padding: 16px 16px 10px;
   border-radius: 20px;
   background:
-    linear-gradient(180deg, rgba(30, 35, 48, 0.54), rgba(13, 15, 20, 0.60));
+    linear-gradient(180deg, rgba(26, 44, 34, 0.54), rgba(11, 19, 16, 0.60));
   border: 1px solid rgba(232, 234, 240, 0.08);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.02),
@@ -3204,7 +3204,7 @@ body {
   flex-wrap: nowrap;
   border-radius: 999px;
   border: 1px solid rgba(232, 234, 240, 0.08);
-  background: rgba(13, 15, 20, 0.26);
+  background: rgba(11, 19, 16, 0.26);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.015);
 }
 
@@ -3231,8 +3231,8 @@ body {
 }
 
 .umpire-above-swatch {
-  background: linear-gradient(90deg, rgba(139, 235, 214, 0.95), rgba(77, 224, 192, 0.95));
-  box-shadow: 0 0 10px rgba(77, 224, 192, 0.16);
+  background: linear-gradient(90deg, rgba(132, 206, 152, 0.95), rgba(87, 184, 106, 0.95));
+  box-shadow: 0 0 10px rgba(87, 184, 106, 0.16);
 }
 
 .umpire-below-swatch {
@@ -3312,7 +3312,7 @@ body {
   gap: 8px;
   padding: 7px 11px;
   border-radius: 999px;
-  background: rgba(30, 35, 48, 0.52);
+  background: rgba(26, 44, 34, 0.52);
   border: 1px solid rgba(232, 234, 240, 0.08);
   color: rgba(232, 234, 240, 0.70);
   font-family: 'IBM Plex Mono', monospace;
@@ -3329,7 +3329,7 @@ body {
 }
 
 .umpire-above-swatch {
-  background: linear-gradient(90deg, rgba(131, 219, 200, 0.95), rgba(77, 224, 192, 0.95));
+  background: linear-gradient(90deg, rgba(120, 196, 138, 0.95), rgba(87, 184, 106, 0.95));
 }
 
 .umpire-neutral-swatch {
@@ -3431,7 +3431,7 @@ body {
 }
 
 .umpire-above-swatch {
-  background: linear-gradient(90deg, rgba(131, 219, 200, 0.96), rgba(77, 224, 192, 0.96));
+  background: linear-gradient(90deg, rgba(120, 196, 138, 0.96), rgba(87, 184, 106, 0.96));
 }
 
 .umpire-neutral-swatch {
@@ -3867,9 +3867,9 @@ body {
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(circle at 18% 18%, rgba(79, 168, 255, 0.12), transparent 24%),
-    radial-gradient(circle at 82% 18%, rgba(232, 200, 64, 0.12), transparent 20%),
-    linear-gradient(180deg, #101820 0%, #0d0f14 100%);
+    radial-gradient(circle at 18% 18%, rgba(74, 150, 92, 0.12), transparent 24%),
+    radial-gradient(circle at 82% 18%, rgba(230, 162, 60, 0.12), transparent 20%),
+    linear-gradient(180deg, #0d1a14 0%, #0b1310 100%);
   color: var(--text);
   padding: 74px 24px 84px;
 }
@@ -3881,7 +3881,7 @@ body {
   pointer-events: none;
   background-image:
     radial-gradient(circle, rgba(255, 255, 255, 0.55) 0 1px, transparent 2px),
-    radial-gradient(circle, rgba(232, 200, 64, 0.28) 0 1px, transparent 2px);
+    radial-gradient(circle, rgba(230, 162, 60, 0.28) 0 1px, transparent 2px);
   background-size: 180px 180px, 115px 115px;
   background-position: 22px 36px, 70px 104px;
   opacity: 0.12;
@@ -3904,10 +3904,10 @@ body {
   display: inline-block;
   margin-bottom: 12px;
   padding: 7px 14px;
-  border: 1px solid rgba(232, 200, 64, 0.38);
+  border: 1px solid rgba(230, 162, 60, 0.38);
   border-radius: 999px;
   color: var(--accent);
-  background: rgba(232, 200, 64, 0.08);
+  background: rgba(230, 162, 60, 0.08);
   font-family: 'IBM Plex Mono', monospace;
   font-size: 12px;
   letter-spacing: 1px;
@@ -3939,7 +3939,7 @@ body {
   min-height: 760px;
   border: 1px solid rgba(232, 234, 240, 0.14);
   border-radius: 24px;
-  background: #0d0f14;
+  background: #0b1310;
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
   overflow: hidden;
 }
@@ -3962,9 +3962,9 @@ body {
   padding: 0;
   margin: 0;
   background:
-    radial-gradient(circle at 18% 0%, rgba(79, 168, 255, 0.10), transparent 28%),
-    radial-gradient(circle at 82% 6%, rgba(232, 200, 64, 0.08), transparent 24%),
-    #0d0f14;
+    radial-gradient(circle at 18% 0%, rgba(74, 150, 92, 0.10), transparent 28%),
+    radial-gradient(circle at 82% 6%, rgba(230, 162, 60, 0.08), transparent 24%),
+    #0b1310;
   border-top: 1px solid rgba(232, 234, 240, 0.08);
   border-bottom: 1px solid rgba(232, 234, 240, 0.08);
 }
@@ -4071,7 +4071,7 @@ umpire-scroll-story {
   min-height: 100vh !important;
   opacity: 1 !important;
   transform: none !important;
-  background: linear-gradient(180deg, #101820 0%, #0d0f14 100%) !important;
+  background: linear-gradient(180deg, #0d1a14 0%, #0b1310 100%) !important;
   border-bottom: 1px solid rgba(232, 234, 240, 0.08) !important;
 }
 
@@ -4128,7 +4128,7 @@ umpire-scroll-story {
 /* Polished on-page One Game scrollytelling section to match the main website */
 /* ========================================================================== */
 #one-game-scroll-section {
-  --scroll-panel: rgba(30, 35, 48, 0.78);
+  --scroll-panel: rgba(26, 44, 34, 0.78);
   --scroll-panel-strong: rgba(22, 25, 32, 0.92);
   --scroll-line: rgba(232, 234, 240, 0.10);
   --scroll-gold: var(--accent);
@@ -4137,10 +4137,10 @@ umpire-scroll-story {
   color: var(--text) !important;
   font-family: 'IBM Plex Sans', sans-serif !important;
   background:
-    radial-gradient(circle at 22% 8%, rgba(232, 200, 64, 0.12), transparent 26%),
-    radial-gradient(circle at 80% 20%, rgba(79, 168, 255, 0.11), transparent 26%),
+    radial-gradient(circle at 22% 8%, rgba(230, 162, 60, 0.12), transparent 26%),
+    radial-gradient(circle at 80% 20%, rgba(74, 150, 92, 0.11), transparent 26%),
     radial-gradient(circle at 50% 92%, rgba(45, 96, 59, 0.24), transparent 38%),
-    linear-gradient(180deg, #101820 0%, #0d0f14 48%, #151b32 100%) !important;
+    linear-gradient(180deg, #0d1a14 0%, #0b1310 48%, #112318 100%) !important;
   position: relative !important;
   overflow: visible !important;
   border-top: 1px solid rgba(232, 234, 240, 0.08) !important;
@@ -4184,9 +4184,9 @@ umpire-scroll-story {
   gap: 8px !important;
   margin-bottom: 16px !important;
   padding: 7px 14px !important;
-  border: 1px solid rgba(77, 224, 192, 0.36) !important;
+  border: 1px solid rgba(87, 184, 106, 0.36) !important;
   border-radius: 999px !important;
-  background: rgba(77, 224, 192, 0.08) !important;
+  background: rgba(87, 184, 106, 0.08) !important;
   color: var(--accent2) !important;
   font-family: 'IBM Plex Mono', monospace !important;
   font-size: 11px !important;
@@ -4200,7 +4200,7 @@ umpire-scroll-story {
   height: 7px;
   border-radius: 50%;
   background: var(--accent2);
-  box-shadow: 0 0 14px rgba(77, 224, 192, 0.9);
+  box-shadow: 0 0 14px rgba(87, 184, 106, 0.9);
 }
 
 #one-game-scroll-section .hero-title {
@@ -4235,9 +4235,9 @@ umpire-scroll-story {
   padding: 20px 22px !important;
   border-radius: 18px !important;
   background:
-    radial-gradient(circle at 18% 16%, rgba(232, 200, 64, 0.12), transparent 32%),
-    rgba(30, 35, 48, 0.78) !important;
-  border: 1px solid rgba(232, 200, 64, 0.24) !important;
+    radial-gradient(circle at 18% 16%, rgba(230, 162, 60, 0.12), transparent 32%),
+    rgba(26, 44, 34, 0.78) !important;
+  border: 1px solid rgba(230, 162, 60, 0.24) !important;
   box-shadow: 0 22px 58px rgba(0, 0, 0, 0.32) !important;
   backdrop-filter: blur(8px) !important;
 }
@@ -4263,8 +4263,8 @@ umpire-scroll-story {
 
 #one-game-scroll-section .btn-new-game,
 #one-game-scroll-section .continue-btn {
-  background: rgba(232, 200, 64, 0.11) !important;
-  border: 1px solid rgba(232, 200, 64, 0.42) !important;
+  background: rgba(230, 162, 60, 0.11) !important;
+  border: 1px solid rgba(230, 162, 60, 0.42) !important;
   color: var(--accent) !important;
   border-radius: 999px !important;
   font-family: 'IBM Plex Mono', monospace !important;
@@ -4276,8 +4276,8 @@ umpire-scroll-story {
 
 #one-game-scroll-section .btn-new-game:hover,
 #one-game-scroll-section .continue-btn:hover {
-  background: rgba(232, 200, 64, 0.18) !important;
-  border-color: rgba(232, 200, 64, 0.62) !important;
+  background: rgba(230, 162, 60, 0.18) !important;
+  border-color: rgba(230, 162, 60, 0.62) !important;
   transform: translateY(-1px) !important;
 }
 
@@ -4294,8 +4294,8 @@ umpire-scroll-story {
   padding: 80px 34px !important;
   border-bottom: 1px solid rgba(232, 234, 240, 0.08) !important;
   background:
-    radial-gradient(circle at 0% 20%, rgba(77, 224, 192, 0.08), transparent 32%),
-    linear-gradient(180deg, rgba(22, 25, 32, 0.70), rgba(13, 15, 20, 0.70)) !important;
+    radial-gradient(circle at 0% 20%, rgba(87, 184, 106, 0.08), transparent 32%),
+    linear-gradient(180deg, rgba(22, 25, 32, 0.70), rgba(11, 19, 16, 0.70)) !important;
   border-left: 1px solid rgba(232, 234, 240, 0.08) !important;
   border-right: 1px solid rgba(232, 234, 240, 0.08) !important;
 }
@@ -4317,8 +4317,8 @@ umpire-scroll-story {
 }
 
 #one-game-scroll-section .section-num span {
-  background: rgba(77, 224, 192, 0.10) !important;
-  border: 1px solid rgba(77, 224, 192, 0.30) !important;
+  background: rgba(87, 184, 106, 0.10) !important;
+  border: 1px solid rgba(87, 184, 106, 0.30) !important;
   color: var(--accent2) !important;
   border-radius: 999px !important;
 }
@@ -4351,7 +4351,7 @@ umpire-scroll-story {
 #one-game-scroll-section .stat-inline,
 #one-game-scroll-section .type-pill {
   border: 1px solid rgba(232, 234, 240, 0.10) !important;
-  background: rgba(13, 15, 20, 0.42) !important;
+  background: rgba(11, 19, 16, 0.42) !important;
   color: #ffffff !important;
 }
 
@@ -4367,7 +4367,7 @@ umpire-scroll-story {
 
 #one-game-scroll-section .stat-miss {
   color: var(--accent) !important;
-  border-color: rgba(232, 200, 64, 0.32) !important;
+  border-color: rgba(230, 162, 60, 0.32) !important;
 }
 
 #one-game-scroll-section #scroll-viz-sticky {
@@ -4376,10 +4376,10 @@ umpire-scroll-story {
   height: calc(100vh - 36px) !important;
   min-height: calc(100vh - 36px) !important;
   background:
-    radial-gradient(circle at 50% 18%, rgba(77, 224, 192, 0.10), transparent 34%),
-    radial-gradient(circle at 50% 82%, rgba(232, 200, 64, 0.10), transparent 34%),
-    linear-gradient(180deg, rgba(30, 35, 48, 0.96), rgba(13, 15, 20, 0.92)) !important;
-  border: 1px solid rgba(77, 224, 192, 0.20) !important;
+    radial-gradient(circle at 50% 18%, rgba(87, 184, 106, 0.10), transparent 34%),
+    radial-gradient(circle at 50% 82%, rgba(230, 162, 60, 0.10), transparent 34%),
+    linear-gradient(180deg, rgba(26, 44, 34, 0.96), rgba(11, 19, 16, 0.92)) !important;
+  border: 1px solid rgba(87, 184, 106, 0.20) !important;
   box-shadow: 0 26px 70px rgba(0, 0, 0, 0.34) !important;
 }
 
@@ -4395,14 +4395,14 @@ umpire-scroll-story {
 #one-game-scroll-section #scroll-zone-wrap {
   padding: 10px !important;
   border-radius: 20px !important;
-  background: rgba(13, 15, 20, 0.34) !important;
+  background: rgba(11, 19, 16, 0.34) !important;
   border: 1px solid rgba(232, 234, 240, 0.08) !important;
 }
 
 #one-game-scroll-section .viz-caption {
   color: var(--accent2) !important;
-  background: rgba(77, 224, 192, 0.08) !important;
-  border: 1px solid rgba(77, 224, 192, 0.22) !important;
+  background: rgba(87, 184, 106, 0.08) !important;
+  border: 1px solid rgba(87, 184, 106, 0.22) !important;
   border-radius: 999px !important;
   padding: 7px 12px !important;
   margin-bottom: 14px !important;
@@ -4422,11 +4422,11 @@ umpire-scroll-story {
 
 #one-game-scroll-section .prog-dot.active {
   background: var(--accent) !important;
-  box-shadow: 0 0 14px rgba(232, 200, 64, 0.8) !important;
+  box-shadow: 0 0 14px rgba(230, 162, 60, 0.8) !important;
 }
 
 #one-game-scroll-section .summary-card {
-  background: rgba(13, 15, 20, 0.46) !important;
+  background: rgba(11, 19, 16, 0.46) !important;
   border: 1px solid rgba(232, 234, 240, 0.08) !important;
   border-radius: 14px !important;
 }
@@ -4440,15 +4440,15 @@ umpire-scroll-story {
 }
 
 #one-game-scroll-section .accuracy-verdict {
-  background: rgba(232, 200, 64, 0.08) !important;
-  border: 1px solid rgba(232, 200, 64, 0.20) !important;
+  background: rgba(230, 162, 60, 0.08) !important;
+  border: 1px solid rgba(230, 162, 60, 0.20) !important;
   color: rgba(232, 234, 240, 0.78) !important;
   border-radius: 14px !important;
 }
 
 #one-game-scroll-section #scroll-pitch-tooltip {
-  background: rgba(13, 15, 20, 0.96) !important;
-  border: 1px solid rgba(77, 224, 192, 0.24) !important;
+  background: rgba(11, 19, 16, 0.96) !important;
+  border: 1px solid rgba(87, 184, 106, 0.24) !important;
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35) !important;
 }
 
@@ -4519,8 +4519,8 @@ umpire-scroll-story {
   padding: 14px;
   border-radius: 18px;
   background:
-    linear-gradient(180deg, rgba(30, 35, 48, 0.90), rgba(22, 25, 32, 0.86));
-  border: 1px solid rgba(77, 224, 192, 0.30);
+    linear-gradient(180deg, rgba(26, 44, 34, 0.90), rgba(22, 25, 32, 0.86));
+  border: 1px solid rgba(87, 184, 106, 0.30);
   box-shadow: 0 26px 70px rgba(0, 0, 0, 0.42);
   backdrop-filter: blur(8px);
   overflow: hidden;
@@ -4533,7 +4533,7 @@ umpire-scroll-story {
   pointer-events: none;
   border-radius: 18px;
   background:
-    linear-gradient(90deg, rgba(77, 224, 192, 0.20), transparent 18%, transparent 82%, rgba(232, 200, 64, 0.14));
+    linear-gradient(90deg, rgba(87, 184, 106, 0.20), transparent 18%, transparent 82%, rgba(230, 162, 60, 0.14));
   opacity: 0.5;
 }
 
@@ -4544,7 +4544,7 @@ umpire-scroll-story {
   margin-bottom: 12px;
   padding: 0 10px;
   border-radius: 9px;
-  background: rgba(13, 15, 20, 0.66);
+  background: rgba(11, 19, 16, 0.66);
   border: 1px solid rgba(232, 234, 240, 0.08);
   display: flex;
   align-items: center;
@@ -4568,9 +4568,9 @@ umpire-scroll-story {
   margin-left: auto;
   padding: 4px 8px;
   border-radius: 999px;
-  background: rgba(232, 200, 64, 0.10);
+  background: rgba(230, 162, 60, 0.10);
   color: var(--accent);
-  border: 1px solid rgba(232, 200, 64, 0.22);
+  border: 1px solid rgba(230, 162, 60, 0.22);
 }
 
 .intro-video {
@@ -4596,10 +4596,10 @@ umpire-scroll-story {
   position: relative;
   min-height: 360px;
   border-radius: 18px;
-  border: 1px solid rgba(77, 224, 192, 0.30);
+  border: 1px solid rgba(87, 184, 106, 0.30);
   background:
-    radial-gradient(circle at 50% 25%, rgba(77, 224, 192, 0.12), transparent 38%),
-    linear-gradient(180deg, rgba(30, 35, 48, 0.90), rgba(22, 25, 32, 0.86));
+    radial-gradient(circle at 50% 25%, rgba(87, 184, 106, 0.12), transparent 38%),
+    linear-gradient(180deg, rgba(26, 44, 34, 0.90), rgba(22, 25, 32, 0.86));
   box-shadow: 0 26px 70px rgba(0, 0, 0, 0.42);
   overflow: hidden;
 }
@@ -4898,8 +4898,8 @@ umpire-scroll-story {
 }
 
 #one-game-scroll-section .miss-type-card {
-  background: rgba(13, 15, 20, 0.48);
-  border: 1px solid rgba(232, 200, 64, 0.20);
+  background: rgba(11, 19, 16, 0.48);
+  border: 1px solid rgba(230, 162, 60, 0.20);
   border-radius: 14px;
   padding: 15px 16px;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
@@ -4921,7 +4921,7 @@ umpire-scroll-story {
   width: 9px;
   height: 9px;
   border-radius: 999px;
-  box-shadow: 0 0 12px rgba(232, 200, 64, 0.42);
+  box-shadow: 0 0 12px rgba(230, 162, 60, 0.42);
 }
 
 #one-game-scroll-section .miss-type-title {
@@ -4972,3 +4972,150 @@ umpire-scroll-story {
 #one-game-scroll-section .miss-type-grid .miss-type-card:nth-child(n+5) .miss-type-note {
   font-size: 12px;
 }
+
+
+
+/* --- Refined game visuals --- */
+#game-screen {
+  position: relative;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(230,162,60,0.08), transparent 22%),
+    radial-gradient(circle at 12% 50%, rgba(87,184,106,0.10), transparent 26%),
+    radial-gradient(circle at 88% 48%, rgba(74,150,92,0.11), transparent 26%),
+    linear-gradient(180deg, #08110d 0%, #0b1510 48%, #091310 100%);
+}
+
+.pitch-panel .count-bar,
+.pitch-panel .pitch-info,
+.right-panel .panel-card,
+.right-panel .phase-card,
+#feedback-toast {
+  box-shadow: 0 14px 32px rgba(0,0,0,0.18);
+}
+
+.zone-wrapper {
+  padding: 22px 20px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(87,184,106,0.16);
+  background:
+    radial-gradient(circle at 50% 82%, rgba(230,162,60,0.08), transparent 28%),
+    radial-gradient(circle at 50% 8%, rgba(255,255,255,0.03), transparent 34%),
+    linear-gradient(180deg, rgba(20,25,36,0.95), rgba(10,14,22,0.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    0 18px 48px rgba(0,0,0,0.28);
+}
+
+#zone-svg {
+  display: block;
+  margin: 0 auto;
+  border-radius: 18px;
+  background: transparent;
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.22),
+    inset 0 0 0 1px rgba(255,255,255,0.04);
+}
+
+.phase-msg {
+  top: 12px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(230,162,60,0.85);
+  background: rgba(9,12,18,0.88);
+  box-shadow:
+    0 8px 20px rgba(0,0,0,0.24),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+  color: #f0b85a;
+  letter-spacing: 1.5px;
+}
+
+.view-caption {
+  letter-spacing: 1.7px;
+  fill: rgba(232,234,240,0.78);
+}
+
+.zone-box {
+  shape-rendering: geometricPrecision;
+}
+
+.call-buttons {
+  gap: 14px;
+}
+
+.btn-call {
+  padding: 16px 18px;
+  border-radius: 14px;
+  font-size: 26px;
+  letter-spacing: 1.8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    0 10px 24px rgba(0,0,0,0.18);
+}
+
+#btn-strike {
+  background: linear-gradient(180deg, rgba(180,53,53,0.95), rgba(131,37,37,0.95));
+}
+
+#btn-strike:not(:disabled):hover {
+  background: linear-gradient(180deg, rgba(205,68,68,0.98), rgba(145,41,41,0.98));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255,79,79,0.26);
+}
+
+#btn-ball {
+  background: linear-gradient(180deg, rgba(60,88,138,0.96), rgba(49,73,116,0.96));
+}
+
+#btn-ball:not(:disabled):hover {
+  background: linear-gradient(180deg, rgba(79,117,182,0.98), rgba(55,84,134,0.98));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(79,168,255,0.24);
+}
+
+#feedback-toast {
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background:
+    radial-gradient(circle at 6% 50%, rgba(255,255,255,0.03), transparent 14%),
+    linear-gradient(180deg, rgba(24,28,38,0.96), rgba(16,19,28,0.96));
+  border-left-width: 4px;
+}
+
+.pitch-info, .count-bar {
+  border-radius: 12px;
+  border-color: rgba(255,255,255,0.07);
+}
+
+.pitch-type-badge {
+  border-radius: 999px;
+  background: rgba(87,184,106,0.12);
+  border: 1px solid rgba(87,184,106,0.20);
+  padding: 6px 12px;
+}
+
+.pitch-speed {
+  font-size: 30px;
+}
+
+.panel-card, .phase-card {
+  border-radius: 14px;
+  border-color: rgba(255,255,255,0.07);
+}
+
+@media (max-width: 760px) {
+  .zone-wrapper {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  #zone-svg {
+    width: min(100%, 340px);
+    height: auto;
+  }
+
+  .btn-call {
+    font-size: 23px;
+  }
+}
+
