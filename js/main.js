@@ -6,6 +6,7 @@ const PITCH_NAMES = {
   FS: 'Split-Finger', KC: 'Knuckle Curve'
 };
 
+
 let currentIdx = 0;
 let correct = 0;
 let attempted = 0;
@@ -13,6 +14,7 @@ let errors = 0;
 let awaitingNext = false;
 let pitchStartTime = null;
 let responseTimes = [];
+let recentCalls = [];
 let gameStarted = false;
 let autoNextTimer = null;
 
@@ -153,6 +155,32 @@ function getCurrentStreak() {
     : 0;
 }
 
+function pickDesiredCall() {
+  const n = recentCalls.length;
+  if (n >= 2 && recentCalls[n - 1] === recentCalls[n - 2]) {
+    return !recentCalls[n - 1];
+  }
+  const recent = recentCalls.slice(-8);
+  const strikes = recent.filter(Boolean).length;
+  const balls = recent.length - strikes;
+  if (strikes - balls >= 3) return false;
+  if (balls - strikes >= 3) return true;
+  return Math.random() < 0.5;
+}
+
+function pickFromPool(pool) {
+  if (!pool.length) return -1;
+  const desiredStrike = pickDesiredCall();
+  const matching = pool.filter(
+    (i) => isPitchInFixedStrikeZone(PITCHES[i]) === desiredStrike
+  );
+  const finalPool = matching.length ? matching : pool;
+  const pick = finalPool[Math.floor(Math.random() * finalPool.length)];
+  recentCalls.push(isPitchInFixedStrikeZone(PITCHES[pick]));
+  if (recentCalls.length > 30) recentCalls.shift();
+  return pick;
+}
+
 function chooseNextPitchIndex(startIndex) {
   const onScreenIndexes = [];
   const borderlineIndexes = [];
@@ -169,42 +197,27 @@ function chooseNextPitchIndex(startIndex) {
 
   const hotStreak = getCurrentStreak() >= HOT_STREAK_THRESHOLD;
 
-  // ON FIRE (5+ streak): punish the player with the very closest edge pitches.
-  if (hotStreak && borderlineIndexes.length > 0) {
-    const hardestFirst = borderlineIndexes
-      .slice()
-      .sort((a, b) =>
-        getDistanceFromZoneEdgePx(PITCHES[a]) - getDistanceFromZoneEdgePx(PITCHES[b]));
-    const poolSize = Math.max(1, Math.min(HOT_STREAK_HARD_POOL, hardestFirst.length));
-    return hardestFirst[Math.floor(Math.random() * poolSize)];
-  }
-
-  // Before the game gets harder, still avoid extreme off-screen pitches.
+  // Easy warm-up: the first few calls just avoid extreme off-screen pitches.
   if (!hotStreak && correct < BORDERLINE_START_CORRECT) {
-    if (onScreenIndexes.length === 0) return startIndex;
-    return onScreenIndexes[0];
+    return onScreenIndexes.length ? onScreenIndexes[0] : startIndex;
   }
 
-  let currentBorderlineChance =
-    correct >= BORDERLINE_SECOND_LEVEL_CORRECT
-      ? BORDERLINE_SECOND_LEVEL_CHANCE
-      : BORDERLINE_CHANCE;
-
-  if (hotStreak) currentBorderlineChance = 0.98;
-
-  const shouldPreferBorderline = Math.random() < currentBorderlineChance;
-
-  if (shouldPreferBorderline && borderlineIndexes.length > 0) {
-    const randomPick = Math.floor(Math.random() * borderlineIndexes.length);
-    return borderlineIndexes[randomPick];
+  // Decide whether to draw from the hard (borderline) pool.
+  let useBorderline;
+  if (hotStreak) {
+    useBorderline = true; // ON FIRE: always a tough edge call...
+  } else {
+    const chance =
+      correct >= BORDERLINE_SECOND_LEVEL_CORRECT
+        ? BORDERLINE_SECOND_LEVEL_CHANCE
+        : BORDERLINE_CHANCE;
+    useBorderline = Math.random() < chance;
   }
 
-  if (onScreenIndexes.length > 0) {
-    const randomPick = Math.floor(Math.random() * onScreenIndexes.length);
-    return onScreenIndexes[randomPick];
-  }
-
-  return startIndex;
+  const pool =
+    useBorderline && borderlineIndexes.length ? borderlineIndexes : onScreenIndexes;
+  const pick = pickFromPool(pool);
+  return pick >= 0 ? pick : startIndex;
 }
 
 function moveSelectedPitchIntoCurrentSlot(currentSlot, selectedIndex) {
@@ -417,6 +430,7 @@ function resetGameState() {
   awaitingNext = false;
   pitchStartTime = null;
   responseTimes = [];
+  recentCalls = [];
   gameStarted = false;
   timedMode = false;
   timedIntroShown = false;
