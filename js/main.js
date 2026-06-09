@@ -346,9 +346,8 @@ function showTimedIntro(onContinue) {
       '<div class="timed-intro-badge">⏱️</div>' +
       '<h2>Now Let\u2019s Make It Harder</h2>' +
       '<p>Real umpires have to make the call the instant the pitch hits the plate. ' +
-      'From here on you get just <strong>two seconds</strong> to call every pitch \u2014 ' +
-      'let the clock run out and it counts as a blown call.</p>' +
-      '<button type="button" class="timed-intro-btn">Play On \u2014 2.0s Clock</button>' +
+      'From here on you get just <strong>two seconds</strong> to call every pitch. Letting the clock run out counts as a blown call.</p>' +
+      '<button type="button" class="timed-intro-btn">Play On</button>' +
     '</div>';
   document.body.appendChild(overlay);
   requestAnimationFrame(() => overlay.classList.add('show'));
