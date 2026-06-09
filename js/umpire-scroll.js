@@ -1,4 +1,3 @@
-// ─── One Game, Every Call Scrollytelling Section (real on-page, no iframe) ───
 (function initOneGameEveryCallScroll() {
   function startWhenReady() {
     const host = document.getElementById('one-game-scroll-section');
@@ -6,9 +5,7 @@
     if (typeof d3 === 'undefined') { setTimeout(startWhenReady, 100); return; }
 let GAMES_DATA = [];
 
-// ══════════════════════════════════════
-//  CONFIG
-// ══════════════════════════════════════
+
 const ZONE_LEFT  = -0.708;
 const ZONE_RIGHT =  0.708;
 const W = 400, H = 400;
@@ -27,8 +24,6 @@ const TYPE_COLORS = {
 };
 function typeColor(n){ return TYPE_COLORS[n] || '#9ca3af'; }
 
-// A pitch counts as touching the zone if the VISIBLE dot touches or overlaps the displayed strike-zone box.
-// This matches the on-screen logic the viewer is using when they judge whether a called ball clipped the zone.
 const ZONE_TOUCH_DOT_RADIUS_PX = 7.0;
 function pitchTouchesZone(p, zone) {
   const top = zone && Number.isFinite(zone.top) ? zone.top : p.t;
@@ -74,16 +69,12 @@ function getDisplayedStats(game) {
   return { ...game.stats, total, strikes, balls, ms, mb, missed, acc };
 }
 
-// ══════════════════════════════════════
-//  STATE
-// ══════════════════════════════════════
+
 let currentGame = null;
 let currentStep = 0;
 const TOTAL_STEPS = 9;
 
-// ══════════════════════════════════════
-//  GAME LOADING
-// ══════════════════════════════════════
+
 function pickRandomGame() {
   const idx = Math.floor(Math.random() * GAMES_DATA.length);
   loadGame(GAMES_DATA[idx]);
@@ -93,8 +84,7 @@ function loadGame(game) {
   currentGame = game;
   currentStep = 0;
 
-  // Recalculate misses from the same displayed-zone logic used to draw yellow highlights.
-  // This keeps the text counts, pitch-type breakdown, and final summary synced with the graph.
+
   const stats = getDisplayedStats(game);
   game.displayStats = stats;
 
@@ -110,6 +100,11 @@ function loadGame(game) {
   document.getElementById('scroll-s3-balls').textContent   = stats.balls;
   document.getElementById('scroll-s4-strikes').textContent = stats.strikes;
   document.getElementById('scroll-s5-balls').textContent   = stats.balls;
+  // Miscalled counts shown in the slide copy (synced with the amber highlights).
+  const s4miss = document.getElementById('scroll-s4-miss'); // called strikes that were really balls
+  if (s4miss) s4miss.textContent = `${stats.mb} pitch${stats.mb !== 1 ? 'es' : ''}`;
+  const s5miss = document.getElementById('scroll-s5-miss'); // called balls that were really strikes
+  if (s5miss) s5miss.textContent = `${stats.ms} pitch${stats.ms !== 1 ? 'es' : ''}`;
   document.getElementById('scroll-s6-missed').textContent  = stats.missed;
   document.getElementById('scroll-s6-miss-b').textContent  = `${stats.ms} pitch${stats.ms!==1?'es':''}`;
   document.getElementById('scroll-s6-miss-s').textContent  = `${stats.mb} pitch${stats.mb!==1?'es':''}`;
@@ -131,7 +126,7 @@ function loadGame(game) {
     <div class="summary-card"><div class="big" style="color:var(--strike)">${stats.strikes}</div><div class="label">Called Strikes</div></div>
     <div class="summary-card"><div class="big" style="color:var(--ball)">${stats.balls}</div><div class="label">Called Balls</div></div>
     <div class="summary-card"><div class="big" style="color:var(--miss-dark)">${stats.missed}</div><div class="label">Missed Calls</div></div>
-    <div class="summary-card"><div class="big" style="font-size:20px;line-height:1.35;letter-spacing:0.3px;color:#ffffff;"><div style="white-space:nowrap;">${stats.ms} strike${stats.ms!==1?'s':''} called a <span style="color:var(--ball)">ball</span></div><div style="white-space:nowrap;margin-top:8px;">${stats.mb} ball${stats.mb!==1?'s':''} called a <span style="color:var(--strike)">strike</span></div></div><div class="label">Miss Type Breakdown</div></div>
+    <div class="summary-card"><div class="big" style="font-size:20px;line-height:1.35;letter-spacing:0.3px;color:#ffffff;"><div style="white-space:nowrap;">${stats.ms} <span style="color:var(--ball)">Miscalled Ball${stats.ms!==1?'s':''}</span></div><div style="white-space:nowrap;margin-top:8px;">${stats.mb} <span style="color:var(--strike)">Miscalled Strike${stats.mb!==1?'s':''}</span></div></div><div class="label">Miss Type Breakdown</div></div>
   `;
 
   // Verdict
@@ -315,7 +310,7 @@ function renderViz(step) {
       ()=>5.5,
       ()=>0.95,
       true,
-      [{color:'rgba(200,57,43,0.9)',label:'Called Strike'},{color:'rgba(245,155,0,0.9)',label:'A Ball Called A Strike'}],
+      [{color:'rgba(200,57,43,0.9)',label:'Called Strike'},{color:'rgba(245,155,0,0.9)',label:'Miscalled Strike'}],
       pitches.filter(p=>p.c===0), 'rgba(37,99,176,0.1)',
       p=>p._wrongStrike);
   else if (step === 6) renderZoneDots(pitches.filter(p=>p.c===0),
@@ -323,26 +318,28 @@ function renderViz(step) {
       ()=>5.5,
       ()=>0.95,
       true,
-      [{color:'rgba(37,99,176,0.9)',label:'Called Ball'},{color:'rgba(245,155,0,0.9)',label:'A Strike Called A Ball'}],
+      [{color:'rgba(37,99,176,0.9)',label:'Called Ball'},{color:'rgba(245,155,0,0.9)',label:'Miscalled Ball'}],
       pitches.filter(p=>p.c===1), 'rgba(200,57,43,0.1)',
       p=>p._wrongBall);
   else if (step === 7) renderZoneDots(pitches,
-      p=>p._actualMiss?'#f59b00':(p.c===1?'rgba(200,57,43,0.28)':'rgba(37,99,176,0.24)'),
+      p=>p._wrongStrike?'#f59b00':p._wrongBall?'#22d3ee':(p.c===1?'rgba(200,57,43,0.28)':'rgba(37,99,176,0.24)'),
       ()=>4.8,
       p=>p._actualMiss?1:0.28,
       true,
-      [{color:'rgba(200,57,43,0.35)',label:'Called Strike'},{color:'rgba(37,99,176,0.35)',label:'Called Ball'},{color:'#f59b00',label:'Missed Call'}],
+      [{color:'rgba(200,57,43,0.35)',label:'Called Strike'},{color:'rgba(37,99,176,0.35)',label:'Called Ball'},{color:'#f59b00',label:'Miscalled Strike'},{color:'#22d3ee',label:'Miscalled Ball'}],
       null, null,
-      p=>p._actualMiss);
+      p=>p._actualMiss,
+      p=>p._wrongStrike?'#f59b00':p._wrongBall?'#22d3ee':'rgba(245,155,0,0.95)');
   else if (step === 8) renderMissTypeClusters(pitches.filter(p=>p._actualMiss));
   else if (step === 9) renderZoneDots(pitches,
-      p=>p._actualMiss ? '#f59b00' : (p.c===1?'rgba(200,57,43,0.75)':'rgba(37,99,176,0.65)'),
+      p=>p._wrongStrike?'#f59b00':p._wrongBall?'#22d3ee':(p.c===1?'rgba(200,57,43,0.75)':'rgba(37,99,176,0.65)'),
       ()=>4.8,
       p=>p._actualMiss?1:0.65,
       true,
-      [{color:'rgba(200,57,43,0.8)',label:'Called Strike'},{color:'rgba(37,99,176,0.8)',label:'Called Ball'},{color:'rgba(245,155,0,0.95)',label:'Missed Call'}],
+      [{color:'rgba(200,57,43,0.8)',label:'Called Strike'},{color:'rgba(37,99,176,0.8)',label:'Called Ball'},{color:'#f59b00',label:'Miscalled Strike'},{color:'#22d3ee',label:'Miscalled Ball'}],
       null, null,
-      p=>p._actualMiss);
+      p=>p._actualMiss,
+      p=>p._wrongStrike?'#f59b00':p._wrongBall?'#22d3ee':'rgba(245,155,0,0.95)');
 }
 
 // ══════════════════════════════════════
@@ -547,12 +544,28 @@ function renderMissTypeClusters(missedPitches) {
       .transition().delay(80 + idx * 45).duration(250).attr('opacity', 1);
 
     group.data.forEach((p, i) => {
-      const dotSpacing = 13;
-      const totalWidth = (group.data.length - 1) * dotSpacing;
+      const dotCount = group.data.length;
+      const dotR = 5;
+      const dotRight = PW - 18;          // keep the rightmost dot inside the card
+      const dotsLeft = PW * 0.50;        // dots live in the right half
+      const bandW = Math.max(40, dotRight - dotsLeft);
+      const minSpacing = 2 * dotR + 2;   // spacing floor before wrapping
+      const perRow = Math.max(1, Math.min(dotCount, Math.floor(bandW / minSpacing) + 1));
+      const rowCount = Math.ceil(dotCount / perRow);
+      const spacing = perRow > 1 ? Math.min(13, bandW / (perRow - 1)) : 0;
+      const rowGap = 11;
+      const rowsBlockH = (rowCount - 1) * rowGap;
+
+      const rowIdx = Math.floor(i / perRow);
+      const colIdx = i % perRow;
+      const countInRow = Math.min(perRow, dotCount - rowIdx * perRow);
+      const rowWidth = (countInRow - 1) * spacing;
+      const rowStartX = dotRight - rowWidth; // right-anchor each row
+
       nodes.push({
         ...p,
-        tx: dotsX - totalWidth / 2 + i * dotSpacing,
-        ty: y,
+        tx: rowStartX + colIdx * spacing,
+        ty: y - rowsBlockH / 2 + rowIdx * rowGap,
         displayColor: p._wrongStrike ? 'rgba(200,57,43,0.92)' : 'rgba(37,99,176,0.92)',
       });
     });
@@ -582,8 +595,8 @@ function renderMissTypeClusters(missedPitches) {
       .transition().delay(220 + idx * 45).duration(220).attr('opacity', 0.98);
 
     const parts = [];
-    if (group.red) parts.push(`${group.red} ball called strike`);
-    if (group.blue) parts.push(`${group.blue} strike called ball`);
+    if (group.red) parts.push(`${group.red} Miscalled Strike${group.red !== 1 ? 's' : ''}`);
+    if (group.blue) parts.push(`${group.blue} Miscalled Ball${group.blue !== 1 ? 's' : ''}`);
 
     dynLayer.append('text')
       .attr('x', textX)
@@ -620,8 +633,8 @@ function renderMissTypeClusters(missedPitches) {
     .attr('opacity', 0.95);
 
   renderLegend([
-    {color:'rgba(200,57,43,0.92)', label:'A Ball Called A Strike'},
-    {color:'rgba(37,99,176,0.92)', label:'A Strike Called A Ball'}
+    {color:'rgba(200,57,43,0.92)', label:'Miscalled Strike'},
+    {color:'rgba(37,99,176,0.92)', label:'Miscalled Ball'}
   ]);
 }
 
@@ -754,7 +767,7 @@ function renderBlobSplit(pitches) {
 // ══════════════════════════════════════
 //  STEPS 4–8: ZONE SCATTER
 // ══════════════════════════════════════
-function renderZoneDots(pitches, colorFn, sizeFn, opFn, showMiss, legendItems, ghostPitches, ghostColor, highlightFn) {
+function renderZoneDots(pitches, colorFn, sizeFn, opFn, showMiss, legendItems, ghostPitches, ghostColor, highlightFn, highlightColorFn) {
   // Ghost layer
   if (ghostPitches && ghostPitches.length) {
     dynLayer.selectAll('.ghost-dot')
@@ -771,6 +784,9 @@ function renderZoneDots(pitches, colorFn, sizeFn, opFn, showMiss, legendItems, g
 
   // Main dots. Yellow indicates a highlight/ring only; the pitch keeps its original call color.
   const isHighlighted = highlightFn || (p => showMiss && p.m);
+  // Per-pitch ring colour (defaults to amber so other steps are unchanged).
+  const ringStroke  = p => highlightColorFn ? highlightColorFn(p) : 'rgba(245,155,0,0.95)';
+  const pulseStroke = p => highlightColorFn ? highlightColorFn(p) : 'rgba(245,155,0,0.7)';
   const nonMissed = pitches.filter(p => !isHighlighted(p));
   const missed    = pitches.filter(p => isHighlighted(p));
 
@@ -783,7 +799,7 @@ function renderZoneDots(pitches, colorFn, sizeFn, opFn, showMiss, legendItems, g
       .attr('cy', p => ySc(p.z))
       .attr('r', 0)
       .attr('fill', p => colorFn(p))
-      .attr('stroke', p => isHighlighted(p) ? 'rgba(245,155,0,0.95)' : 'rgba(255,255,255,0.2)')
+      .attr('stroke', p => isHighlighted(p) ? ringStroke(p) : 'rgba(255,255,255,0.2)')
       .attr('stroke-width', p => isHighlighted(p) ? 2.2 : 0.5)
       .attr('opacity', p => opFn(p))
       .attr('cursor','pointer')
@@ -804,7 +820,7 @@ function renderZoneDots(pitches, colorFn, sizeFn, opFn, showMiss, legendItems, g
       const ring = ringsLayer.append('circle')
         .attr('cx', xSc(p.x)).attr('cy', ySc(p.z))
         .attr('r', 9).attr('fill','none')
-        .attr('stroke','rgba(245,155,0,0.7)').attr('stroke-width',1.7)
+        .attr('stroke', pulseStroke(p)).attr('stroke-width',1.7)
         .attr('pointer-events','none');
       function pulse() {
         ring.attr('r',9).attr('opacity',0.8)
@@ -840,7 +856,7 @@ function showTip(event, p) {
   const isDisplayedMiss = p._actualMiss || p.m;
   const missLine = isDisplayedMiss ? '<div class="tt-miss">⚠ Missed Call</div>' : '';
   const zoneNote = isDisplayedMiss
-    ? (p._wrongStrike || p.c === 1 ? 'A ball called a strike' : 'A strike called a ball')
+    ? (p._wrongStrike || p.c === 1 ? 'Miscalled Strike' : 'Miscalled Ball')
     : '';
   tooltip.innerHTML = `
     <div class="tt-type">${p.n}</div>

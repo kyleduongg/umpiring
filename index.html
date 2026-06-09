@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -355,6 +353,7 @@
       <h2 class="section-heading">What Was<br>A <em>Strike</em> To<br>The Umpire?</h2>
       <div class="section-body">
         Filtering to just <span class="stat-inline stat-strike" id="scroll-s4-strikes">—</span> called strikes, this shows the pitches the umpire believed crossed the zone. Some are obvious. Others sit close to the edges, where the call becomes much harder in real time.
+        <br><br><strong id="scroll-s4-miss" style="color:#f59b00">—</strong> of these strikes were <strong style="color:#f59b00">miscalled</strong> — pitches that were actually <em style="font-style:normal">balls</em> according to the strike zone, but the umpire rang them up as strikes. They are circled in amber on the chart.
       </div>
     </div>
 
@@ -364,6 +363,7 @@
       <h2 class="section-heading">What Was<br>A <em>Ball</em> To<br>The Umpire?</h2>
       <div class="section-body">
         Now filtering to <span class="stat-inline stat-ball" id="scroll-s5-balls">—</span> called balls. Watch for the ones that sneak inside the edges, pitches that were in the zone but called ball anyway.
+        <br><br><strong id="scroll-s5-miss" style="color:#f59b00">—</strong> of these balls were <strong style="color:#f59b00">miscalled</strong> — pitches that were actually <em style="font-style:normal">strikes</em> according to the strike zone, but the umpire waved them off as balls. They are circled in amber on the chart.
       </div>
     </div>
 
@@ -374,9 +374,9 @@
       <div class="section-body">
         <span class="stat-inline stat-miss" id="scroll-s6-missed">—</span> pitches where the umpire’s call did not match the actual strike zone.
         <br><br>
-        <strong id="scroll-s6-miss-b">—</strong> inside the zone, called <em>ball</em>.<br>
-        <strong id="scroll-s6-miss-s">—</strong> outside the zone, called <em>strike</em>.
-        <br><br>The missed calls are circled in amber so you can see exactly where the judgment broke down. Hover over any circled pitch to compare the call, pitch type, location, and pitcher.
+        <span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#22d3ee;margin-right:7px;vertical-align:middle"></span><strong id="scroll-s6-miss-b" style="color:#22d3ee">—</strong> inside the zone, called <em style="color:#22d3ee;font-style:normal">ball</em> — a <strong style="color:#22d3ee">Miscalled Ball</strong>.<br>
+        <span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#f59b00;margin-right:7px;vertical-align:middle"></span><strong id="scroll-s6-miss-s" style="color:#f59b00">—</strong> outside the zone, called <em style="color:#f59b00;font-style:normal">strike</em> — a <strong style="color:#f59b00">Miscalled Strike</strong>.
+        <br><br>Each missed call is color-coded on the chart: <span style="color:#f59b00">amber</span> marks a <strong style="color:#f59b00">Miscalled Strike</strong>, <span style="color:#22d3ee">cyan</span> marks a <strong style="color:#22d3ee">Miscalled Ball</strong>. Hover over any circled pitch to compare the call, pitch type, location, and pitcher.
       </div>
     </div>
 
@@ -385,7 +385,7 @@
       <div class="section-num"><span>08</span>Pitch Type Trouble</div>
       <h2 class="section-heading">Which Pitches<br>Gave The Umpire The Most <em>Trouble?</em></h2>
       <div class="section-body">
-        These missed calls are grouped by pitch type and colored by miss direction. Red dots show balls that were called strikes, while blue dots show strikes that were called balls.
+        These missed calls are grouped by pitch type and colored by miss direction. Red dots are <strong style="color:var(--strike)">Miscalled Strikes</strong>, while blue dots are <strong style="color:var(--ball)">Miscalled Balls</strong>.
         <br><br>
         This makes it easier to see which pitch shapes gave the umpire the most trouble in this game.
       </div>
