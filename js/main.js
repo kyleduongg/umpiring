@@ -1291,7 +1291,7 @@ function initUmpireAccuracyViz(RAW) {
 
   if (heroNum) heroNum.textContent = `${AVG.toFixed(2)}%`;
   if (heroSub) {
-    heroSub.textContent = `Across ${RAW.umpires.length} umpires during the June 2025 MLB season`;
+    heroSub.textContent = `Across ${RAW.umpires.length} umpires who umpired during the June 2025 MLB season`;
   }
 
   const totalUmpires = RAW.umpires.length;
