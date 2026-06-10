@@ -135,7 +135,7 @@
         '<span class="gf-lb-rank">' + (i + 1) + '</span>' +
         '<span class="gf-lb-name">' + (e.name || '---') + '</span>' +
         '<span class="gf-lb-acc">' + (e.acc != null ? e.acc + '%' : '--') + '</span>' +
-        '<span class="gf-lb-score">' + (e.score || 0).toLocaleString() + '</span>';
+        '<span class="gf-lb-score">' + (e.score || 0).toLocaleString() + ' PTs</span>';
       elLbList.appendChild(li);
     });
   }
