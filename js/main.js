@@ -721,14 +721,14 @@ function loadPitch(idx) {
   const phaseCard = document.getElementById('phase-card');
 
   if (showZone) {
-    phaseMsg.textContent = `◆ PRACTICE (${idx + 1}/${PRACTICE_COUNT}) — Strike zone visible`;
+    phaseMsg.textContent = `◆ PRACTICE (${idx + 1}/${PRACTICE_COUNT}) — Strike Zone Visible!`;
     phaseMsg.style.opacity = 1;
     phaseLabel.textContent = '📋 Practice Phase';
     phaseDesc.textContent = 'The strike zone box is shown for the first 3 pitches. After that, you get no guide.';
     phaseCard.style.background = 'rgba(232,200,64,0.07)';
     phaseCard.style.borderColor = 'rgba(232,200,64,0.25)';
   } else {
-    phaseMsg.textContent = '🔴 LIVE MODE — No zone guide';
+    phaseMsg.textContent = '🔴 LIVE MODE — No Strike Zone!';
     phaseMsg.style.opacity = 1;
     phaseLabel.textContent = '⚾ Live Mode';
     phaseDesc.textContent = 'Zone box hidden. Keep calling pitches until you make 3 errors.';
