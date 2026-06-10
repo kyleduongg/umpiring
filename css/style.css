@@ -5297,7 +5297,7 @@ umpire-scroll-story {
   color: var(--accent); margin: 6px 0 12px;
 }
 .timed-intro-card p { color: var(--text); opacity: .9; line-height: 1.6; font-size: 15px; margin-bottom: 22px; }
-.timed-intro-card strong { color: var(--accent2); }
+.timed-intro-card strong { color: var(--strike); }
 .timed-intro-btn {
   font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px;
   color: #0b1310; background: var(--accent); border: none; border-radius: 10px;
