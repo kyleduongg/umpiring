@@ -326,7 +326,7 @@ function renderViz(step) {
       ()=>4.8,
       p=>p._actualMiss?1:0.28,
       true,
-      [{color:'rgba(200,57,43,0.35)',label:'Called Strike'},{color:'rgba(37,99,176,0.35)',label:'Called Ball'},{color:'#f59b00',label:'Miscalled Strike'},{color:'#22d3ee',label:'Miscalled Ball'}],
+      [{color:'#f59b00',label:'Miscalled Strike'},{color:'#22d3ee',label:'Miscalled Ball'}],
       null, null,
       p=>p._actualMiss,
       p=>p._wrongStrike?'#f59b00':p._wrongBall?'#22d3ee':'rgba(245,155,0,0.95)');
@@ -336,7 +336,7 @@ function renderViz(step) {
       ()=>4.8,
       p=>p._actualMiss?1:0.65,
       true,
-      [{color:'rgba(200,57,43,0.8)',label:'Called Strike'},{color:'rgba(37,99,176,0.8)',label:'Called Ball'},{color:'#f59b00',label:'Miscalled Strike'},{color:'#22d3ee',label:'Miscalled Ball'}],
+      [{color:'#f59b00',label:'Miscalled Strike'},{color:'#22d3ee',label:'Miscalled Ball'}],
       null, null,
       p=>p._actualMiss,
       p=>p._wrongStrike?'#f59b00':p._wrongBall?'#22d3ee':'rgba(245,155,0,0.95)');
