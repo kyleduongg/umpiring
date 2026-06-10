@@ -252,19 +252,21 @@ body {
 }
 
 #intro-screen h1 {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(58px, 8.5vw, 112px);
-  letter-spacing: 2px;
-  line-height: 0.92;
+  font-family: 'Oswald', 'Bebas Neue', sans-serif;
+  font-weight: 700;
+  font-size: clamp(16px, 5.2vw, 74px);
+  letter-spacing: 0.5px;
+  line-height: 1.06;
+  white-space: nowrap;
   color: #ffffff;
   margin-bottom: 18px;
   text-shadow: 0 12px 34px rgba(0, 0, 0, 0.42);
 }
 
 .intro-subtitle {
-  max-width: 880px;
+  max-width: 820px;
   margin: 0 auto 30px;
-  font-size: clamp(18px, 1.8vw, 25px);
+  font-size: clamp(15px, 1.45vw, 20px);
   line-height: 1.55;
   color: rgba(232, 234, 240, 0.86);
 }

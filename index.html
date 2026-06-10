@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +6,7 @@
   <title>Inside the Umpire's Strike Zone</title>
   <link rel="icon" type="image/png" href="favicon.png" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -356,7 +353,7 @@
       <h2 class="section-heading">What Was<br>A <em>Strike</em> To<br>The Umpire?</h2>
       <div class="section-body">
         Filtering to just <span class="stat-inline stat-strike" id="scroll-s4-strikes">—</span> called strikes, this shows the pitches the umpire believed crossed the zone. Some are obvious. Others sit close to the edges, where the call becomes much harder in real time.
-        <br><br><strong id="scroll-s4-miss" style="color:#f59b00">—</strong> of these strikes were <strong style="color:#f59b00">miscalled</strong> pitches that were actually <em style="font-style:normal">balls</em> according to the strike zone but were called strikes by the umpire. They are circled in amber on the chart.
+        <br><br><strong id="scroll-s4-miss" style="color:#f59b00">—</strong> of these strikes were <strong style="color:#f59b00">miscalled</strong> — pitches that were actually <em style="font-style:normal">balls</em> according to the strike zone, but the umpire rang them up as strikes. They are circled in amber on the chart.
       </div>
     </div>
 
@@ -366,7 +363,7 @@
       <h2 class="section-heading">What Was<br>A <em>Ball</em> To<br>The Umpire?</h2>
       <div class="section-body">
         Now filtering to <span class="stat-inline stat-ball" id="scroll-s5-balls">—</span> called balls. Watch for the ones that sneak inside the edges, pitches that were in the zone but called ball anyway.
-        <br><br><strong id="scroll-s5-miss" style="color:#f59b00">—</strong> of these balls were <strong style="color:#f59b00">miscalled</strong> pitches that were actually <em style="font-style:normal">strikes</em> according to the strike zone but were called balls by the umpire. They are circled in amber on the chart.
+        <br><br><strong id="scroll-s5-miss" style="color:#f59b00">—</strong> of these balls were <strong style="color:#f59b00">miscalled</strong> — pitches that were actually <em style="font-style:normal">strikes</em> according to the strike zone, but the umpire waved them off as balls. They are circled in amber on the chart.
       </div>
     </div>
 
@@ -866,36 +863,37 @@
   <button id="btn-restart">Restart Game ↺</button>
 </section>
 
+<!-- Takeaways / "But Remember" Section -->
 <section id="takeaways-section">
   <div class="takeaways-inner">
-    <h2 class="takeaways-title">Keep This in Mind</h2>
+    <h2 class="takeaways-title">But Remember…</h2>
     <p class="takeaways-intro">
-      Think that was tough? You just experienced the easiest version of the job. Real umpires make every call in real time, under conditions far less forgiving.
+      The game gave you a clean angle, a generous clock, and nothing on the line. A real umpire works without any of that. Here is what every call behind the plate actually involves:
     </p>
 
     <div class="takeaways-list">
       <div class="takeaway-item">
-        <p><strong>No time to think.</strong> Balls and strikes are called live and final. The call is made the moment the pitch crosses the plate.</p>
+        <p><strong>No replay, no do-over.</strong> Balls and strikes are called live and final — there is no booth reviewing the pitch you just judged.</p>
       </div>
       <div class="takeaway-item">
-        <p><strong>Too fast to process.</strong> Every pitch reaches the plate in a fraction of a second.</p>
+        <p><strong>Under half a second.</strong> A 95&nbsp;mph fastball reaches the plate in about 0.4 seconds — quicker than the clock you were racing against.</p>
       </div>
       <div class="takeaway-item">
-        <p><strong>Obstructed view.</strong> Glove framing, the catcher’s body, and the batter’s stance can all block a clear look at the strike zone.</p>
+        <p><strong>The catcher is in the way.</strong> Glove framing, the catcher's body, and the batter's stance all block a clean look at the zone.</p>
       </div>
       <div class="takeaway-item">
-        <p><strong>No strike zone on the field.</strong> There is no overlay to rely on. The umpire has to visualize the zone and adjust it to every hitter.</p>
+        <p><strong>No box on the field.</strong> There is no TV strike-zone overlay — the umpire holds the entire zone in their head and adjusts it to every hitter.</p>
       </div>
       <div class="takeaway-item">
-        <p><strong>100+ calls a night.</strong> Focus has to stay locked in through heat, cold, rain, and extra innings.</p>
+        <p><strong>250+ calls a night.</strong> Focus has to hold pitch after pitch, often through heat, cold, rain, and extra innings.</p>
       </div>
       <div class="takeaway-item">
-        <p><strong>Everyone is watching.</strong> Forty thousand fans, both dugouts, and a game on the line. Every pitch on the edge becomes a debate.</p>
+        <p><strong>Everyone is watching.</strong> Forty thousand fans, both dugouts, and a game on the line — on every pitch that nicks the edge.</p>
       </div>
     </div>
 
     <div class="takeaways-callout">
-      <p>The version you played was the easy one — you had a clean view, extra time to think, and no real consequences for being wrong. Real umpires don’t get that luxury. They have to make every call in real time, with imperfect sightlines, no replay in the moment, and the weight of the decision sticking immediately. Once it’s called, they have to live with it. The next time a pitch barely misses or catches the corner, <strong>it might be worth giving them a little credit</strong>.</p>
+      What you played was the easy version — a clean view, a forgiving clock, and zero consequences. Real umpires get the call right far more often than the boos suggest. Next close pitch, maybe give them a little credit.
     </div>
   </div>
 </section>
