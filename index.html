@@ -31,6 +31,9 @@
       <button type="button" id="watch-demo-btn" class="watch-demo-btn">
         <span class="watch-demo-icon">▶</span> Watch the Demo
       </button>
+      <button type="button" id="leaderboard-btn" class="lb-open-btn">
+        🏆 Leaderboard
+      </button>
     </div>
 
     <h1>Strike or Ball? Could You Call the Zone?</h1>
@@ -951,6 +954,45 @@
   });
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') closeVideo();
+  });
+})();
+</script>
+
+<!-- Leaderboard (modal, opened by the Leaderboard button) -->
+<div id="leaderboard-modal" class="video-modal lb-modal" aria-hidden="true">
+  <div class="video-modal-backdrop" data-close></div>
+  <div class="lb-dialog" role="dialog" aria-modal="true" aria-label="Leaderboard">
+    <button type="button" class="video-modal-close" data-close aria-label="Close">×</button>
+    <h2 class="lb-dialog-title">🏆 Leaderboard</h2>
+    <div id="gf-lb-save" class="gf-lb-save"></div>
+    <ol id="gf-lb-list" class="gf-lb-list"></ol>
+  </div>
+</div>
+
+<script>
+(function () {
+  var lbModal = document.getElementById('leaderboard-modal');
+  function openLeaderboard() {
+    if (!lbModal) return;
+    if (window.GameFeel && window.GameFeel.renderLeaderboard) window.GameFeel.renderLeaderboard();
+    lbModal.classList.add('open');
+    lbModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLeaderboard() {
+    if (!lbModal) return;
+    lbModal.classList.remove('open');
+    lbModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  window.openLeaderboard = openLeaderboard;
+  var lbBtn = document.getElementById('leaderboard-btn');
+  if (lbBtn) lbBtn.addEventListener('click', openLeaderboard);
+  if (lbModal) lbModal.addEventListener('click', function (e) {
+    if (e.target.hasAttribute('data-close')) closeLeaderboard();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeLeaderboard();
   });
 })();
 </script>

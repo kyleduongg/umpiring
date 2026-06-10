@@ -9,6 +9,7 @@
     built: false
   };
   window.GameFeel = GF;
+  GF.renderLeaderboard = function () { renderLeaderboard(); };
 
   function ctx() {
     if (!GF.ac) {
@@ -64,7 +65,80 @@
   };
 
   let elScore, elCombo, elComboTxt, elMult, elOuts, elSoundBtn, elFloaters, elFlash, zoneWrap;
+  let elLbList, elLbSave;
   let activeCallouts = 0;
+
+  // ── Leaderboard (persists across refreshes via the browser's localStorage) ──
+  var LB_KEY = 'umpireLeaderboardV1';
+  var pendingRun = null;   // a finished game waiting to be saved
+  var lastSavedId = null;  // highlight the most recently saved row
+
+  function loadLB() {
+    try {
+      var raw = localStorage.getItem(LB_KEY);
+      var arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr : [];
+    } catch (e) { return []; }
+  }
+  function saveLB(arr) {
+    try { localStorage.setItem(LB_KEY, JSON.stringify(arr)); } catch (e) { /* storage blocked */ }
+  }
+  function addToLB(entry) {
+    var arr = loadLB();
+    arr.push(entry);
+    arr.sort(function (a, b) { return (b.score || 0) - (a.score || 0); });
+    arr = arr.slice(0, 25);
+    saveLB(arr);
+    return arr;
+  }
+  function renderLeaderboard() {
+    if (!elLbList || !elLbSave) return;
+
+    // Save form — only while there's a freshly finished, unsaved run.
+    elLbSave.innerHTML = '';
+    if (pendingRun) {
+      var row = el('div', 'gf-lb-saverow');
+      row.appendChild(el('span', 'gf-lb-savelabel',
+        'Save your ' + (pendingRun.score || 0).toLocaleString() + ' pts:'));
+      var input = el('input', 'gf-lb-input');
+      input.type = 'text'; input.maxLength = 24; input.placeholder = 'Your name';
+      var btn = el('button', 'gf-lb-savebtn', 'Save');
+      btn.type = 'button';
+      function doSave() {
+        var name = (input.value || '').trim().slice(0, 24) || 'YOU';
+        addToLB({
+          id: pendingRun.id, name: name, score: pendingRun.score,
+          acc: pendingRun.acc, streak: pendingRun.streak, ts: pendingRun.ts
+        });
+        lastSavedId = pendingRun.id;
+        pendingRun = null;
+        renderLeaderboard();
+      }
+      btn.addEventListener('click', doSave);
+      input.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); doSave(); } });
+      row.appendChild(input);
+      row.appendChild(btn);
+      elLbSave.appendChild(row);
+      setTimeout(function () { try { input.focus(); } catch (e) {} }, 40);
+    }
+
+    // Top scores list
+    elLbList.innerHTML = '';
+    var arr = loadLB();
+    if (!arr.length) {
+      elLbList.appendChild(el('li', 'gf-lb-empty', 'No scores yet — play a game!'));
+      return;
+    }
+    arr.slice(0, 8).forEach(function (e, i) {
+      var li = el('li', 'gf-lb-row' + (e.id === lastSavedId ? ' you' : ''));
+      li.innerHTML =
+        '<span class="gf-lb-rank">' + (i + 1) + '</span>' +
+        '<span class="gf-lb-name">' + (e.name || '---') + '</span>' +
+        '<span class="gf-lb-acc">' + (e.acc != null ? e.acc + '%' : '--') + '</span>' +
+        '<span class="gf-lb-score">' + (e.score || 0).toLocaleString() + '</span>';
+      elLbList.appendChild(li);
+    });
+  }
 
   function el(tag, cls, html) {
     const e = document.createElement(tag);
@@ -137,8 +211,13 @@
     zoneWrap.appendChild(elFlash);
     zoneWrap.appendChild(elFloaters);
 
+    // Leaderboard lives in a popup modal (in index.html); grab its elements.
+    elLbSave = document.getElementById('gf-lb-save');
+    elLbList = document.getElementById('gf-lb-list');
+
     GF.built = true;
     renderHud();
+    renderLeaderboard();
   }
 
   function renderHud() {
@@ -315,7 +394,19 @@
 
   GF.onGameOver = function (stats) {
     stats = stats || {};
+    build();
     sfx.over();
+
+    // Record this run as a pending (unsaved) leaderboard entry.
+    pendingRun = {
+      id: 'r' + Date.now(),
+      score: GF.score,
+      acc: (stats.accuracyPct != null ? stats.accuracyPct : null),
+      streak: GF.bestCombo,
+      ts: Date.now()
+    };
+    renderLeaderboard();
+
     const section = document.getElementById('comparison-section');
     if (!section) return;
 
@@ -336,7 +427,8 @@
         '<span><strong>' + GF.bestCombo + '</strong>Best Streak</span>' +
         '<span><strong>' + (stats.accuracyPct != null ? stats.accuracyPct + '%' : '--') + '</strong>Accuracy</span>' +
       '</div>' +
-      '<div class="gf-rank-blurb">' + r.blurb + '</div>';
+      '<div class="gf-rank-blurb">' + r.blurb + '</div>' +
+      '<button type="button" id="gf-open-lb" class="gf-rank-lb-btn">🏆 Save to Leaderboard</button>';
 
     const header = section.querySelector('h1');
     if (header && header.nextSibling) {
@@ -344,6 +436,11 @@
     } else {
       section.insertBefore(banner, section.firstChild);
     }
+
+    const openBtn = document.getElementById('gf-open-lb');
+    if (openBtn) openBtn.addEventListener('click', function () {
+      if (window.openLeaderboard) window.openLeaderboard();
+    });
   };
 
   document.addEventListener('keydown', (e) => {

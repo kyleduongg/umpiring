@@ -5306,9 +5306,6 @@ umpire-scroll-story {
 .timed-intro-btn:hover { filter: brightness(1.08); }
 .timed-intro-btn:active { transform: scale(.96); }
 
-/* ============================================================================
-   TAKEAWAYS — "But Remember…" closing section
-   ========================================================================== */
 #takeaways-section {
   width: 100%;
   min-height: 100vh;
@@ -5401,11 +5398,12 @@ umpire-scroll-story {
   animation: bounceDown 1.2s ease-in-out infinite;
 }
 
+.watch-demo-wrap { display: block; width: 100%; text-align: center; }
 .watch-demo-btn {
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  margin: 4px auto 30px;
+  margin: 16px auto 20px;
   padding: 12px 24px;
   font-family: 'IBM Plex Sans', sans-serif;
   font-size: 15px;
@@ -5488,3 +5486,73 @@ umpire-scroll-story {
 @media (max-width: 600px) {
   .video-modal-close { top: -44px; right: 0; }
 }
+
+.gf-lb-saverow {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
+}
+.gf-lb-savelabel { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); }
+.gf-lb-input {
+  flex: 1 1 140px; min-width: 120px; padding: 7px 10px; border-radius: 8px;
+  border: 1px solid var(--border); background: rgba(255,255,255,0.05);
+  color: var(--text); font-family: 'IBM Plex Sans', sans-serif; font-size: 14px;
+}
+.gf-lb-input:focus { outline: none; border-color: var(--accent); }
+.gf-lb-savebtn {
+  padding: 6px 14px; border-radius: 8px; border: none; cursor: pointer;
+  background: var(--accent); color: #0b1310; font-weight: 600;
+  font-family: 'IBM Plex Sans', sans-serif; font-size: 13px;
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+.gf-lb-savebtn:hover { filter: brightness(1.06); }
+.gf-lb-savebtn:active { transform: scale(0.96); }
+.gf-lb-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.gf-lb-empty { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--muted); padding: 6px 0; }
+.gf-lb-row {
+  display: grid; grid-template-columns: 22px 1fr auto auto; align-items: center; gap: 10px;
+  padding: 6px 8px; border-radius: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 13px;
+}
+.gf-lb-row:nth-child(odd) { background: rgba(255,255,255,0.03); }
+.gf-lb-row.you { background: rgba(230,162,60,0.16); border: 1px solid rgba(230,162,60,0.40); }
+.gf-lb-rank { color: var(--muted); font-weight: 600; }
+.gf-lb-name { color: var(--text); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gf-lb-acc { color: var(--accent2); font-size: 11px; }
+.gf-lb-score { color: var(--accent); font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 0.5px; }
+
+/* Leaderboard open button (secondary, sits beside Watch the Demo) */
+.lb-open-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  margin: 16px 0 20px; padding: 12px 22px;
+  font-family: 'IBM Plex Sans', sans-serif; font-size: 15px; font-weight: 600;
+  color: var(--accent); background: transparent;
+  border: 1px solid rgba(230, 162, 60, 0.55); border-radius: 999px; cursor: pointer;
+  transition: transform 0.12s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.lb-open-btn:hover { transform: translateY(-2px); background: rgba(230, 162, 60, 0.12); border-color: var(--accent); }
+.lb-open-btn:active { transform: translateY(0) scale(0.97); }
+.watch-demo-wrap { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; }
+
+.lb-dialog {
+  position: relative; width: 100%; max-width: 460px;
+  background: linear-gradient(135deg, rgba(26,44,34,0.98), rgba(19,30,24,0.98));
+  border: 1px solid var(--border); border-radius: 18px;
+  padding: 26px 24px 28px; box-shadow: 0 22px 60px rgba(0,0,0,0.6);
+  animation: vmPop 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+  max-height: 86vh; overflow-y: auto;
+}
+.lb-dialog-title {
+  font-family: 'Oswald', 'Bebas Neue', sans-serif; font-weight: 700;
+  font-size: 28px; letter-spacing: 0.5px; color: var(--accent);
+  text-align: center; margin: 2px 0 18px;
+}
+.lb-modal .video-modal-close { top: 12px; right: 12px; }
+
+/* Save-to-leaderboard button inside the results banner */
+.gf-rank-lb-btn {
+  margin-top: 18px; padding: 11px 22px; border-radius: 999px; cursor: pointer;
+  font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; font-weight: 600;
+  color: #0b1310; background: var(--accent); border: none;
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+.gf-rank-lb-btn:hover { filter: brightness(1.06); }
+.gf-rank-lb-btn:active { transform: scale(0.97); }
