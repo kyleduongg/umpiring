@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,6 +26,12 @@
 
   <div class="intro-content">
     <div class="intro-kicker">One pitch. One look. No replay.</div>
+
+    <div class="watch-demo-wrap">
+      <button type="button" id="watch-demo-btn" class="watch-demo-btn">
+        <span class="watch-demo-icon">▶</span> Watch the Demo
+      </button>
+    </div>
 
     <h1>Strike or Ball? Could You Call the Zone?</h1>
 
@@ -901,7 +908,52 @@
   </div>
 </section>
 
+<!-- Project Demo Video (modal, opened by the Watch the Demo button) -->
+<div id="video-modal" class="video-modal" aria-hidden="true">
+  <div class="video-modal-backdrop" data-close></div>
+  <div class="video-modal-dialog" role="dialog" aria-modal="true" aria-label="Project demo video">
+    <button type="button" class="video-modal-close" data-close aria-label="Close video">×</button>
+    <div class="video-frame">
+      <iframe
+        id="video-modal-iframe"
+        title="Project demo video"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen></iframe>
+    </div>
+  </div>
+</div>
 
+<script>
+(function () {
+  var EMBED = 'https://www.youtube.com/embed/zmtLeNA5cp0?rel=0&autoplay=1';
+  var modal = document.getElementById('video-modal');
+  var frame = document.getElementById('video-modal-iframe');
+  var btn = document.getElementById('watch-demo-btn');
+  function openVideo() {
+    if (!modal || !frame) return;
+    frame.src = EMBED;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeVideo() {
+    if (!modal || !frame) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    frame.src = ''; // stop playback
+    document.body.style.overflow = '';
+  }
+  if (btn) btn.addEventListener('click', openVideo);
+  if (modal) modal.addEventListener('click', function (e) {
+    if (e.target.hasAttribute('data-close')) closeVideo();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeVideo();
+  });
+})();
+</script>
 
 <script>
   const reactionToggle = document.getElementById('reaction-toggle');
