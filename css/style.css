@@ -5376,3 +5376,27 @@ umpire-scroll-story {
   #takeaways-section { padding: 64px 18px 64px; }
   .takeaway-item { padding: 13px 16px; }
 }
+
+/* Animated scroll cue on the data-story hero (matches the other sections) */
+#scroll-hero .hero-scroll-cue {
+  text-align: center;
+  text-decoration: none;
+  margin-top: 26px;
+  cursor: pointer;
+}
+#scroll-hero .hero-scroll-cue .cue-text {
+  display: block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
+  margin-bottom: 8px;
+}
+#scroll-hero .hero-scroll-cue .scroll-arrow {
+  display: block;
+  color: #e6a23c;
+  font-size: 30px;
+  line-height: 1;
+  animation: bounceDown 1.2s ease-in-out infinite;
+}
