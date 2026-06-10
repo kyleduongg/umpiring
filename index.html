@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,9 +31,6 @@
     <div class="watch-demo-wrap">
       <button type="button" id="watch-demo-btn" class="watch-demo-btn">
         <span class="watch-demo-icon">▶</span> Watch the Demo
-      </button>
-      <button type="button" id="leaderboard-btn" class="lb-open-btn">
-        🏆 Leaderboard
       </button>
     </div>
 
@@ -765,6 +763,11 @@
 
   <!-- Right -->
   <div class="right-panel">
+    <!-- Leaderboard shortcut -->
+    <button type="button" class="lb-open-btn lb-game-btn" data-leaderboard-open>
+      🏆 Leaderboard
+    </button>
+
     <!-- Phase notice -->
     <div class="phase-card" id="phase-card">
       <strong id="phase-label">📋 Practice Phase</strong>
@@ -986,8 +989,10 @@
     document.body.style.overflow = '';
   }
   window.openLeaderboard = openLeaderboard;
-  var lbBtn = document.getElementById('leaderboard-btn');
-  if (lbBtn) lbBtn.addEventListener('click', openLeaderboard);
+  var lbButtons = document.querySelectorAll('[data-leaderboard-open]');
+  lbButtons.forEach(function (lbBtn) {
+    lbBtn.addEventListener('click', openLeaderboard);
+  });
   if (lbModal) lbModal.addEventListener('click', function (e) {
     if (e.target.hasAttribute('data-close')) closeLeaderboard();
   });
