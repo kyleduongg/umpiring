@@ -1113,6 +1113,7 @@ body {
 }
 
 .game-start-card {
+  position: relative;
   width: min(560px, 100%);
   background: var(--panel);
   border: 1px solid rgba(230, 162, 60, 0.32);
@@ -1120,6 +1121,47 @@ body {
   padding: 30px 28px;
   text-align: center;
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+}
+
+
+.ready-leaderboard-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border: 1px solid rgba(230, 162, 60, 0.34);
+  border-radius: 999px;
+  background: rgba(230, 162, 60, 0.09);
+  color: var(--accent);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+}
+
+.ready-leaderboard-btn:hover {
+  transform: translateY(-1px);
+  background: rgba(230, 162, 60, 0.16);
+  border-color: rgba(230, 162, 60, 0.58);
+}
+
+.ready-leaderboard-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (max-width: 620px) {
+  .ready-leaderboard-btn {
+    position: static;
+    margin: 0 auto 16px;
+  }
 }
 
 .game-start-kicker {
