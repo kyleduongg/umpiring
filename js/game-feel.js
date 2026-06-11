@@ -296,12 +296,12 @@
   };
 
   const RANKS = [
-    { minAcc: 0,  min: 0,    badge: '🧢', title: 'Sandlot Rookie',     blurb: 'Everyone starts somewhere — keep your eye on the zone.' },
-    { minAcc: 62, min: 300,  badge: '⚾', title: 'Single-A Call-Up',    blurb: 'Finding your footing behind the plate. Keep sharpening that eye.' },
-    { minAcc: 75, min: 900,  badge: '🎯', title: 'Big-League Umpire',   blurb: "Solid, dependable calls — you belong in the show." },
-    { minAcc: 84, min: 1800, badge: '⭐', title: 'All-Star Arbiter',    blurb: 'Elite zone awareness. The crowd respects your eye.' },
-    { minAcc: 90, min: 2800, badge: '🧤', title: 'Gold-Glove Eyes',     blurb: 'Almost nothing gets past you out there.' },
-    { minAcc: 94, min: 4000, badge: '🏆', title: 'Hall-of-Fame Vision', blurb: 'You out-umped the umps. Cooperstown is on the line.' }
+    { minAcc: 0,  min: 0,    badge: '🧢', title: 'Sandlot Rookie',        blurb: 'You are learning the zone one pitch at a time. Keep watching the edges.' },
+    { minAcc: 60, min: 300,  badge: '⚾', title: 'Little League Blue',    blurb: 'A solid start behind the plate. Your strike-zone instincts are taking shape.' },
+    { minAcc: 70, min: 900,  badge: '📋', title: 'High School Umpire',    blurb: 'You make dependable calls and stay composed when pitches get close.' },
+    { minAcc: 80, min: 1800, badge: '🎯', title: 'College Conference Crew', blurb: 'Sharp accuracy and strong command of the zone have earned you a college assignment.' },
+    { minAcc: 88, min: 2800, badge: '⭐', title: 'Minor League Veteran',  blurb: 'You handle borderline pitches like a seasoned professional. The majors are within reach.' },
+    { minAcc: 94, min: 4000, badge: '🏆', title: 'Big-League Umpire',     blurb: 'Elite accuracy under pressure. You have earned your place on a big-league crew.' }
   ];
   function rankFor(score, accuracyPct) {
     const acc = (typeof accuracyPct === 'number') ? accuracyPct : 0;
@@ -427,7 +427,7 @@
         '<span><strong>' + GF.bestCombo + '</strong>Best Streak</span>' +
         '<span><strong>' + (stats.accuracyPct != null ? stats.accuracyPct + '%' : '--') + '</strong>Accuracy</span>' +
       '</div>' +
-      '<div class="gf-rank-blurb">' + r.blurb + '</div>' +
+      '<div class="gf-rank-blurb">' + (r.blurb || '') + '</div>' +
       '<button type="button" id="gf-open-lb" class="gf-rank-lb-btn">🏆 Save to Leaderboard</button>';
 
     const header = section.querySelector('h1');
