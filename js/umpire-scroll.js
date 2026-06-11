@@ -288,6 +288,25 @@ function renderViz(step) {
   ];
   document.getElementById('scroll-viz-caption').textContent = captions[step] || '';
 
+  const notes = [
+    '',
+    "Hover a dot for its type, speed & call.",
+    "Hover a dot for its type, speed & location.",
+    "Hover a dot to see strike or ball.",
+    "Hover a dot for its location and call.",
+    "Hover a dot — circled ones are missed calls.",
+    "Hover a dot — circled ones are missed calls.",
+    "Hover a circled pitch for the blown call.",
+    "Hover a dot for the miscalled pitch.",
+    ''
+  ];
+  const noteEl = document.getElementById('scroll-viz-note');
+  if (noteEl) {
+    noteEl.innerHTML = notes[step]
+      ? '<span class="viz-note-tag">Note</span> ' + notes[step]
+      : '';
+  }
+
   if (step <= 3 || step === 8) {
     // Clear zone bg axes too
     bgLayer.selectAll('*').remove();

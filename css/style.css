@@ -5626,3 +5626,33 @@ umpire-scroll-story {
 .term-item { display: flex; flex-direction: column; gap: 5px; }
 .term-name { font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 15px; color: var(--accent2); }
 .term-def { font-family: 'IBM Plex Sans', sans-serif; font-size: 13.5px; line-height: 1.55; color: rgba(232, 234, 240, 0.85); }
+
+#scroll-viz-sticky .viz-note {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 22px;
+  margin: 0;
+  padding: 0 16px;
+  max-width: none;
+  white-space: nowrap;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.55);
+  text-align: center;
+}
+#scroll-viz-sticky .viz-note-tag {
+  color: #e6a23c;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+@media (max-width: 900px) {
+  #scroll-viz-sticky .viz-note {
+    position: static;
+    margin-top: 10px;
+    white-space: normal;
+    text-align: center;
+  }
+}
