@@ -5686,3 +5686,23 @@ umpire-scroll-story {
   letter-spacing: 1px;
   line-height: 1;
 }
+
+
+#game-points-card { display: none; }
+#btn-continue-points {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 1px;
+  color: #0b1310;
+  background: var(--accent);
+  border: none;
+  border-radius: 10px;
+  padding: 12px 26px;
+  cursor: pointer;
+  transition: transform .1s ease, filter .15s ease;
+}
+#btn-continue-points:hover { filter: brightness(1.08); }
+#btn-continue-points:active { transform: scale(.96); }
+.points-overview-list strong { color: var(--accent); }
+.one-second-intro-card { border-color: rgba(255,79,79,.6); box-shadow: 0 0 38px rgba(255,79,79,.18); }
+.one-second-intro-card h2 { color: var(--strike); }

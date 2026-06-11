@@ -20,9 +20,13 @@ let autoNextTimer = null;
 
 const AUTO_NEXT_DELAY_MS = 1250;
 
-const CALL_TIME_LIMIT_MS = 2000;
+const TWO_SECOND_LIMIT_MS = 2000;
+const ONE_SECOND_LIMIT_MS = 1000;
+let callTimeLimitMs = TWO_SECOND_LIMIT_MS;
 let timedMode = false;
 let timedIntroShown = false;
+let oneSecondMode = false;
+let oneSecondIntroShown = false;
 let callCountdownTimer = null;
 let countdownStartTimer = null;
 let countdownRAF = null;
@@ -281,7 +285,7 @@ function ensureCallTimerUI() {
   wrap.innerHTML =
     '<div class="call-timer-row">' +
       '<span class="call-timer-label">⏱ CALL CLOCK</span>' +
-      '<span class="call-timer-num">2.0s</span>' +
+      '<span class="call-timer-num">' + (callTimeLimitMs / 1000).toFixed(1) + 's</span>' +
     '</div>' +
     '<div class="call-timer-track"><div class="call-timer-fill"></div></div>';
   panel.insertBefore(wrap, zoneWrap);
@@ -303,7 +307,7 @@ function updateCountdownUI(remaining) {
   if (!wrap) return;
   const num = wrap.querySelector('.call-timer-num');
   const fill = wrap.querySelector('.call-timer-fill');
-  const pct = Math.max(0, Math.min(100, (remaining / CALL_TIME_LIMIT_MS) * 100));
+  const pct = Math.max(0, Math.min(100, (remaining / callTimeLimitMs) * 100));
   let color = 'var(--accent2)';
   if (remaining <= 700) color = 'var(--strike)';
   else if (remaining <= 1200) color = 'var(--accent)';
@@ -330,10 +334,10 @@ function tickCountdown() {
 function beginCallCountdown() {
   countdownStartTimer = null;
   if (awaitingNext || !gameStarted) return;
-  callDeadline = performance.now() + CALL_TIME_LIMIT_MS;
+  callDeadline = performance.now() + callTimeLimitMs;
   showCountdownUI();
   tickCountdown();
-  callCountdownTimer = setTimeout(handleCallTimeout, CALL_TIME_LIMIT_MS);
+  callCountdownTimer = setTimeout(handleCallTimeout, callTimeLimitMs);
 }
 
 function handleCallTimeout() {
@@ -352,6 +356,28 @@ function showTimedIntro(onContinue) {
       '<p>Real umpires have to make the call the instant the pitch hits the plate. ' +
       'From here on you get just <strong>two seconds</strong> to call every pitch. Letting the clock run out counts as a blown call.</p>' +
       '<button type="button" class="timed-intro-btn">Play On</button>' +
+    '</div>';
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => overlay.classList.add('show'));
+  const finish = () => {
+    overlay.classList.remove('show');
+    setTimeout(() => overlay.remove(), 250);
+    if (typeof onContinue === 'function') onContinue();
+  };
+  overlay.querySelector('.timed-intro-btn').addEventListener('click', finish);
+}
+
+
+function showOneSecondIntro(onContinue) {
+  const overlay = document.createElement('div');
+  overlay.className = 'timed-intro-overlay';
+  overlay.innerHTML =
+    '<div class="timed-intro-card one-second-intro-card">' +
+      '<div class="timed-intro-badge">⚡</div>' +
+      '<h2>Final Speed Test</h2>' +
+      '<p>You have reached 15 correct calls. The pressure is going up again. ' +
+      'From here on you get only <strong>one second</strong> to call every pitch. A timeout still counts as a blown call.</p>' +
+      '<button type="button" class="timed-intro-btn">Take the Challenge</button>' +
     '</div>';
   document.body.appendChild(overlay);
   requestAnimationFrame(() => overlay.classList.add('show'));
@@ -437,6 +463,9 @@ function resetGameState() {
   gameStarted = false;
   timedMode = false;
   timedIntroShown = false;
+  oneSecondMode = false;
+  oneSecondIntroShown = false;
+  callTimeLimitMs = TWO_SECOND_LIMIT_MS;
   clearCallTimers();
 
   PITCHES = shuffleArray(PITCHES);
@@ -938,13 +967,27 @@ function makeCall(userCall) {
 
   const gameOver = errors >= MAX_ERRORS || attempted >= PITCHES.length;
 
-  // First time the player gets more than 5 correct: introduce the call clock.
+  // First time the player gets more than 5 correct: introduce the 2-second call clock.
   if (!gameOver && !timedMode && !timedIntroShown && correct > 5) {
     timedIntroShown = true;
     clearAutoNextTimer();
     hideNextButton();
     showTimedIntro(() => {
       timedMode = true;
+      callTimeLimitMs = TWO_SECOND_LIMIT_MS;
+      goToNextPitch();
+    });
+    return;
+  }
+
+  // After 15 correct calls, add a second timed stage with a 1-second clock.
+  if (!gameOver && timedMode && !oneSecondMode && !oneSecondIntroShown && correct >= 15) {
+    oneSecondIntroShown = true;
+    clearAutoNextTimer();
+    hideNextButton();
+    showOneSecondIntro(() => {
+      oneSecondMode = true;
+      callTimeLimitMs = ONE_SECOND_LIMIT_MS;
       goToNextPitch();
     });
     return;
@@ -983,6 +1026,7 @@ document.getElementById('btn-strike').addEventListener('click', () => makeCall('
 document.getElementById('btn-ball').addEventListener('click', () => makeCall('ball'));
 
 const continueButton = document.getElementById('btn-continue-instructions');
+const pointsButton = document.getElementById('btn-continue-points');
 const startButton = document.getElementById('btn-start-game');
 
 if (continueButton) {
@@ -990,13 +1034,18 @@ if (continueButton) {
     const readyCard = document.getElementById('game-ready-card');
     const instructionsCard = document.getElementById('game-instructions-card');
 
-    if (readyCard) {
-      readyCard.style.display = 'none';
-    }
+    if (readyCard) readyCard.style.display = 'none';
+    if (instructionsCard) instructionsCard.style.display = 'block';
+  });
+}
 
-    if (instructionsCard) {
-      instructionsCard.style.display = 'block';
-    }
+if (pointsButton) {
+  pointsButton.addEventListener('click', () => {
+    const instructionsCard = document.getElementById('game-instructions-card');
+    const pointsCard = document.getElementById('game-points-card');
+
+    if (instructionsCard) instructionsCard.style.display = 'none';
+    if (pointsCard) pointsCard.style.display = 'block';
   });
 }
 
@@ -1160,6 +1209,7 @@ document.getElementById('btn-restart').addEventListener('click', () => {
   const overlay = document.getElementById('game-start-overlay');
   const readyCard = document.getElementById('game-ready-card');
   const instructionsCard = document.getElementById('game-instructions-card');
+  const pointsCard = document.getElementById('game-points-card');
 
   if (overlay) {
     overlay.style.display = 'flex';
@@ -1171,6 +1221,10 @@ document.getElementById('btn-restart').addEventListener('click', () => {
 
   if (instructionsCard) {
     instructionsCard.style.display = 'none';
+  }
+
+  if (pointsCard) {
+    pointsCard.style.display = 'none';
   }
 
   const comparisonSection = document.getElementById('comparison-section');
