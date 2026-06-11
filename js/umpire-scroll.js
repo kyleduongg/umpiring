@@ -119,6 +119,18 @@ function loadGame(game) {
     pills.appendChild(pill);
   });
 
+  const missByType = {};
+  (game.pitches || []).forEach(p => {
+    if (p._wrongStrike || p._wrongBall) {
+      const k = p.n || 'Unknown';
+      missByType[k] = (missByType[k] || 0) + 1;
+    }
+  });
+  let toughName = 'None', toughCount = 0;
+  Object.keys(missByType).forEach(k => {
+    if (missByType[k] > toughCount) { toughCount = missByType[k]; toughName = k; }
+  });
+
   // Summary grid
   document.getElementById('scroll-summary-grid').innerHTML = `
     <div class="summary-card"><div class="big" style="color:var(--correct)">${stats.acc}%</div><div class="label">Call Accuracy</div></div>
@@ -126,7 +138,8 @@ function loadGame(game) {
     <div class="summary-card"><div class="big" style="color:var(--strike)">${stats.strikes}</div><div class="label">Called Strikes</div></div>
     <div class="summary-card"><div class="big" style="color:var(--ball)">${stats.balls}</div><div class="label">Called Balls</div></div>
     <div class="summary-card"><div class="big" style="color:var(--miss-dark)">${stats.missed}</div><div class="label">Missed Calls</div></div>
-    <div class="summary-card"><div class="big" style="font-size:20px;line-height:1.35;letter-spacing:0.3px;color:#ffffff;"><div style="white-space:nowrap;">${stats.ms} <span style="color:var(--ball)">Miscalled Ball${stats.ms!==1?'s':''}</span></div><div style="white-space:nowrap;margin-top:8px;">${stats.mb} <span style="color:var(--strike)">Miscalled Strike${stats.mb!==1?'s':''}</span></div></div><div class="label">Miss Type Breakdown</div></div>
+    <div class="summary-card summary-card-pitch"><div class="big" style="font-size:24px;line-height:1.2;letter-spacing:1px;white-space:nowrap;">${toughCount ? `<span style="color:${typeColor(toughName)};">${toughName}</span><span style="color:#ffffff;">: ${toughCount}</span>` : `<span style="color:var(--miss-dark);">None</span>`}</div><div class="label">Most Miscalled Pitch Type</div></div>
+    <div class="summary-card summary-card-wide"><div class="miss-bd-row"><span class="miss-bd"><strong style="color:var(--ball)">${stats.ms}</strong> Miscalled Ball${stats.ms!==1?'s':''}</span><span class="miss-bd"><strong style="color:var(--strike)">${stats.mb}</strong> Miscalled Strike${stats.mb!==1?'s':''}</span></div><div class="label">Miss Type Breakdown</div></div>
   `;
 
   // Verdict

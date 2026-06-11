@@ -5656,3 +5656,33 @@ umpire-scroll-story {
     text-align: center;
   }
 }
+
+#one-game-scroll-section .summary-card-wide {
+  grid-column: 1 / -1;
+  align-items: center;
+  text-align: center;
+}
+#one-game-scroll-section .summary-card-wide .miss-bd-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 12px 36px;
+}
+
+#one-game-scroll-section .summary-card-pitch .big { margin-top: 9px; }
+#one-game-scroll-section .summary-card-wide .miss-bd {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--fm);
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  color: rgba(244, 240, 232, 0.85);
+}
+#one-game-scroll-section .summary-card-wide .miss-bd strong {
+  font-family: var(--ff);
+  font-size: 30px;
+  letter-spacing: 1px;
+  line-height: 1;
+}
