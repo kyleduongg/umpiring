@@ -491,6 +491,9 @@
             <p class="umpire-dashboard-instruction">
               Hover over any bar to see more details about a specific umpire.
             </p>
+            <button type="button" id="terminology-btn" class="terminology-btn">
+              <span class="terminology-icon">ⓘ</span> Click to view terminology
+            </button>
           </div>
         </div>
 
@@ -501,7 +504,7 @@
             Accuracy
           </button>
 
-          <button class="umpire-sort-btn" id="sort-above-exp">
+          <button class="umpire-sort-btn" id="sort-above-exp" title="Accuracy vs. the league average, adjusted for how hard each umpire's pitches were to call.">
             Above Expected
           </button>
 
@@ -995,6 +998,55 @@
   });
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') closeLeaderboard();
+  });
+})();
+</script>
+
+<!-- Terminology (modal, opened by the "Click to view terminology" button) -->
+<div id="terminology-modal" class="video-modal term-modal" aria-hidden="true">
+  <div class="video-modal-backdrop" data-close></div>
+  <div class="term-dialog" role="dialog" aria-modal="true" aria-label="Leaderboard terminology">
+    <button type="button" class="video-modal-close" data-close aria-label="Close">×</button>
+    <h2 class="term-dialog-title">Terminology</h2>
+    <ul class="term-list">
+      <li class="term-item">
+        <span class="term-name">Accuracy</span>
+        <span class="term-def">The percentage of pitches the umpire called correctly, with strikes ruled as strikes and balls ruled as balls, out of all pitches they judged.</span>
+      </li>
+      <li class="term-item">
+        <span class="term-name">Above Expected</span>
+        <span class="term-def">How much better or worse an umpire performed than the league average after accounting for the difficulty of the pitches they called. Positive values indicate the umpire made more correct calls than expected, particularly on challenging or borderline pitches, while negative values indicate fewer correct calls than expected.</span>
+      </li>
+      <li class="term-item">
+        <span class="term-name">Games Umpired</span>
+        <span class="term-def">How many games the umpire worked behind the plate during the June 2025 season, representing their workload and sample size.</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<script>
+(function () {
+  var modal = document.getElementById('terminology-modal');
+  var btn = document.getElementById('terminology-btn');
+  function openTerms() {
+    if (!modal) return;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeTerms() {
+    if (!modal) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  if (btn) btn.addEventListener('click', openTerms);
+  if (modal) modal.addEventListener('click', function (e) {
+    if (e.target.hasAttribute('data-close')) closeTerms();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeTerms();
   });
 })();
 </script>
