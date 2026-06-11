@@ -31,6 +31,7 @@ let callDeadline = 0;
 const PRACTICE_COUNT = 3;
 const MAX_ERRORS = 3;
 const PLATE_HALF_WIDTH_FT = 0.708;
+const PITCH_RADIUS_PX = 8;
 
 const FIXED_ZONE_TOP = 3.5;
 const FIXED_ZONE_BOTTOM = 1.5;
@@ -71,30 +72,27 @@ function getPitchAnimationDuration(speed) {
 }
 
 function isPitchInFixedStrikeZone(pitch) {
-  const pitchRadiusPx = 8;
+  const ballCenterX = xScale(Number(pitch.plate_x));
+  const ballCenterY = yScale(Number(pitch.plate_z));
 
-  const ballCenterX = xScale(pitch.plate_x);
-  const ballCenterY = yScale(pitch.plate_z);
+  if (!Number.isFinite(ballCenterX) || !Number.isFinite(ballCenterY)) {
+    return false;
+  }
 
   const zoneLeftPx = xScale(-PLATE_HALF_WIDTH_FT);
   const zoneRightPx = xScale(PLATE_HALF_WIDTH_FT);
   const zoneTopPx = yScale(FIXED_ZONE_TOP);
   const zoneBottomPx = yScale(FIXED_ZONE_BOTTOM);
 
-  const ballLeftPx = ballCenterX - pitchRadiusPx;
-  const ballRightPx = ballCenterX + pitchRadiusPx;
-  const ballTopPx = ballCenterY - pitchRadiusPx;
-  const ballBottomPx = ballCenterY + pitchRadiusPx;
+  // Find the point in the rectangular zone closest to the baseball's center.
+  // The pitch is a strike exactly when the circular baseball overlaps or
+  // touches that rectangle. Equality is intentional: touching counts.
+  const nearestX = Math.max(zoneLeftPx, Math.min(ballCenterX, zoneRightPx));
+  const nearestY = Math.max(zoneTopPx, Math.min(ballCenterY, zoneBottomPx));
+  const dx = ballCenterX - nearestX;
+  const dy = ballCenterY - nearestY;
 
-  const touchesHorizontally =
-    ballRightPx >= zoneLeftPx &&
-    ballLeftPx <= zoneRightPx;
-
-  const touchesVertically =
-    ballBottomPx >= zoneTopPx &&
-    ballTopPx <= zoneBottomPx;
-
-  return touchesHorizontally && touchesVertically;
+  return (dx * dx + dy * dy) <= (PITCH_RADIUS_PX * PITCH_RADIUS_PX);
 }
 
 function getDistanceFromZoneEdgePx(pitch) {
@@ -759,7 +757,7 @@ function loadPitch(idx) {
   pitchCircle
     .attr('cx', startX)
     .attr('cy', startY)
-    .attr('r', 8)
+    .attr('r', PITCH_RADIUS_PX)
     .attr('fill', pitchColor)
     .attr('stroke', '#fff')
     .attr('stroke-width', 1.5)
@@ -855,14 +853,14 @@ function makeCall(userCall) {
   pitchCircle
     .attr('fill', actualStrike ? 'var(--strike)' : 'var(--ball)')
     .attr('stroke', isCorrect ? 'var(--correct)' : 'var(--wrong)')
-    .attr('stroke-width', 3);
+    .attr('stroke-width', 1.25);
 
   resultRing
     .attr('cx', endX)
     .attr('cy', endY)
-    .attr('r', 8)
+    .attr('r', PITCH_RADIUS_PX)
     .attr('stroke', isCorrect ? 'var(--correct)' : 'var(--wrong)')
-    .attr('stroke-width', 2)
+    .attr('stroke-width', 0.75)
     .attr('opacity', 0.9);
 
   resultRing
