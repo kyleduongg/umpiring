@@ -32,6 +32,11 @@ const PRACTICE_COUNT = 3;
 const MAX_ERRORS = 3;
 const PLATE_HALF_WIDTH_FT = 0.708;
 const PITCH_RADIUS_PX = 8;
+const PITCH_STROKE_WIDTH_PX = 1.25;
+const ZONE_STROKE_WIDTH_PX = 2.2;
+
+const PITCH_TOUCH_RADIUS_PX =
+  PITCH_RADIUS_PX + PITCH_STROKE_WIDTH_PX / 2 + ZONE_STROKE_WIDTH_PX / 2;
 
 const FIXED_ZONE_TOP = 3.5;
 const FIXED_ZONE_BOTTOM = 1.5;
@@ -92,7 +97,8 @@ function isPitchInFixedStrikeZone(pitch) {
   const dx = ballCenterX - nearestX;
   const dy = ballCenterY - nearestY;
 
-  return (dx * dx + dy * dy) <= (PITCH_RADIUS_PX * PITCH_RADIUS_PX);
+  return (dx * dx + dy * dy) <=
+    (PITCH_TOUCH_RADIUS_PX * PITCH_TOUCH_RADIUS_PX);
 }
 
 function getDistanceFromZoneEdgePx(pitch) {
@@ -760,7 +766,7 @@ function loadPitch(idx) {
     .attr('r', PITCH_RADIUS_PX)
     .attr('fill', pitchColor)
     .attr('stroke', '#fff')
-    .attr('stroke-width', 1.5)
+    .attr('stroke-width', PITCH_STROKE_WIDTH_PX)
     .attr('opacity', 0.9);
 
   g.selectAll('.trail').remove();
@@ -853,14 +859,14 @@ function makeCall(userCall) {
   pitchCircle
     .attr('fill', actualStrike ? 'var(--strike)' : 'var(--ball)')
     .attr('stroke', isCorrect ? 'var(--correct)' : 'var(--wrong)')
-    .attr('stroke-width', 1.25);
+    .attr('stroke-width', PITCH_STROKE_WIDTH_PX);
 
   resultRing
     .attr('cx', endX)
     .attr('cy', endY)
     .attr('r', PITCH_RADIUS_PX)
     .attr('stroke', isCorrect ? 'var(--correct)' : 'var(--wrong)')
-    .attr('stroke-width', 0.75)
+    .attr('stroke-width', 1.25)
     .attr('opacity', 0.9);
 
   resultRing
